@@ -47,6 +47,11 @@ Examples
 | `<Enter>:`          | Alignment around 1st colon                            |
 | ...                 | ...                                                   |
 
+Demo
+----
+
+[Screencast](https://vimeo.com/63506219)
+
 Author
 ------
 
