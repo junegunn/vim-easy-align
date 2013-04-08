@@ -11,6 +11,10 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, ljust, recursive)
   let pattern       = '\s*\(' .a:pattern. '\)\s*'
   for line in range(a:fl, a:ll)
     let tokens     = split(getline(line), pattern.'\zs')
+    if empty(tokens)
+      continue
+    endif
+
     let max_tokens = len(tokens) > max_tokens ? len(tokens) : max_tokens
     let nth        = match(tokens[0], '^\s*$') != -1 ? a:nth + 1 : a:nth
 
