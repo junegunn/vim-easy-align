@@ -12,12 +12,12 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, ljust, recursive)
   for line in range(a:fl, a:ll)
     let tokens     = split(getline(line), pattern.'\zs')
     let max_tokens = len(tokens) > max_tokens ? len(tokens) : max_tokens
+    let nth        = match(tokens[0], '^\s*$') != -1 ? a:nth + 1 : a:nth
 
-    if len(tokens) < a:nth
+    if len(tokens) < nth
       continue
     endif
 
-    let nth    = match(tokens[0], '^\s*$') != -1 ? a:nth + 1 : a:nth
     let last   = tokens[nth - 1]
     let before = (nth > 1 ? join(tokens[0 : nth - 2], '') : '') . substitute(last, pattern.'$', '', '')
     let after  = join(tokens[nth : -1], '')
