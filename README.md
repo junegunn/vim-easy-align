@@ -47,11 +47,6 @@ Examples
 | `<Enter>:`          | Alignment around 1st colon                            |
 | ...                 | ...                                                   |
 
-Demo
-----
-
-[Screencast](https://vimeo.com/63506219)
-
 Defining custom alignment rules
 -------------------------------
 
@@ -59,14 +54,19 @@ Define (or override) alignment rules.
 
 ```vim
 let g:lesser_align_delimiters = {
-\ '/': {
-\     'pattern':       '/',
+\ 'x': {
+\     'pattern':       '[xX]',
 \     'margin_left':   ' <<<',
 \     'margin_right':  '>>> ',
-\     'stick_to_left': 0,
+\     'stick_to_left': 0
 \   }
 \ }
 ```
+
+Demo
+----
+
+[Screencast](https://vimeo.com/63506219)
 
 Author
 ------
