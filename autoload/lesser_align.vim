@@ -4,7 +4,7 @@ endif
 let g:lesser_align_loaded = 1
 let g:lesser_align_delimiters_merged = {
 \  ' ': { 'pattern': ' ', 'margin_left': '',  'margin_right': '', 'stick_to_left': 0 },
-\  '=': { 'pattern': '<=>\|&&=\|||=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
+\  '=': { 'pattern': '<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
 \                         'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
 \  ':': { 'pattern': ':', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  ',': { 'pattern': ',', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
