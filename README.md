@@ -52,6 +52,22 @@ Demo
 
 [Screencast](https://vimeo.com/63506219)
 
+Defining custom alignment rules
+-------------------------------
+
+Define (or override) alignment rules.
+
+```vim
+let g:lesser_align_delimiters = {
+\ '/': {
+\     'pattern':       '/',
+\     'margin_left':   ' <<<',
+\     'margin_right':  '>>> ',
+\     'stick_to_left': 0,
+\   }
+\ }
+```
+
 Author
 ------
 

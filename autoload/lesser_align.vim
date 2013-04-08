@@ -2,8 +2,22 @@ if exists("g:lesser_align_loaded")
   finish
 endif
 let g:lesser_align_loaded = 1
+let g:lesser_align_delimiters_merged = {
+\  ' ': { 'pattern': ' ', 'margin_left': '',  'margin_right': '', 'stick_to_left': 0 },
+\  '=': { 'pattern': '<=>\|&&=\|||=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
+\                         'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
+\  ':': { 'pattern': ':', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
+\  ',': { 'pattern': ',', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
+\  '|': { 'pattern': '|', 'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 }
+\ }
 
-function! s:do_align(fl, ll, pattern, nth, ml, mr, ljust, recursive)
+if !exists("g:lesser_align_delimiters")
+  let g:lesser_align_delimiters = {}
+endif
+
+call extend(g:lesser_align_delimiters_merged, g:lesser_align_delimiters)
+
+function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines         = {}
   let just_len      = 0
   let max_delim_len = 0
@@ -41,7 +55,7 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, ljust, recursive)
     let pad = just_len - len(prefix)
     if pad > 0
       for i in range(pad)
-        if a:ljust
+        if a:stick_to_left
           let suffix = ' '. suffix
         else
           let prefix = prefix . ' '
@@ -60,7 +74,7 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, ljust, recursive)
   endfor
 
   if a:recursive && a:nth < max_tokens
-    call s:do_align(a:fl, a:ll, a:pattern, a:nth + 1, a:ml, a:mr, a:ljust, a:recursive)
+    call s:do_align(a:fl, a:ll, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
   endif
 endfunction
 
@@ -96,16 +110,14 @@ function! lesser_align#align() range
   let n = empty(n) ? 1 : n
 
   let error = 0
-  if ch == ' '
-    call s:do_align(a:firstline, a:lastline, ' ', n, '', '', 0, recursive)
-  elseif ch == '='
-    call s:do_align(a:firstline, a:lastline, '<=>\|&&=\|||=\|=\~\|=>\|[:+/*!%^=-]\?=', n, ' ', ' ', 0, recursive)
-  elseif ch == ':'
-    call s:do_align(a:firstline, a:lastline, ':', n, '', ' ', 1, recursive)
-  elseif ch == ','
-    call s:do_align(a:firstline, a:lastline, ',', n, '', ' ', 1, recursive)
-  elseif ch == '|'
-    call s:do_align(a:firstline, a:lastline, '|', n, ' ', ' ', 0, recursive)
+  if has_key(g:lesser_align_delimiters_merged, ch)
+    let dict = g:lesser_align_delimiters_merged[ch]
+    call s:do_align(a:firstline, a:lastline,
+                  \ get(dict, 'pattern', ch),
+                  \ n,
+                  \ get(dict, 'margin_left', ' '),
+                  \ get(dict, 'margin_right', ' '),
+                  \ get(dict, 'stick_to_left', 0), recursive)
   else
     let error = 1
   endif
