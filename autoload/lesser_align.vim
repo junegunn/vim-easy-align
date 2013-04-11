@@ -78,38 +78,61 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
   endif
 endfunction
 
-function! lesser_align#align() range
-  echon "\rlesser-align ()"
-  let n = ''
+function! lesser_align#align(...) range
   let recursive = 0
+  let n         = ''
+  let ch        = ''
 
-  while 1
-    let c  = getchar()
-    let ch = nr2char(c)
-    if c == 3 || c == 27
+  if a:0 == 0
+    echon "\rlesser-align ()"
+    while 1
+      let c  = getchar()
+      let ch = nr2char(c)
+      if c == 3 || c == 27
+        return
+      elseif c >= 48 && c <= 57
+        if n == '*'
+          echon "\rField number(*) already specified"
+          return
+        endif
+        let n = n . nr2char(c)
+        echon "\rlesser-align (". n .")"
+      elseif ch == '*'
+        if !empty(n)
+          echon "\rField number(". n .") already specified"
+          return
+        endif
+        let n = '*'
+        echon "\rlesser-align (*)"
+      else
+        break
+      endif
+    endwhile
+  elseif a:0 == 1
+    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|\*\)\?\(.\)$')
+    if empty(tokens)
+      echo "Invalid arguments: ". a:1
       return
-    elseif c >= 48 && c <= 57
-      if recursive
-        echo "Number(*) already specified"
-        return
-      endif
-      let n = n . nr2char(c)
-      echon "\rlesser-align (". n .")"
-    elseif ch == '*'
-      if !empty(n)
-        echo "Number already specified"
-        return
-      endif
-      let recursive = 1
-      echon "\rlesser-align (*)"
-    else
-      break
     endif
-  endwhile
+    let [n, ch] = tokens[1:2]
+  elseif a:0 == 2
+    let n  = a:1
+    let ch = a:2
+  else
+    echo "Invalid number of arguments: ". a:0 ." (expected 0, 1, or 2)"
+    return
+  endif
 
-  let n = empty(n) ? 1 : n
+  if n == '*'
+    let n = 1
+    let recursive = 1
+  elseif empty(n)
+    let n = 1
+  elseif n != string(str2nr(n))
+    echon "\rInvalid field number: ". n
+    return
+  endif
 
-  let error = 0
   if has_key(g:lesser_align_delimiters_merged, ch)
     let dict = g:lesser_align_delimiters_merged[ch]
     call s:do_align(a:firstline, a:lastline,
@@ -118,14 +141,9 @@ function! lesser_align#align() range
                   \ get(dict, 'margin_left', ' '),
                   \ get(dict, 'margin_right', ' '),
                   \ get(dict, 'stick_to_left', 0), recursive)
-  else
-    let error = 1
-  endif
-
-  if error
-    echon "\rUnknown delimiter: ". ch
-  else
     echon "\rlesser-align (". (recursive ? '*' : n) . ch .")"
+  else
+    echon "\rUnknown delimiter: ". ch
   endif
 endfunction
 
