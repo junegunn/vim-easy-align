@@ -2,3 +2,4 @@
 .gitignore     export-ignore
 doc/tags       export-ignore
 README.md      export-ignore
+zip            export-ignore
