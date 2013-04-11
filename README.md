@@ -4,7 +4,7 @@ vim-lesser-align
 Yet another Vim alignment plugin without too much ambition.
 
 This plugin clearly has less features than the other pre-existing ones with the similar goals,
-but it is simpler, easier to use, and good enough for the most of the cases.
+but it is simpler, easier to use, and good enough (or even better) for the most of the cases.
 
 Usage
 -----

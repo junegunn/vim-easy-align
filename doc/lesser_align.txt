@@ -1,0 +1,61 @@
+vim-lesser-align                        *vim-lesser-align* *lesser-align*
+=========================================================================
+
+Author: Junegunn Choi <https://github.com/junegunn>
+
+Yet another Vim alignment plugin without too much ambition.
+
+This plugin clearly has less features than the other pre-existing ones
+with the similar goals, but it is simpler, easier to use, and good enough
+(or even better) for the most of the cases.
+
+https://github.com/junegunn/vim-lesser-align
+
+
+LesserAlign                                                 *LesserAlign*
+-------------------------------------------------------------------------
+
+Vim-lesser-align defines `LesserAlign` command in the visual mode.
+For convenience, it is advised that you define a mapping for triggering
+it in your .vimrc.
+
+    vnoremap <silent> <Enter> :LesserAlign<cr>
+
+Then a key sequence becomes a combination of 3 parts.
+
+1. <Enter>
+    - Shortcut for `:LesserAssign<cr>`
+2. Integer (optional, default: 1)
+    1       Alignment around 1st delimiter
+    2       Alignment around 2nd delimiter
+    ...
+    *       Alignment around all delimiters (tabularize)
+3. Delimiter
+    =       Operators containing equals sign (=, ==, !=, +=, &&=, ...)
+    <space>
+    :
+    ,
+    |
+
+Examples:
+
+  <Enter>=         Alignment around 1st equals sign (and the likes)
+  <Enter>2=        Alignment around 2nd equals sign (and the likes)
+  <Enter>3=        Alignment around 3rd equals sign (and the likes)
+  <Enter>*=        Alignment around all equals signs (and the likes)
+  <Enter><space>   Alignment around 1st whitespace
+  <Enter>2<space>  Alignment around 2nd whitespace
+  <Enter>:         Alignment around 1st colon
+
+
+Defining custom alignment rules
+-------------------------------------------------------------------------
+
+    let g:lesser_align_delimiters = {
+    \ 'x': {
+    \     'pattern':       '[xX]',
+    \     'margin_left':   ' <<<',
+    \     'margin_right':  '>>> ',
+    \     'stick_to_left': 0
+    \   }
+    \ }
