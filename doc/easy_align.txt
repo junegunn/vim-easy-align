@@ -1,0 +1,64 @@
+vim-easy-align                              *vim-easy-align* *easy-align*
+=========================================================================
+
+Author: Junegunn Choi <https://github.com/junegunn>
+
+Yet another Vim alignment plugin without too much ambition.
+
+This plugin clearly has less features than the other pre-existing ones
+with the similar goals, but it is simpler, easier to use,
+and just good enough for the most of the cases.
+
+https://github.com/junegunn/vim-easy-align
+
+
+EasyAlign                                                     *EasyAlign*
+-------------------------------------------------------------------------
+
+Vim-easy-align defines `:EasyAlign` command in the visual mode.
+
+For convenience, it is advised that you define a mapping for triggering it
+in your `.vimrc`.
+
+    vnoremap <silent> <Enter> :EasyAlign<cr>
+
+With this mapping, you can align selected lines with a few keystrokes.
+
+1. <Enter> key to start EasyAlign command
+2. Optional field number (default: 1)
+    1        Alignment around 1st delimiter
+    2        Alignment around 2nd delimiter
+    ...
+    *        Alignment around all delimiters (recursive)
+3. Delimiter
+    <space>  General alignment around whitespaces
+    =        Operators containing equals sign (=, ==, !=, +=, &&=, ...)
+    :        Suitable for formatting JSON or YAML
+    .        Multi-line method chaining
+    ,        Multi-line method arguments. CSV.
+    |        Table markdown
+
+Examples:
+
+  <Enter>=         Alignment around 1st equals sign (and the likes)
+  <Enter>2=        Alignment around 2nd equals sign (and the likes)
+  <Enter>3=        Alignment around 3rd equals sign (and the likes)
+  <Enter>*=        Alignment around all equals signs (and the likes)
+  <Enter><space>   Alignment around 1st whitespace
+  <Enter>2<space>  Alignment around 2nd whitespace
+  <Enter>:         Alignment around 1st colon
+
+
+Defining custom alignment rules
+-------------------------------------------------------------------------
+
+    let g:easy_align_delimiters = {
+    \ '/': { 'pattern': '//*' },
+    \ 'x': {
+    \     'pattern':       '[xX]',
+    \     'margin_left':   ' <<<',
+    \     'margin_right':  '>>> ',
+    \     'stick_to_left': 0
+    \   }
+    \ }
+

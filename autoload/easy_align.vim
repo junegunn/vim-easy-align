@@ -1,21 +1,22 @@
-if exists("g:lesser_align_loaded")
+if exists("g:easy_align_loaded")
   finish
 endif
-let g:lesser_align_loaded = 1
-let g:lesser_align_delimiters_merged = {
-\  ' ': { 'pattern': ' ', 'margin_left': '',  'margin_right': '', 'stick_to_left': 0 },
+let g:easy_align_loaded = 1
+let g:easy_align_delimiters_merged = {
+\  ' ': { 'pattern': ' ',  'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
 \  '=': { 'pattern': '<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
-\                         'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
-\  ':': { 'pattern': ':', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
-\  ',': { 'pattern': ',', 'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
-\  '|': { 'pattern': '|', 'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 }
+\                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
+\  ':': { 'pattern': ':',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
+\  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
+\  '|': { 'pattern': '|',  'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
+\  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 }
 \ }
 
-if !exists("g:lesser_align_delimiters")
-  let g:lesser_align_delimiters = {}
+if !exists("g:easy_align_delimiters")
+  let g:easy_align_delimiters = {}
 endif
 
-call extend(g:lesser_align_delimiters_merged, g:lesser_align_delimiters)
+call extend(g:easy_align_delimiters_merged, g:easy_align_delimiters)
 
 function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines         = {}
@@ -78,13 +79,13 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
   endif
 endfunction
 
-function! lesser_align#align(...) range
+function! easy_align#align(...) range
   let recursive = 0
   let n         = ''
   let ch        = ''
 
   if a:0 == 0
-    echon "\rlesser-align ()"
+    echon "\reasy-align ()"
     while 1
       let c  = getchar()
       let ch = nr2char(c)
@@ -96,14 +97,14 @@ function! lesser_align#align(...) range
           return
         endif
         let n = n . nr2char(c)
-        echon "\rlesser-align (". n .")"
+        echon "\reasy-align (". n .")"
       elseif ch == '*'
         if !empty(n)
           echon "\rField number(". n .") already specified"
           return
         endif
         let n = '*'
-        echon "\rlesser-align (*)"
+        echon "\reasy-align (*)"
       else
         break
       endif
@@ -133,15 +134,15 @@ function! lesser_align#align(...) range
     return
   endif
 
-  if has_key(g:lesser_align_delimiters_merged, ch)
-    let dict = g:lesser_align_delimiters_merged[ch]
+  if has_key(g:easy_align_delimiters_merged, ch)
+    let dict = g:easy_align_delimiters_merged[ch]
     call s:do_align(a:firstline, a:lastline,
                   \ get(dict, 'pattern', ch),
                   \ n,
                   \ get(dict, 'margin_left', ' '),
                   \ get(dict, 'margin_right', ' '),
                   \ get(dict, 'stick_to_left', 0), recursive)
-    echon "\rlesser-align (". (recursive ? '*' : n) . ch .")"
+    echon "\reasy-align (". (recursive ? '*' : n) . ch .")"
   else
     echon "\rUnknown delimiter: ". ch
   endif
