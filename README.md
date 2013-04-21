@@ -39,16 +39,16 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 
 ### Example command sequences
 
-| With visual map   | Description                                       | Equivalent command    |
-| ----------------- | ------------------------------------------------- | --------------------- |
-| `<Enter>=`        | Alignment around 1st equals sign (and the likes)  | `:'<,'>EasyAlign =`   |
-| `<Enter>2=`       | Alignment around 2nd equals sign (and the likes)  | `:'<,'>EasyAlign 2=`  |
-| `<Enter>3=`       | Alignment around 3rd equals sign (and the likes)  | `:'<,'>EasyAlign 3=`  |
-| `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign *=`  |
-| `<Enter><space>`  | Alignment around 1st space                        | `:'<,'>EasyAlign \ `  |
-| `<Enter>2<space>` | Alignment around 2nd space                        | `:'<,'>EasyAlign 2\ ` |
-| `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign :`   |
-| ...               | ...                                               |                       |
+| With visual map   | Description                                       | Equivalent command   |
+| ----------------- | ------------------------------------------------- | -------------------- |
+| `<Enter>=`        | Alignment around 1st equals sign (and the likes)  | `:'<,'>EasyAlign=`   |
+| `<Enter>2=`       | Alignment around 2nd equals sign (and the likes)  | `:'<,'>EasyAlign2=`  |
+| `<Enter>3=`       | Alignment around 3rd equals sign (and the likes)  | `:'<,'>EasyAlign3=`  |
+| `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign*=`  |
+| `<Enter><space>`  | Alignment around 1st space                        | `:'<,'>EasyAlign\ `  |
+| `<Enter>2<space>` | Alignment around 2nd space                        | `:'<,'>EasyAlign2\ ` |
+| `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`   |
+| ...               | ...                                               |                      |
 
 Defining custom alignment rules
 -------------------------------
