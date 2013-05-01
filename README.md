@@ -50,6 +50,26 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 | `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`   |
 | ...               | ...                                               |                      |
 
+### Alignment in blockwise-visual mode
+
+In blockwise-visual mode (`CTRL-V`), EasyAlign aligns only the selected portions.
+Consider the following case where you want to align `=>` operators.
+
+```ruby
+my_hash = { :a => 1,
+            :aa => 2,
+            :aaa => 3 }
+```
+
+In non-blockwise visual mode, `<Enter>=` won't work because of the assignment operator in the first line.
+So we instead enter blockwise-visual mode, and select text *around* `=>` operators, then press `<Enter>=`.
+
+```ruby
+my_hash = { :a   => 1,
+            :aa  => 2,
+            :aaa => 3 }
+```
+
 Defining custom alignment rules
 -------------------------------
 

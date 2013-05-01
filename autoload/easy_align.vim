@@ -18,14 +18,17 @@ endif
 
 call extend(g:easy_align_delimiters_merged, g:easy_align_delimiters)
 
-function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
+function! s:do_align(fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines         = {}
   let just_len      = 0
   let max_delim_len = 0
   let max_tokens    = 0
   let pattern       = '\s*\(' .a:pattern. '\)\s*'
   for line in range(a:fl, a:ll)
-    let tokens     = split(getline(line), pattern.'\zs')
+    let tokens = split(a:lc ?
+                      \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
+                      \ strpart(getline(line), a:fc - 1),
+                      \ pattern.'\zs')
     if empty(tokens)
       continue
     endif
@@ -71,11 +74,17 @@ function! s:do_align(fl, ll, pattern, nth, ml, mr, stick_to_left, recursive)
     endif
     let ml = empty(prefix) ? '' : a:ml
     let mr = empty(suffix) ? '' : a:mr
-    call setline(line, substitute(join([prefix, ml, delim, mr, suffix], ''), '\s*$', '', ''))
+
+    let aligned = join([prefix, ml, delim, mr, suffix], '')
+    let cline = getline(line)
+    let part1 = strpart(cline, 0, a:fc - 1)
+    let part2 = a:lc ? aligned : substitute(aligned, '\s*$', '', '')
+    let part3 = a:lc ? strpart(cline, a:lc) : ''
+    call setline(line, part1 . part2 . part3)
   endfor
 
   if a:recursive && a:nth < max_tokens
-    call s:do_align(a:fl, a:ll, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
+    call s:do_align(a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
   endif
 endfunction
 
@@ -137,6 +146,8 @@ function! easy_align#align(...) range
   if has_key(g:easy_align_delimiters_merged, ch)
     let dict = g:easy_align_delimiters_merged[ch]
     call s:do_align(a:firstline, a:lastline,
+                  \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
+                  \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
                   \ get(dict, 'pattern', ch),
                   \ n,
                   \ get(dict, 'margin_left', ' '),
