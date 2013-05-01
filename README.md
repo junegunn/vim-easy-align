@@ -50,7 +50,7 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 | `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`   |
 | ...               | ...                                               |                      |
 
-### Alignment in blockwise-visual mode
+### Partial alignment in blockwise-visual mode
 
 In blockwise-visual mode (`CTRL-V`), EasyAlign aligns only the selected portions.
 Consider the following case where you want to align `=>` operators.
