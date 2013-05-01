@@ -33,7 +33,7 @@ function! s:do_align(fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recurs
       continue
     endif
 
-    let max_tokens = len(tokens) > max_tokens ? len(tokens) : max_tokens
+    let max_tokens = max([len(tokens), max_tokens])
     let nth        = match(tokens[0], '^\s*$') != -1 ? a:nth + 1 : a:nth
 
     if len(tokens) < nth
@@ -41,46 +41,40 @@ function! s:do_align(fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recurs
     endif
 
     let last   = tokens[nth - 1]
-    let before = (nth > 1 ? join(tokens[0 : nth - 2], '') : '') . substitute(last, pattern.'$', '', '')
-    let after  = join(tokens[nth : -1], '')
+    let prefix = (nth > 1 ? join(tokens[0 : nth - 2], '') : '') . substitute(last, pattern.'$', '', '')
+    let suffix = join(tokens[nth : -1], '')
 
     if match(last, pattern.'$') == -1
       continue
     endif
 
     let delim         = matchlist(tokens[nth - 1], pattern)[1]
-    let just_len      = len(before) > just_len ? len(before) : just_len
-    let max_delim_len = len(delim) > max_delim_len ? len(delim) : max_delim_len
-    let lines[line]   = [before, after, delim]
+    let just_len      = max([len(prefix), just_len])
+    let max_delim_len = max([len(delim), max_delim_len])
+    let lines[line]   = [prefix, suffix, delim]
   endfor
 
   for [line, tokens] in items(lines)
     let [prefix, suffix, delim] = tokens
-    let pad = just_len - len(prefix)
-    if pad > 0
-      for i in range(pad)
-        if a:stick_to_left
-          let suffix = ' '. suffix
-        else
-          let prefix = prefix . ' '
-        endif
-      endfor
-    endif
-    let pad = max_delim_len - len(delim)
-    if pad > 0
-      for i in range(pad)
-        let delim = ' '. delim
-      endfor
-    endif
-    let ml = empty(prefix) ? '' : a:ml
-    let mr = empty(suffix) ? '' : a:mr
 
+    let pad = repeat(' ', just_len - len(prefix))
+    if a:stick_to_left
+      let suffix = pad . suffix
+    else
+      let prefix = prefix . pad
+    endif
+
+    let delim   = repeat(' ', max_delim_len - len(delim)). delim
+    let cline   = getline(line)
+    let before  = strpart(cline, 0, a:fc - 1)
+    let after   = a:lc ? strpart(cline, a:lc) : ''
+
+    let ml      = empty(prefix) ? '' : a:ml
+    let mr      = (empty(suffix . after) || stridx(after, a:mr) == 0) ? '' : a:mr
     let aligned = join([prefix, ml, delim, mr, suffix], '')
-    let cline = getline(line)
-    let part1 = strpart(cline, 0, a:fc - 1)
-    let part2 = a:lc ? aligned : substitute(aligned, '\s*$', '', '')
-    let part3 = a:lc ? strpart(cline, a:lc) : ''
-    call setline(line, part1 . part2 . part3)
+    let aligned = empty(after) ? substitute(aligned, '\s*$', '', '') : aligned
+
+    call setline(line, before.aligned.after)
   endfor
 
   if a:recursive && a:nth < max_tokens
