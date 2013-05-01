@@ -53,7 +53,7 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 ### Partial alignment in blockwise-visual mode
 
 In blockwise-visual mode (`CTRL-V`), EasyAlign aligns only the selected portions.
-Consider the following case where you want to align `=>` operators.
+Consider the following case where you want to align text around `=>` operators.
 
 ```ruby
 my_hash = { :a => 1,
@@ -61,8 +61,10 @@ my_hash = { :a => 1,
             :aaa => 3 }
 ```
 
-In non-blockwise visual mode, `<Enter>=` won't work because of the assignment operator in the first line.
-So we instead enter blockwise-visual mode, and select text *around* `=>` operators, then press `<Enter>=`.
+In non-blockwise visual mode (`v` / `V`), `<Enter>=` won't work since the assignment
+operator in the first line gets in the way.
+So we instead enter blockwise-visual mode (`CTRL-V`), and select the text *around*
+`=>` operators, then press `<Enter>=`.
 
 ```ruby
 my_hash = { :a   => 1,
