@@ -52,7 +52,9 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 
 ### Partial alignment in blockwise-visual mode
 
-In blockwise-visual mode (`CTRL-V`), EasyAlign aligns only the selected portions.
+In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only the selected
+parts, instead of the whole lines in the range.
+
 Consider the following case where you want to align text around `=>` operators.
 
 ```ruby

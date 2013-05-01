@@ -49,6 +49,13 @@ Examples:
   <Enter>:         Alignment around 1st colon
 
 
+Partial alignment in blockwise-visual mode
+-------------------------------------------------------------------------
+
+In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only
+the selected parts, instead of the whole lines in the range.
+
+
 Defining custom alignment rules
 -------------------------------------------------------------------------
 
