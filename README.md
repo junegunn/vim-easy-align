@@ -77,6 +77,7 @@ Defining custom alignment rules
 
 ```vim
 let g:easy_align_delimiters = {
+\ '>': { 'pattern': '>>\|=>\|>' },
 \ '/': { 'pattern': '//*' },
 \ 'x': {
 \     'pattern':       '[xX]',
