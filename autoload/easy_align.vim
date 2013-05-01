@@ -70,7 +70,7 @@ function! s:do_align(fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recurs
     let after   = a:lc ? strpart(cline, a:lc) : ''
 
     let ml      = empty(prefix) ? '' : a:ml
-    let mr      = (empty(suffix . after) || stridx(after, a:mr) == 0) ? '' : a:mr
+    let mr      = (empty(suffix . after) || (empty(suffix) && stridx(after, a:mr) == 0)) ? '' : a:mr
     let aligned = join([prefix, ml, delim, mr, suffix], '')
     let aligned = empty(after) ? substitute(aligned, '\s*$', '', '') : aligned
 
