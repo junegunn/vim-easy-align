@@ -1,15 +1,17 @@
 vim-easy-align
 ==============
 
-Yet another Vim alignment plugin without too much ambition.
+A simple, easy-to-use Vim alignment plugin.
 
-This plugin clearly has less features than the other pre-existing ones with the similar goals,
-but it is simpler, easier to use, and just good enough for the most of the cases.
+Demo
+----
+
+[Screencast](https://vimeo.com/63506219)
 
 Usage
 -----
 
-Vim-easy-align defines `:EasyAlign` command in the visual mode.
+_vim-easy-align_ defines interactive `:EasyAlign` command in the visual mode.
 For convenience, it is advised that you define a mapping for triggering it in your `.vimrc`.
 
 ```vim
@@ -18,7 +20,8 @@ vnoremap <silent> <Enter> :EasyAlign<cr>
 
 With the mapping, you can align selected lines with a few keystrokes.
 
-1. `<Enter>` key to start EasyAlign command
+1. `<Enter>` key to start interactive EasyAlign command
+1. Optional Enter keys to switch justficiation mode (default: left)
 1. Optional field number (default: 1)
     - `1`        Alignment around 1st delimiter
     - `2`        Alignment around 2nd delimiter
@@ -39,16 +42,17 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 
 ### Example command sequences
 
-| With visual map   | Description                                       | Equivalent command   |
-| ----------------- | ------------------------------------------------- | -------------------- |
-| `<Enter>=`        | Alignment around 1st equals sign (and the likes)  | `:'<,'>EasyAlign=`   |
-| `<Enter>2=`       | Alignment around 2nd equals sign (and the likes)  | `:'<,'>EasyAlign2=`  |
-| `<Enter>3=`       | Alignment around 3rd equals sign (and the likes)  | `:'<,'>EasyAlign3=`  |
-| `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign*=`  |
-| `<Enter><space>`  | Alignment around 1st space                        | `:'<,'>EasyAlign\ `  |
-| `<Enter>2<space>` | Alignment around 2nd space                        | `:'<,'>EasyAlign2\ ` |
-| `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`   |
-| ...               | ...                                               |                      |
+| With visual map   | Description                                       | Equivalent command      |
+| ----------------- | ------------------------------------------------- | ----------------------- |
+| `<Enter>=`        | Alignment around 1st equals signs (and the likes) | `:'<,'>EasyAlign=`      |
+| `<Enter>2=`       | Alignment around 2nd equals signs (and the likes) | `:'<,'>EasyAlign2=`     |
+| `<Enter>3=`       | Alignment around 3rd equals signs (and the likes) | `:'<,'>EasyAlign3=`     |
+| `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign*=`     |
+| `<Enter><Enter>=` | Right-justified alignment around 1st equals signs | `:'<,'>EasyAlignRight=` |
+| `<Enter><space>`  | Alignment around 1st space                        | `:'<,'>EasyAlign\ `     |
+| `<Enter>2<space>` | Alignment around 2nd space                        | `:'<,'>EasyAlign2\ `    |
+| `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`      |
+| ...               | ...                                               |                         |
 
 ### Partial alignment in blockwise-visual mode
 
@@ -90,10 +94,57 @@ let g:easy_align_delimiters = {
 \ }
 ```
 
-Demo
-----
+Handling unmatched lines
+------------------------
 
-[Screencast](https://vimeo.com/63506219)
+EasyAlign by default ignores lines without the matching delimiters.
+This is to ignore interleaved comments commonly found in code.
+
+For example, when aligning the following code block,
+
+```
+{
+  # Quantity of apples
+  apple: 1,
+  # Quantity of bananas
+  bananas: 2,
+  # Quantity of grapefruits
+  grapefruits: 3
+}
+```
+
+we don't want to the comment lines to affect the alignment,
+so this is usually what we want.
+
+```
+{
+  # Quantity of apples
+  apple:       1,
+  # Quantity of bananas
+  bananas:     2,
+  # Quantity of grapefruits
+  grapefruits: 3
+}
+```
+
+However, this default behavior is configurable.
+
+```vim
+let g:easy_align_ignore_unmatched = 0
+```
+
+Then we get,
+
+```
+{
+  # Quantity of apples
+  apple:                     1,
+  # Quantity of bananas
+  bananas:                   2,
+  # Quantity of grapefruits
+  grapefruits:               3
+}
+```
 
 Author
 ------

@@ -1,21 +1,16 @@
 vim-easy-align                              *vim-easy-align* *easy-align*
 =========================================================================
 
-Author: Junegunn Choi <https://github.com/junegunn>
+A simple, easy-to-use Vim alignment plugin.
 
-Yet another Vim alignment plugin without too much ambition.
-
-This plugin clearly has less features than the other pre-existing ones
-with the similar goals, but it is simpler, easier to use,
-and just good enough for the most of the cases.
-
-https://github.com/junegunn/vim-easy-align
+  Author: Junegunn Choi
+  Source: https://github.com/junegunn/vim-easy-align
 
 
 EasyAlign                                                     *EasyAlign*
 -------------------------------------------------------------------------
 
-Vim-easy-align defines `:EasyAlign` command in the visual mode.
+vim-easy-align defines interactive `:EasyAlign` command in the visual mode.
 
 For convenience, it is advised that you define a mapping for triggering it
 in your `.vimrc`.
@@ -24,13 +19,14 @@ in your `.vimrc`.
 
 With this mapping, you can align selected lines with a few keystrokes.
 
-1. <Enter> key to start EasyAlign command
-2. Optional field number (default: 1)
+1. <Enter> key to start interactive EasyAlign command
+2. Optional Enter keys to switch justficiation mode (default: left)
+3. Optional field number (default: 1)
     1        Alignment around 1st delimiter
     2        Alignment around 2nd delimiter
     ...
     *        Alignment around all delimiters (recursive)
-3. Delimiter
+4. Delimiter
     <space>  General alignment around whitespaces
     =        Operators containing equals sign (=, ==, !=, +=, &&=, ...)
     :        Suitable for formatting JSON or YAML
@@ -38,15 +34,26 @@ With this mapping, you can align selected lines with a few keystrokes.
     ,        Multi-line method arguments. CSV.
     |        Table markdown
 
+During the key sequence, <Enter> key will switch justification mode.
+(left -> right -> center)
+
 Examples:
 
-  <Enter>=         Alignment around 1st equals sign (and the likes)
-  <Enter>2=        Alignment around 2nd equals sign (and the likes)
-  <Enter>3=        Alignment around 3rd equals sign (and the likes)
+  <Enter>=         Alignment around 1st equals signs (and the likes)
+  <Enter>2=        Alignment around 2nd equals signs (and the likes)
+  <Enter>3=        Alignment around 3rd equals signs (and the likes)
   <Enter>*=        Alignment around all equals signs (and the likes)
+  <Enter><Enter>=  Right-justified alignment around 1st equals signs
   <Enter><space>   Alignment around 1st whitespace
   <Enter>2<space>  Alignment around 2nd whitespace
   <Enter>:         Alignment around 1st colon
+
+
+EasyAlignRight, EasyAlignCenter        *EasyAlignRight* *EasyAlignCenter*
+-------------------------------------------------------------------------
+
+*EasyAlignRight* and *EasyAlignCenter* are the right and center justified
+versions of EasyAlign command.
 
 
 Partial alignment in blockwise-visual mode
@@ -56,7 +63,8 @@ In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only
 the selected parts, instead of the whole lines in the range.
 
 
-Defining custom alignment rules
+
+Defining custom alignment rules                 *g:easy_align_delimiters*
 -------------------------------------------------------------------------
 
     let g:easy_align_delimiters = {
@@ -69,3 +77,46 @@ Defining custom alignment rules
     \   }
     \ }
 
+
+Handling unmatched lines                  *g:easy_align_ignore_unmatched*
+-------------------------------------------------------------------------
+
+EasyAlign by default ignores lines without the matching delimiters.
+This is to ignore interleaved comments commonly found in code.
+
+For example, when aligning the following code,
+
+    {
+      # Quantity of apples
+      apple: 1,
+      # Quantity of bananas
+      bananas: 2,
+      # Quantity of grapefruits
+      grapefruits: 3
+    }
+
+this is usually what we want.
+
+    {
+      # Quantity of apples
+      apple:       1,
+      # Quantity of bananas
+      bananas:     2,
+      # Quantity of grapefruits
+      grapefruits: 3
+    }
+
+However, this default behavior is configurable.
+
+    let g:easy_align_ignore_unmatched = 0
+
+Then we get,
+
+    {
+      # Quantity of apples
+      apple:                     1,
+      # Quantity of bananas
+      bananas:                   2,
+      # Quantity of grapefruits
+      grapefruits:               3
+    }
