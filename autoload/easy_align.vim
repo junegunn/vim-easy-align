@@ -13,15 +13,14 @@ let s:easy_align_delimiters_default = {
 \  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 }
 \ }
 
-let s:just = ['L', 'R', 'C']
+let s:just = ['', '[R]']
 
 function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
-  let lines          = {}
-  let max_token_len  = 0
-  let max_delim_len  = 0
-  let max_prefix_len = 0
-  let max_tokens     = 0
-  let pattern        = '\s*\(' .a:pattern. '\)\s*'
+  let lines         = {}
+  let max_just_len  = 0
+  let max_delim_len = 0
+  let max_tokens    = 0
+  let pattern       = '\s*\(' .a:pattern. '\)\s*'
   for line in range(a:fl, a:ll)
     let tokens = split(a:lc ?
                       \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
@@ -31,17 +30,21 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       continue
     endif
 
+    " Preserve indentation
+    if match(tokens[0], '^\s*$') != -1
+      let tokens = extend([join(tokens[0:1], '')], tokens[2:-1])
+    endif
     let max_tokens = max([len(tokens), max_tokens])
-    let nth        = match(tokens[0], '^\s*$') != -1 ? a:nth + 1 : a:nth
 
-    if len(tokens) < nth
+    if len(tokens) < a:nth
       continue
     endif
+    let nth = a:nth - 1 " 0-based
 
-    let last   = tokens[nth - 1]
-    let prefix = (nth > 1 ? join(tokens[0 : nth - 2], '') : '')
+    let last   = tokens[nth]
+    let prefix = (nth > 0 ? join(tokens[0 : nth - 1], '') : '')
     let token  = substitute(last, pattern.'$', '', '')
-    let suffix = join(tokens[nth : -1], '')
+    let suffix = join(tokens[nth + 1: -1], '')
 
     if match(last, pattern.'$') == -1
       if !exists("g:easy_align_ignore_unmatched") || g:easy_align_ignore_unmatched
@@ -53,16 +56,15 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       let delim = matchlist(last, pattern)[1]
     endif
 
-    let max_token_len  = max([len(token), max_token_len])
-    let max_prefix_len = max([len(prefix), max_prefix_len])
-    let max_delim_len  = max([len(delim), max_delim_len])
-    let lines[line]    = [prefix, token, delim, suffix]
+    let max_just_len  = max([len(token.prefix), max_just_len])
+    let max_delim_len = max([len(delim), max_delim_len])
+    let lines[line]   = [prefix, token, delim, suffix]
   endfor
 
   for [line, tokens] in items(lines)
     let [prefix, token, delim, suffix] = tokens
 
-    let pad = repeat(' ', max_token_len - len(token) + max_prefix_len - len(prefix))
+    let pad = repeat(' ', max_just_len - len(prefix) - len(token))
     if a:just == 0
       if a:stick_to_left
         let suffix = pad . suffix
@@ -71,15 +73,6 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       endif
     elseif a:just == 1
       let token = pad . token
-    else
-      let p1 = strpart(pad, 0, len(pad) / 2)
-      let p2 = strpart(pad, len(pad) / 2)
-      if a:stick_to_left
-        let token = p1 . token
-        let suffix = p2 . suffix
-      else
-        let token = p1. token .p2
-      endif
     endif
 
     let delim   = repeat(' ', max_delim_len - len(delim)). delim
@@ -101,7 +94,8 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
 endfunction
 
 function! s:echon(l, n, d)
-  echon "\rEasyAlign[". s:just[a:l] ."] (" .a:n.a:d. ")"
+  echon "\r"
+  echon "\rEasyAlign". s:just[a:l] ." (" .a:n.a:d. ")"
 endfunction
 
 function! easy_align#align(just, ...) range

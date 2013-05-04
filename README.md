@@ -1,7 +1,7 @@
 vim-easy-align
 ==============
 
-A simple, easy-to-use Vim alignment plugin.
+A simple, easy-to-use Vim alignment plugin without too much ambition.
 
 Demo
 ----
@@ -21,7 +21,7 @@ vnoremap <silent> <Enter> :EasyAlign<cr>
 With the mapping, you can align selected lines with a few keystrokes.
 
 1. `<Enter>` key to start interactive EasyAlign command
-1. Optional Enter keys to switch justficiation mode (default: left)
+1. Optional Enter keys to toggle right justification mode
 1. Optional field number (default: 1)
     - `1`        Alignment around 1st delimiter
     - `2`        Alignment around 2nd delimiter

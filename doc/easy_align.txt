@@ -1,7 +1,7 @@
 vim-easy-align                              *vim-easy-align* *easy-align*
 =========================================================================
 
-A simple, easy-to-use Vim alignment plugin.
+A simple, easy-to-use Vim alignment plugin without too much ambition.
 
   Author: Junegunn Choi
   Source: https://github.com/junegunn/vim-easy-align
@@ -34,8 +34,7 @@ With this mapping, you can align selected lines with a few keystrokes.
     ,        Multi-line method arguments. CSV.
     |        Table markdown
 
-During the key sequence, <Enter> key will switch justification mode.
-(left -> right -> center)
+During the key sequence, <Enter> key will toggle right-justification mode.
 
 Examples:
 
@@ -49,11 +48,10 @@ Examples:
   <Enter>:         Alignment around 1st colon
 
 
-EasyAlignRight, EasyAlignCenter        *EasyAlignRight* *EasyAlignCenter*
+EasyAlignRight                                           *EasyAlignRight*
 -------------------------------------------------------------------------
 
-*EasyAlignRight* and *EasyAlignCenter* are the right and center justified
-versions of EasyAlign command.
+*EasyAlignRight* is the right justified version of EasyAlign command.
 
 
 Partial alignment in blockwise-visual mode
@@ -120,3 +118,4 @@ Then we get,
       # Quantity of grapefruits
       grapefruits:               3
     }
+
