@@ -97,7 +97,7 @@ let g:easy_align_delimiters = {
 Handling unmatched lines
 ------------------------
 
-EasyAlign by default ignores lines without the matching delimiters.
+EasyAlign by default ignores lines without the matching delimiters (except in right-justification mode).
 This is to ignore interleaved comments commonly found in code.
 
 For example, when aligning the following code block,

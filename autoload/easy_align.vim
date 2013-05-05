@@ -47,7 +47,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
     let suffix = join(tokens[nth + 1: -1], '')
 
     if match(last, pattern.'$') == -1
-      if !exists("g:easy_align_ignore_unmatched") || g:easy_align_ignore_unmatched
+      if a:just == 0 && (!exists("g:easy_align_ignore_unmatched") || g:easy_align_ignore_unmatched)
         continue
       else
         let delim = ''
