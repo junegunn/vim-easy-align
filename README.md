@@ -126,7 +126,7 @@ For example, when aligning the following code block,
 }
 ```
 
-we don't want to the comment lines to affect the alignment,
+we don't want the comment lines to affect the alignment,
 so this is usually what we want.
 
 ```
