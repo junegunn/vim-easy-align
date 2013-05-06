@@ -23,8 +23,8 @@ With the mapping, you can align selected lines with a few keystrokes.
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to toggle right-justification mode
 1. Optional field number (default: 1)
-    - `1`        Alignment around 1st delimiter
-    - `2`        Alignment around 2nd delimiter
+    - `1`        Alignment around 1st delimiters
+    - `2`        Alignment around 2nd delimiters
     - ...
     - `*`        Alignment around all delimiters (recursive)
 1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`)
@@ -38,7 +38,7 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 | `:`       | Suitable for formatting JSON or YAML                       |
 | `.`       | Multi-line method chaining                                 |
 | `,`       | Multi-line method arguments                                |
-| `|`       | Table markdown                                             |
+| &#124;    | Table markdown                                             |
 
 ### Example command sequences
 
