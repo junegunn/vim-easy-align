@@ -8,6 +8,19 @@ Demo
 
 [Screencast](https://vimeo.com/63506219)
 
+Installation
+------------
+
+Either [download zip file](http://www.vim.org/scripts/script.php?script_id=4520)
+and extract in ~/.vim or use [Vundle](https://github.com/gmarik/vundle) (recommended)
+or [Pathogen](https://github.com/tpope/vim-pathogen).
+
+### With Vundle
+
+```vim
+Bundle 'junegunn/vim-easy-align'
+```
+
 Usage
 -----
 
