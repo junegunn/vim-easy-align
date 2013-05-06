@@ -5,7 +5,7 @@ let g:easy_align_loaded = 1
 
 let s:easy_align_delimiters_default = {
 \  ' ': { 'pattern': ' ',  'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
-\  '=': { 'pattern': '<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
+\  '=': { 'pattern': '===\|<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
 \                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
 \  ':': { 'pattern': ':',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
