@@ -6,6 +6,8 @@ A simple, easy-to-use Vim alignment plugin without too much ambition.
 Demo
 ----
 
+![Screencast](https://raw.github.com/junegunn/vim-easy-align/gif/vim-easy-align.gif)
+
 [Screencast](https://vimeo.com/63506219)
 
 Installation
