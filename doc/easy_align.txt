@@ -51,7 +51,7 @@ Examples:
 EasyAlignRight                                           *EasyAlignRight*
 -------------------------------------------------------------------------
 
-*EasyAlignRight* is the right-justified version of EasyAlign command.
+EasyAlignRight is the right-justified version of EasyAlign command.
 
 
 Partial alignment in blockwise-visual mode
