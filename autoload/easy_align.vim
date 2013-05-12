@@ -153,7 +153,7 @@ function! easy_align#align(just, ...) range
       endif
     endwhile
   elseif a:0 == 1
-    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|\*\)\?\(.\)$')
+    let tokens = matchlist(a:1, '^\(-\?[1-9][0-9]*\|-\|\*\)\?\(.\)$')
     if empty(tokens)
       echo "Invalid arguments: ". a:1
       return
