@@ -45,9 +45,10 @@ Examples:
   <Enter>3=        Alignment around 3rd equals signs (and the likes)
   <Enter>*=        Alignment around all equals signs (and the likes)
   <Enter><Enter>=  Right-justified alignment around 1st equals signs
-  <Enter><space>   Alignment around 1st whitespace
-  <Enter>2<space>  Alignment around 2nd whitespace
-  <Enter>:         Alignment around 1st colon
+  <Enter><space>   Alignment around 1st whitespaces
+  <Enter>2<space>  Alignment around 2nd whitespaces
+  <Enter>-<space>  Alignment around the last whitespaces
+  <Enter>:         Alignment around 1st colons
   <Enter>-}        Alignment around the last closing braces
 
 
