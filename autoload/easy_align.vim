@@ -36,7 +36,6 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       let tokens = extend([join(tokens[0:1], '')], tokens[2:-1])
     endif
     let max_tokens = max([len(tokens), max_tokens])
-
     if a:nth > 0
       if len(tokens) < a:nth
         continue
@@ -125,6 +124,10 @@ function! easy_align#align(just, ...) range
       let ch = nr2char(c)
       if c == 3 || c == 27
         return
+      elseif c == '€kb'
+        if len(n) > 0
+          let n = strpart(n, 0, len(n) - 1)
+        endif
       elseif c == 13
         let just = (just + 1) % len(s:just)
       elseif c == 45
