@@ -26,6 +26,8 @@ With this mapping, you can align selected lines with a few keystrokes.
     2        Alignment around 2nd delimiters
     ...
     *        Alignment around all delimiters (recursive)
+    -        Alignment around the last delimieters
+    -2       Alignment around the one before the last delimieters
 4. Delimiter
     <space>  General alignment around whitespaces
     =        Operators containing equals sign (=, ==, !=, +=, &&=, ...)
@@ -46,6 +48,7 @@ Examples:
   <Enter><space>   Alignment around 1st whitespace
   <Enter>2<space>  Alignment around 2nd whitespace
   <Enter>:         Alignment around 1st colon
+  <Enter>-}        Alignment around the last closing braces
 
 
 EasyAlignRight                                           *EasyAlignRight*

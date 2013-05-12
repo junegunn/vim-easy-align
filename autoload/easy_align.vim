@@ -10,7 +10,8 @@ let s:easy_align_delimiters_default = {
 \  ':': { 'pattern': ':',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  '|': { 'pattern': '|',  'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
-\  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 }
+\  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
+\  '}': { 'pattern': '}',  'margin_left': ' ', 'margin_right': '',  'stick_to_left': 0 }
 \ }
 
 let s:just = ['', '[R]']
@@ -36,10 +37,22 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
     endif
     let max_tokens = max([len(tokens), max_tokens])
 
-    if len(tokens) < a:nth
-      continue
+    if a:nth > 0
+      if len(tokens) < a:nth
+        continue
+      endif
+      let nth = a:nth - 1 " 0-based
+    else
+      if match(tokens[len(tokens) - 1], pattern.'$') == -1
+        let nth = len(tokens) + a:nth - 1
+      else
+        let nth = len(tokens) + a:nth
+      endif
+
+      if nth < 0
+        continue
+      endif
     endif
-    let nth = a:nth - 1 " 0-based
 
     let last   = tokens[nth]
     let prefix = (nth > 0 ? join(tokens[0 : nth - 1], '') : '')
@@ -114,6 +127,12 @@ function! easy_align#align(just, ...) range
         return
       elseif c == 13
         let just = (just + 1) % len(s:just)
+      elseif c == 45
+        if !empty(n)
+          break
+        else
+          let n = '-'
+        endif
       elseif c >= 48 && c <= 57
         if n == '*'
           break
@@ -148,6 +167,8 @@ function! easy_align#align(just, ...) range
   if n == '*'
     let n = 1
     let recursive = 1
+  elseif n == '-'
+    let n = -1
   elseif empty(n)
     let n = 1
   elseif n != string(str2nr(n))
