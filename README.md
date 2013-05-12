@@ -99,6 +99,9 @@ my_hash = { :a   => 1,
             :aaa => 3 }
 ```
 
+However, in this case, we don't really need blockwise visual mode
+since the same can be easily done using the negative field number: `<Enter>-=`
+
 Defining custom alignment rules
 -------------------------------
 
