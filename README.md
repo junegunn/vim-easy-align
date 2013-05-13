@@ -56,7 +56,7 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `:`       | Suitable for formatting JSON or YAML                       |
 | `.`       | Multi-line method chaining                                 |
 | `,`       | Multi-line method arguments                                |
-| `}`       | Closing braces (use it with with a negative field number)  |
+| `}`       | Closing braces (Try using it with a negative field number) |
 | &#124;    | Table markdown                                             |
 
 ### Example command sequences
