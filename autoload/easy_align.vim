@@ -31,7 +31,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
   let max_just_len  = 0
   let max_delim_len = 0
   let max_tokens    = 0
-  let pattern       = '\s*\(' .a:pattern. '\)\s\{-}'
+  let pattern       = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
   for line in range(a:fl, a:ll)
     let tokens = split(a:lc ?
                       \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
@@ -58,7 +58,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
         let nth = len(tokens) + a:nth
       endif
 
-      if nth < 0
+      if nth < 0 || nth == len(tokens)
         continue
       endif
     endif
