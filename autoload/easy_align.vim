@@ -5,7 +5,7 @@ let g:easy_align_loaded = 1
 
 let s:easy_align_delimiters_default = {
 \  ' ': { 'pattern': ' ',  'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
-\  '=': { 'pattern': '===\|<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=',
+\  '=': { 'pattern': '===\|<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=[#?]\?',
 \                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
 \  ':': { 'pattern': ':',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
@@ -21,7 +21,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
   let max_just_len  = 0
   let max_delim_len = 0
   let max_tokens    = 0
-  let pattern       = '\s*\(' .a:pattern. '\)\s*'
+  let pattern       = '\s*\(' .a:pattern. '\)\s\{-}'
   for line in range(a:fl, a:ll)
     let tokens = split(a:lc ?
                       \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
@@ -56,7 +56,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
     let last   = tokens[nth]
     let prefix = (nth > 0 ? join(tokens[0 : nth - 1], '') : '')
     let token  = substitute(last, pattern.'$', '', '')
-    let suffix = join(tokens[nth + 1: -1], '')
+    let suffix = substitute(join(tokens[nth + 1: -1], ''), '^\s*', '', '')
 
     if match(last, pattern.'$') == -1
       if a:just == 0 && (!exists("g:easy_align_ignore_unmatched") || g:easy_align_ignore_unmatched)
@@ -130,30 +130,30 @@ function! easy_align#align(just, ...) range
         endif
       elseif c == 13
         let just = (just + 1) % len(s:just)
-      elseif c == 45
-        if !empty(n)
-          break
+      elseif index(['-', '*'], ch) != -1
+        if empty(n)
+          let n = ch
         else
-          let n = '-'
+          break
         endif
-      elseif c >= 48 && c <= 57
-        if n == '*'
-          break
+      elseif c == 48
+        if n == '-'
+          let n = '-0'
         else
+          break
+        endif
+      elseif c > 48 && c <= 57
+        if n != '*'
           let n = n . nr2char(c)
-        endif
-      elseif ch == '*'
-        if !empty(n)
-          break
         else
-          let n = '*'
+          break
         endif
       else
         break
       endif
     endwhile
   elseif a:0 == 1
-    let tokens = matchlist(a:1, '^\(-\?[1-9][0-9]*\|-\|\*\)\?\(.\)$')
+    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|-[0-9]*\|\*\)\?\(.\)$')
     if empty(tokens)
       echo "Invalid arguments: ". a:1
       return
@@ -174,7 +174,7 @@ function! easy_align#align(just, ...) range
     let n = -1
   elseif empty(n)
     let n = 1
-  elseif n != string(str2nr(n))
+  elseif n != '-0' && n != string(str2nr(n))
     echon "\rInvalid field number: ". n
     return
   endif
