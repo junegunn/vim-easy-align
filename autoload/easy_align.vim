@@ -154,7 +154,7 @@ function! easy_align#align(just, ...) range
         endif
       elseif c > 48 && c <= 57
         if n != '*'
-          let n = n . nr2char(c)
+          let n = n . ch
         else
           break
         endif
