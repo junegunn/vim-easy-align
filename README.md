@@ -45,7 +45,7 @@ With the mapping, you can align selected lines with a few keystrokes.
     - `-`         Alignment around the last delimiters (`-1`)
     - `-2`        Alignment around the one before the last delimiters
     - ...
-1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`)
+1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`, `}`)
 
 Alignment rules for the following delimiters have been defined to meet the most needs.
 
