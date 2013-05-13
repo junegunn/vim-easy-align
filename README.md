@@ -38,13 +38,16 @@ With the mapping, you can align selected lines with a few keystrokes.
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to toggle right-justification mode
 1. Optional field number (default: 1)
-    - `1`        Alignment around 1st delimiters
-    - `2`        Alignment around 2nd delimiters
+    - `1`         Alignment around 1st delimiters
+    - `2`         Alignment around 2nd delimiters
     - ...
-    - `*`        Alignment around all delimiters (recursive)
+    - `*`         Alignment around all delimiters (recursive)
+    - `-`         Alignment around the last delimiters (`-1`)
+    - `-2`        Alignment around the one before the last delimiters
+    - ...
 1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`)
 
-Alignment rules for the following delimiters have been crafted to meet the most needs.
+Alignment rules for the following delimiters have been defined to meet the most needs.
 
 | Delimiter | Description/Use cases                                      |
 | --------- | ---------------------------------------------------------- |
@@ -53,6 +56,7 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 | `:`       | Suitable for formatting JSON or YAML                       |
 | `.`       | Multi-line method chaining                                 |
 | `,`       | Multi-line method arguments                                |
+| `}`       | Closing braces (Try using it with a negative field number) |
 | &#124;    | Table markdown                                             |
 
 ### Example command sequences
@@ -64,9 +68,11 @@ Alignment rules for the following delimiters have been crafted to meet the most 
 | `<Enter>3=`       | Alignment around 3rd equals signs (and the likes) | `:'<,'>EasyAlign3=`     |
 | `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign*=`     |
 | `<Enter><Enter>=` | Right-justified alignment around 1st equals signs | `:'<,'>EasyAlignRight=` |
-| `<Enter><space>`  | Alignment around 1st space                        | `:'<,'>EasyAlign\ `     |
-| `<Enter>2<space>` | Alignment around 2nd space                        | `:'<,'>EasyAlign2\ `    |
+| `<Enter><space>`  | Alignment around 1st whitespaces                  | `:'<,'>EasyAlign\ `     |
+| `<Enter>2<space>` | Alignment around 2nd whitespaces                  | `:'<,'>EasyAlign2\ `    |
+| `<Enter>-<space>` | Alignment around the last whitespaces             | `:'<,'>EasyAlign-\ `    |
 | `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`      |
+| `<Enter>-}`       | Alignment around the last closing braces          | `:'<,'>EasyAlign-}`     |
 | ...               | ...                                               |                         |
 
 ### Partial alignment in blockwise-visual mode
@@ -93,6 +99,9 @@ my_hash = { :a   => 1,
             :aaa => 3 }
 ```
 
+However, in this case, we don't really need blockwise visual mode
+since the same can be easily done using the negative field number: `<Enter>-=`
+
 Defining custom alignment rules
 -------------------------------
 
@@ -100,9 +109,9 @@ Defining custom alignment rules
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
 \ '/': { 'pattern': '//*' },
-\ '}': {
-\     'pattern':       '}',
-\     'margin_left':   ' ',
+\ ')': {
+\     'pattern':       ')',
+\     'margin_left':   '',
 \     'margin_right':  '',
 \     'stick_to_left': 0
 \   }
