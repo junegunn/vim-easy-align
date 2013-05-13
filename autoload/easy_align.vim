@@ -16,6 +16,16 @@ let s:easy_align_delimiters_default = {
 
 let s:just = ['', '[R]']
 
+if exists("*strwidth")
+  function! s:strwidth(str)
+    return strwidth(a:str)
+  endfunction
+else
+  function! s:strwidth(str)
+    return len(split(a:str, '\zs'))
+  endfunction
+endif
+
 function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines         = {}
   let max_just_len  = 0
@@ -68,15 +78,15 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       let delim = matchlist(last, pattern)[1]
     endif
 
-    let max_just_len  = max([len(token.prefix), max_just_len])
-    let max_delim_len = max([len(delim), max_delim_len])
+    let max_just_len  = max([s:strwidth(token.prefix), max_just_len])
+    let max_delim_len = max([s:strwidth(delim), max_delim_len])
     let lines[line]   = [prefix, token, delim, suffix]
   endfor
 
   for [line, tokens] in items(lines)
     let [prefix, token, delim, suffix] = tokens
 
-    let pad = repeat(' ', max_just_len - len(prefix) - len(token))
+    let pad = repeat(' ', max_just_len - s:strwidth(prefix) - s:strwidth(token))
     if a:just == 0
       if a:stick_to_left
         let suffix = pad . suffix
@@ -87,7 +97,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
       let token = pad . token
     endif
 
-    let delim   = repeat(' ', max_delim_len - len(delim)). delim
+    let delim   = repeat(' ', max_delim_len - s:strwidth(delim)). delim
     let cline   = getline(line)
     let before  = strpart(cline, 0, a:fc - 1)
     let after   = a:lc ? strpart(cline, a:lc) : ''
