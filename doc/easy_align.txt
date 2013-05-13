@@ -70,11 +70,12 @@ Defining custom alignment rules                 *g:easy_align_delimiters*
 -------------------------------------------------------------------------
 
     let g:easy_align_delimiters = {
+    \ '>': { 'pattern': '>>\|=>\|>' },
     \ '/': { 'pattern': '//*' },
-    \ 'x': {
-    \     'pattern':       '[xX]',
-    \     'margin_left':   ' <<<',
-    \     'margin_right':  '>>> ',
+    \ ')': {
+    \     'pattern':       ')',
+    \     'margin_left':   '',
+    \     'margin_right':  '',
     \     'stick_to_left': 0
     \   }
     \ }
