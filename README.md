@@ -108,10 +108,11 @@ Defining custom alignment rules
 ```vim
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
-\ '/': { 'pattern': '//*' },
+\ '/': { 'pattern': '//\+' },
+\ '#': { 'pattern': '#\+' },
 \ ']': {
-\     'margin_left':   '',
 \     'pattern':       '[\[\]]',
+\     'margin_left':   '',
 \     'margin_right':  '',
 \     'stick_to_left': 0
 \   },
