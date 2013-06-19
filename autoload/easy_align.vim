@@ -1,7 +1,30 @@
-if exists("g:easy_align_loaded")
+" Copyright (c) 2013 Junegunn Choi
+"
+" MIT License
+"
+" Permission is hereby granted, free of charge, to any person obtaining
+" a copy of this software and associated documentation files (the
+" "Software"), to deal in the Software without restriction, including
+" without limitation the rights to use, copy, modify, merge, publish,
+" distribute, sublicense, and/or sell copies of the Software, and to
+" permit persons to whom the Software is furnished to do so, subject to
+" the following conditions:
+"
+" The above copyright notice and this permission notice shall be
+" included in all copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+" EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+" MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+" NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+" LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+" OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+" WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+if exists("g:loaded_easy_align")
   finish
 endif
-let g:easy_align_loaded = 1
+let g:loaded_easy_align = 1
 
 let s:easy_align_delimiters_default = {
 \  ' ': { 'pattern': ' ',  'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
@@ -27,11 +50,13 @@ else
 endif
 
 function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
-  let lines         = {}
-  let max_just_len  = 0
-  let max_delim_len = 0
-  let max_tokens    = 0
-  let pattern       = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
+  let lines          = {}
+  let max_just_len   = 0
+  let max_delim_len  = 0
+  let max_tokens     = 0
+  let pattern        = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
+  let ignore_comment = has('syntax') && exists('g:syntax_on') &&
+                       \ get(g:, 'easy_align_ignore_comment', 1)
   for line in range(a:fl, a:ll)
     let tokens = split(a:lc ?
                       \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
@@ -39,6 +64,14 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
                       \ pattern.'\zs')
     if empty(tokens)
       continue
+    endif
+
+    if ignore_comment
+      execute "normal! ". line ."G^"
+      if synIDattr(synID(line, a:fc == 1 ? col('.') : a:fc, 0), 'name') =~? 'comment' &&
+         \ synIDattr(synID(line, a:lc ? min([a:lc, col('$') - 1]) : (col('$') - 1), 0), 'name') =~? 'comment'
+        continue
+      endif
     endif
 
     " Preserve indentation
@@ -69,7 +102,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
     let suffix = substitute(join(tokens[nth + 1: -1], ''), '^\s*', '', '')
 
     if match(last, pattern.'$') == -1
-      if a:just == 0 && (!exists("g:easy_align_ignore_unmatched") || g:easy_align_ignore_unmatched)
+      if a:just == 0 && get(g:, 'easy_align_ignore_unmatched', 1)
         continue
       else
         let delim = ''
@@ -190,7 +223,7 @@ function! easy_align#align(just, ...) range
   endif
 
   let delimiters = extend(copy(s:easy_align_delimiters_default),
-                  \ exists("g:easy_align_delimiters") ? g:easy_align_delimiters : {})
+                   \ get(g:, 'easy_align_delimiters', {}))
 
   if has_key(delimiters, ch)
     let dict = delimiters[ch]

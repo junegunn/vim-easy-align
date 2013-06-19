@@ -3,6 +3,14 @@ vim-easy-align
 
 A simple, easy-to-use Vim alignment plugin without too much ambition.
 
+Features:
+
+- Optimized for code editing
+- Extensible alignment rules
+- Aligns text around either _all or n-th_ appearance(s) of the delimiter
+- Ignores comment lines
+- Ignores lines without a matching delimiter
+
 Demo
 ----
 
@@ -78,7 +86,7 @@ Alignment rules for the following delimiters have been defined to meet the most 
 ### Partial alignment in blockwise-visual mode
 
 In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only the selected
-parts, instead of the whole lines in the range.
+text in the block, instead of the whole lines in the range.
 
 Consider the following case where you want to align text around `=>` operators.
 
@@ -102,8 +110,114 @@ my_hash = { :a   => 1,
 However, in this case, we don't really need blockwise visual mode
 since the same can be easily done using the negative field number: `<Enter>-=`
 
-Defining custom alignment rules
--------------------------------
+Options
+-------
+
+| Option                        | Type       | Default | Description                             |
+| ----------------------------- | ---------- | ------- | --------------------------------------- |
+| g:easy_align_ignore_comment   | boolean    | `1`     | Ignore comment lines                    |
+| g:easy_align_ignore_unmatched | boolean    | `1`     | Ignore lines without matching delimiter |
+| g:easy_align_delimiters       | dictionary | `{}`    | Extend or override alignment rules      |
+
+### Ignoring comment lines
+
+EasyAlign by default ignores comment lines.
+
+For example,
+
+```ruby
+{
+  # Quantity of apples: 1
+  apple: 1,
+  # Quantity of bananas: 2
+  bananas: 2,
+  # Quantity of grapefruits: 3
+  grapefruits: 3
+}
+```
+
+becomes
+
+```ruby
+{
+  # Quantity of apples: 1
+  apple:       1,
+  # Quantity of bananas: 2
+  bananas:     2,
+  # Quantity of grapefruits: 3
+  grapefruits: 3
+}
+```
+
+Since finding comment lines is done heuristically using syntax highlighting feature,
+this only works when syntax highlighting is enabled.
+
+If you do not want comment lines to be ignored, you can unset `g:easy_align_ignore_comment` as follows.
+
+```vim
+let g:easy_align_ignore_comment = 0
+```
+
+Then you get,
+
+```ruby
+{
+  # Quantity of apples:      1
+  apple:                     1,
+  # Quantity of bananas:     2
+  bananas:                   2,
+  # Quantity of grapefruits: 3
+  grapefruits:               3
+}
+```
+
+### Ignoring unmatched lines
+
+Lines without a matching delimiter are ignored as well (except in right-justification mode).
+
+For example, when aligning the following code block around the colons,
+
+```ruby
+{
+  apple: proc {
+    this_line_does_not_have_a_colon
+  },
+  bananas: 2,
+  grapefruits: 3
+}
+```
+
+this is usually what we want.
+
+```ruby
+{
+  apple:       proc {
+    this_line_does_not_have_a_colon
+  },
+  bananas:     2,
+  grapefruits: 3
+}
+```
+
+However, this default behavior is also configurable.
+
+```vim
+let g:easy_align_ignore_unmatched = 0
+```
+
+Then we get,
+
+```ruby
+{
+  apple:                             proc {
+    this_line_does_not_have_a_colon
+  },
+  bananas:                           2,
+  grapefruits:                       3
+}
+```
+
+### Extending alignment rules
 
 ```vim
 let g:easy_align_delimiters = {
@@ -125,59 +239,12 @@ let g:easy_align_delimiters = {
 \ }
 ```
 
-Handling unmatched lines
-------------------------
-
-EasyAlign by default ignores lines without the matching delimiters (except in right-justification mode).
-This is to ignore interleaved comments commonly found in code.
-
-For example, when aligning the following code block,
-
-```
-{
-  # Quantity of apples
-  apple: 1,
-  # Quantity of bananas
-  bananas: 2,
-  # Quantity of grapefruits
-  grapefruits: 3
-}
-```
-
-we don't want the comment lines to affect the alignment,
-so this is usually what we want.
-
-```
-{
-  # Quantity of apples
-  apple:       1,
-  # Quantity of bananas
-  bananas:     2,
-  # Quantity of grapefruits
-  grapefruits: 3
-}
-```
-
-However, this default behavior is configurable.
-
-```vim
-let g:easy_align_ignore_unmatched = 0
-```
-
-Then we get,
-
-```
-{
-  # Quantity of apples
-  apple:                     1,
-  # Quantity of bananas
-  bananas:                   2,
-  # Quantity of grapefruits
-  grapefruits:               3
-}
-```
-
 Author
 ------
 
 [Junegunn Choi](https://github.com/junegunn)
+
+License
+-------
+
+MIT

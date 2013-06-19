@@ -63,65 +63,116 @@ Partial alignment in blockwise-visual mode
 -------------------------------------------------------------------------
 
 In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only
-the selected parts, instead of the whole lines in the range.
+the selected text in the block, instead of the whole lines in the range.
 
 
-Defining custom alignment rules                 *g:easy_align_delimiters*
+Ignoring comment lines                      *g:easy_align_ignore_comment*
 -------------------------------------------------------------------------
 
-    let g:easy_align_delimiters = {
-    \ '>': { 'pattern': '>>\|=>\|>' },
-    \ '/': { 'pattern': '//*' },
-    \ ')': {
-    \     'pattern':       ')',
-    \     'margin_left':   '',
-    \     'margin_right':  '',
-    \     'stick_to_left': 0
-    \   }
-    \ }
+EasyAlign by default ignores comment lines.
+
+For example,
+
+    {
+      # Quantity of apples: 1
+      apple: 1,
+      # Quantity of bananas: 2
+      bananas: 2,
+      # Quantity of grapefruits: 3
+      grapefruits: 3
+    }
+
+becomes
+
+    {
+      # Quantity of apples: 1
+      apple:       1,
+      # Quantity of bananas: 2
+      bananas:     2,
+      # Quantity of grapefruits: 3
+      grapefruits: 3
+    }
+
+Since finding comment lines is done heuristically using syntax highlighting
+feature, this only works when syntax highlighting is enabled.
+
+If you do not want comment lines to be ignored, you can unset
+`g:easy_align_ignore_comment` as follows.
+
+    let g:easy_align_ignore_comment = 0
+
+Then you get,
+
+    {
+      # Quantity of apples:      1
+      apple:                     1,
+      # Quantity of bananas:     2
+      bananas:                   2,
+      # Quantity of grapefruits: 3
+      grapefruits:               3
+    }
 
 
 Handling unmatched lines                  *g:easy_align_ignore_unmatched*
 -------------------------------------------------------------------------
 
-EasyAlign by default ignores lines without the matching delimiters
-(except in right-justification mode).
-This is to ignore interleaved comments commonly found in code.
+Lines without a matching delimiter are ignored as well (except in
+right-justification mode).
 
-For example, when aligning the following code,
+For example, when aligning the following code block around the colons,
 
     {
-      # Quantity of apples
-      apple: 1,
-      # Quantity of bananas
+      apple: proc {
+        this_line_does_not_have_a_colon
+      },
       bananas: 2,
-      # Quantity of grapefruits
       grapefruits: 3
     }
 
 this is usually what we want.
 
     {
-      # Quantity of apples
-      apple:       1,
-      # Quantity of bananas
+      apple:       proc {
+        this_line_does_not_have_a_colon
+      },
       bananas:     2,
-      # Quantity of grapefruits
       grapefruits: 3
     }
 
-However, this default behavior is configurable.
+However, this default behavior is also configurable.
 
     let g:easy_align_ignore_unmatched = 0
 
 Then we get,
 
     {
-      # Quantity of apples
-      apple:                     1,
-      # Quantity of bananas
-      bananas:                   2,
-      # Quantity of grapefruits
-      grapefruits:               3
+      apple:                             proc {
+        this_line_does_not_have_a_colon
+      },
+      bananas:                           2,
+      grapefruits:                       3
     }
+
+
+Extending alignment rules                       *g:easy_align_delimiters*
+-------------------------------------------------------------------------
+
+    let g:easy_align_delimiters = {
+    \ '>': { 'pattern': '>>\|=>\|>' },
+    \ '/': { 'pattern': '//\+' },
+    \ '#': { 'pattern': '#\+' },
+    \ ']': {
+    \     'pattern':       '[\[\]]',
+    \     'margin_left':   '',
+    \     'margin_right':  '',
+    \     'stick_to_left': 0
+    \   },
+    \ ')': {
+    \     'pattern':       '[()]',
+    \     'margin_left':   '',
+    \     'margin_right':  '',
+    \     'stick_to_left': 0
+    \   }
+    \ }
+
 
