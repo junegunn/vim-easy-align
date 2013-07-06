@@ -49,7 +49,7 @@ else
   endfunction
 endif
 
-function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
+function! s:do_align(just, cl, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines          = {}
   let max_just_len   = 0
   let max_delim_len  = 0
@@ -67,11 +67,14 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
     endif
 
     if ignore_comment
-      execute "normal! ". line ."G^"
-      if synIDattr(synID(line, a:fc == 1 ? col('.') : a:fc, 0), 'name') =~? 'comment' &&
-         \ synIDattr(synID(line, a:lc ? min([a:lc, col('$') - 1]) : (col('$') - 1), 0), 'name') =~? 'comment'
-        continue
+      if !has_key(a:cl, line)
+        execute "normal! ". line ."G^"
+        let a:cl[line] =
+        \ synIDattr(synID(line, a:fc == 1 ? col('.') : a:fc, 0), 'name') =~? 'comment' &&
+        \ synIDattr(synID(line, a:lc ? min([a:lc, col('$') - 1]) : (col('$') - 1), 0), 'name') =~? 'comment'
       endif
+
+      if a:cl[line] | continue | endif
     endif
 
     " Preserve indentation
@@ -144,7 +147,7 @@ function! s:do_align(just, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, 
   endfor
 
   if a:recursive && a:nth < max_tokens
-    call s:do_align(a:just, a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
+    call s:do_align(a:just, a:cl, a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
   endif
 endfunction
 
@@ -227,7 +230,7 @@ function! easy_align#align(just, ...) range
 
   if has_key(delimiters, ch)
     let dict = delimiters[ch]
-    call s:do_align(just, a:firstline, a:lastline,
+    call s:do_align(just, {}, a:firstline, a:lastline,
                   \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
                   \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
                   \ get(dict, 'pattern', ch),
