@@ -7,7 +7,7 @@ Features:
 
 - Optimized for code editing
 - Extensible alignment rules
-- Aligns text around either _all or n-th_ appearance(s) of the delimiter
+- Aligns text around either _all or n-th_ occurrence(s) of the delimiter
 - Ignores comment lines
 - Ignores lines without a matching delimiter
 
@@ -46,14 +46,15 @@ With the mapping, you can align selected lines with a few keystrokes.
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to toggle right-justification mode
 1. Optional field number (default: 1)
-    - `1`         Alignment around 1st delimiters
-    - `2`         Alignment around 2nd delimiters
+    - `1`         Around the 1st occurrences of delimiters
+    - `2`         Around the 2nd occurrences of delimiters
     - ...
-    - `*`         Alignment around all delimiters (recursive)
-    - `-`         Alignment around the last delimiters (`-1`)
-    - `-2`        Alignment around the one before the last delimiters
+    - `*`         Around all occurrences of delimiters
+    - `**`        Left-right alternating alignment around all delimiters
+    - `-`         Around the last occurrences of delimiters (`-1`)
+    - `-2`        Around the second to last occurrences of delimiters
     - ...
-1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`, `}`)
+1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`)
 
 Alignment rules for the following delimiters have been defined to meet the most needs.
 
@@ -64,24 +65,24 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `:`       | Suitable for formatting JSON or YAML                       |
 | `.`       | Multi-line method chaining                                 |
 | `,`       | Multi-line method arguments                                |
-| `}`       | Closing braces (Try using it with a negative field number) |
 | &#124;    | Table markdown                                             |
 
 ### Example command sequences
 
-| With visual map   | Description                                       | Equivalent command      |
-| ----------------- | ------------------------------------------------- | ----------------------- |
-| `<Enter>=`        | Alignment around 1st equals signs (and the likes) | `:'<,'>EasyAlign=`      |
-| `<Enter>2=`       | Alignment around 2nd equals signs (and the likes) | `:'<,'>EasyAlign2=`     |
-| `<Enter>3=`       | Alignment around 3rd equals signs (and the likes) | `:'<,'>EasyAlign3=`     |
-| `<Enter>*=`       | Alignment around all equals signs (and the likes) | `:'<,'>EasyAlign*=`     |
-| `<Enter><Enter>=` | Right-justified alignment around 1st equals signs | `:'<,'>EasyAlignRight=` |
-| `<Enter><space>`  | Alignment around 1st whitespaces                  | `:'<,'>EasyAlign\ `     |
-| `<Enter>2<space>` | Alignment around 2nd whitespaces                  | `:'<,'>EasyAlign2\ `    |
-| `<Enter>-<space>` | Alignment around the last whitespaces             | `:'<,'>EasyAlign-\ `    |
-| `<Enter>:`        | Alignment around 1st colon                        | `:'<,'>EasyAlign:`      |
-| `<Enter>-}`       | Alignment around the last closing braces          | `:'<,'>EasyAlign-}`     |
-| ...               | ...                                               |                         |
+| With visual map     | Description                                              | Equivalent command        |
+| ------------------- | -------------------------------------------------------- | ------------------------- |
+| `<Enter><space>`    | Alignment around 1st whitespaces                         | `:'<,'>EasyAlign\ `       |
+| `<Enter>2<space>`   | Alignment around 2nd whitespaces                         | `:'<,'>EasyAlign2\ `      |
+| `<Enter>-<space>`   | Alignment around the last whitespaces                    | `:'<,'>EasyAlign-\ `      |
+| `<Enter>:`          | Alignment around 1st colon                               | `:'<,'>EasyAlign:`        |
+| `<Enter>=`          | Alignment around 1st equals signs (and the likes)        | `:'<,'>EasyAlign=`        |
+| `<Enter>2=`         | Alignment around 2nd equals signs (and the likes)        | `:'<,'>EasyAlign2=`       |
+| `<Enter>3=`         | Alignment around 3rd equals signs (and the likes)        | `:'<,'>EasyAlign3=`       |
+| `<Enter>*=`         | Alignment around all equals signs (and the likes)        | `:'<,'>EasyAlign*=`       |
+| `<Enter>**=`        | Left-right alternating alignment around all equals signs | `:'<,'>EasyAlign**=`      |
+| `<Enter><Enter>=`   | Right-justified alignment around 1st equals signs        | `:'<,'>EasyAlignRight=`   |
+| `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlignRight**=` |
+| ...                 | ...                                                      |                           |
 
 ### Partial alignment in blockwise-visual mode
 
