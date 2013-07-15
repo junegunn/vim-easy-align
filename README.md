@@ -222,7 +222,7 @@ Then we get,
 ```vim
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
-\ '/': { 'pattern': '//\+' },
+\ '/': { 'pattern': '//\+\|/\*\|\*/' },
 \ '#': { 'pattern': '#\+' },
 \ ']': {
 \     'pattern':       '[\[\]]',
