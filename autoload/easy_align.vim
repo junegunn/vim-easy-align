@@ -147,7 +147,8 @@ function! s:do_align(just, cl, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_le
   endfor
 
   if a:recursive && a:nth < max_tokens
-    call s:do_align(a:just, a:cl, a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
+    let just = a:recursive == 2 ? !a:just : a:just
+    call s:do_align(just, a:cl, a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
   endif
 endfunction
 
@@ -168,32 +169,38 @@ function! easy_align#align(just, ...) range
 
       let c  = getchar()
       let ch = nr2char(c)
-      if c == 3 || c == 27
+      if c == 3 || c == 27 " CTRL-C / ESC
         return
-      elseif c == '€kb'
+      elseif c == '€kb' " Backspace
         if len(n) > 0
           let n = strpart(n, 0, len(n) - 1)
         endif
-      elseif c == 13
+      elseif c == 13 " Enter key
         let just = (just + 1) % len(s:just)
-      elseif index(['-', '*'], ch) != -1
+      elseif ch == '-'
         if empty(n)
-          let n = ch
+          let n = '-'
+        elseif n == '-'
+          let n = ''
         else
           break
         endif
-      elseif c == 48
-        if n == '-'
-          let n = '-0'
+      elseif ch == '*'
+        if empty(n)
+          let n = '*'
+        elseif n == '*'
+          let n = '**'
+        elseif n == '**'
+          let n = ''
         else
           break
         endif
-      elseif c > 48 && c <= 57
-        if n != '*'
+      elseif c >= 48 && c <= 57
+        if n[0] == '*'
+          break
+        else
           let n = n . ch
-        else
-          break
-        endif
+        end
       else
         break
       endif
@@ -214,15 +221,20 @@ function! easy_align#align(just, ...) range
   endif
 
   if n == '*'
-    let n = 1
+    let nth = 1
     let recursive = 1
+  elseif n == '**'
+    let nth = 1
+    let recursive = 2
   elseif n == '-'
-    let n = -1
+    let nth = -1
   elseif empty(n)
-    let n = 1
+    let nth = 1
   elseif n != '-0' && n != string(str2nr(n))
     echon "\rInvalid field number: ". n
     return
+  else
+    let nth = n
   endif
 
   let delimiters = extend(copy(s:easy_align_delimiters_default),
@@ -234,11 +246,11 @@ function! easy_align#align(just, ...) range
                   \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
                   \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
                   \ get(dict, 'pattern', ch),
-                  \ n,
+                  \ nth,
                   \ get(dict, 'margin_left', ' '),
                   \ get(dict, 'margin_right', ' '),
                   \ get(dict, 'stick_to_left', 0), recursive)
-    call s:echon(just, (recursive ? '*' : n), ch)
+    call s:echon(just, n, ch)
   else
     echon "\rUnknown delimiter: ". ch
   endif
