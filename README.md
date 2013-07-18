@@ -6,6 +6,7 @@ A simple, easy-to-use Vim alignment plugin without too much ambition.
 Features:
 
 - Optimized for code editing
+- Requires minimal keystrokes
 - Extensible alignment rules
 - Aligns text around either _all or n-th_ occurrence(s) of the delimiter
 - Ignores comment lines
@@ -54,18 +55,18 @@ With the mapping, you can align selected lines with a few keystrokes.
     - `-`         Around the last occurrences of delimiters (`-1`)
     - `-2`        Around the second to last occurrences of delimiters
     - ...
-1. Delimiter (`<space>`, `=`, `:`, `.`, `|`, `,`)
+1. Delimiter key (a single keystroke; `<space>`, `=`, `:`, `.`, `|`, `,`)
 
 Alignment rules for the following delimiters have been defined to meet the most needs.
 
-| Delimiter | Description/Use cases                                      |
-| --------- | ---------------------------------------------------------- |
-| `<space>` | General alignment around spaces                            |
-| `=`       | Operators containing equals sign (=, ==, !=, +=, &&=, ...) |
-| `:`       | Suitable for formatting JSON or YAML                       |
-| `.`       | Multi-line method chaining                                 |
-| `,`       | Multi-line method arguments                                |
-| &#124;    | Table markdown                                             |
+| Delimiter key | Description/Use cases                                      |
+| ------------- | ---------------------------------------------------------- |
+| `<space>`     | General alignment around spaces                            |
+| `=`           | Operators containing equals sign (=, ==, !=, +=, &&=, ...) |
+| `:`           | Suitable for formatting JSON or YAML                       |
+| `.`           | Multi-line method chaining                                 |
+| `,`           | Multi-line method arguments                                |
+| &#124;        | Table markdown                                             |
 
 ### Example command sequences
 

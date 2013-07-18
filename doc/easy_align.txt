@@ -29,7 +29,7 @@ With this mapping, you can align selected lines with a few keystrokes.
     -        Around the last occurrences of delimiters (`-1`)
     -2       Around the second to last occurrences of delimiters
     ...
-4. Delimiter
+4. Delimiter key (a single keystroke)
     <space>  General alignment around whitespaces
     =        Operators containing equals sign (=, ==, !=, +=, &&=, ...)
     :        Suitable for formatting JSON or YAML
