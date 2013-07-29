@@ -34,6 +34,8 @@ let s:easy_align_delimiters_default = {
 \  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
 \  '|': { 'pattern': '|',  'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
 \  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
+\  '{': { 'pattern': '(\@<!{',
+\                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
 \  '}': { 'pattern': '}',  'margin_left': ' ', 'margin_right': '',  'stick_to_left': 0 }
 \ }
 
@@ -49,49 +51,90 @@ else
   endfunction
 endif
 
-function! s:do_align(just, cl, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
+function! s:highlighted_as(line, col, groups)
+  if empty(a:groups) | return 0 | endif
+  let hl = synIDattr(synID(a:line, a:col, 0), 'name')
+  for grp in a:groups
+    if hl =~# grp
+      return 1
+    endif
+  endfor
+  return 0
+endfunction
+
+function! s:ignored_syntax()
+  if has('syntax') && exists('g:syntax_on')
+    " Backward-compatibility
+    return get(g:, 'easy_align_ignores',
+          \ (get(g:, 'easy_align_ignore_comment', 1) == 0) ?
+            \ ['String'] : ['String', 'Comment'])
+  else
+    return []
+  endif
+endfunction
+
+function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
   let lines          = {}
   let max_just_len   = 0
   let max_delim_len  = 0
   let max_tokens     = 0
   let pattern        = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
-  let ignore_comment = has('syntax') && exists('g:syntax_on') &&
-                       \ get(g:, 'easy_align_ignore_comment', 1)
+  let ignored_syntax = s:ignored_syntax()
+
+  " Phase 1
   for line in range(a:fl, a:ll)
-    let tokens = split(a:lc ?
-                      \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
-                      \ strpart(getline(line), a:fc - 1),
-                      \ pattern.'\zs')
+    if !has_key(a:all_tokens, line)
+      " Split line into the tokens by the delimiters
+      let raw_tokens = split(a:lc ?
+                        \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
+                        \ strpart(getline(line), a:fc - 1),
+                        \ pattern.'\zs')
+      if empty(ignored_syntax)
+        let tokens = raw_tokens
+      else
+        " Concat adjacent tokens that are split by ignorable delimiters
+        let tokens = []
+        let idx    = 0
+        let concat = 0
+        for token in raw_tokens
+          let idx += len(token)
+          if concat
+            let tokens[len(tokens) - 1] .= token
+          else
+            call add(tokens, token)
+          endif
+          let concat = s:highlighted_as(line, idx + a:fc - 1, ignored_syntax)
+        endfor
+      endif
+
+      " Preserve indentation - merge first two tokens
+      if !empty(tokens) && match(tokens[0], '^\s*$') != -1
+        let tokens = extend([join(tokens[0:1], '')], tokens[2:-1])
+      endif
+
+      " Remember tokens for subsequent recursive calls
+      let a:all_tokens[line] = tokens
+    else
+      let tokens = a:all_tokens[line]
+    endif
+
+    " Skip empty lines
     if empty(tokens)
       continue
     endif
 
-    if ignore_comment
-      if !has_key(a:cl, line)
-        execute "normal! ". line ."G^"
-        let a:cl[line] =
-        \ synIDattr(synID(line, a:fc == 1 ? col('.') : a:fc, 0), 'name') =~? 'comment' &&
-        \ synIDattr(synID(line, a:lc ? min([a:lc, col('$') - 1]) : (col('$') - 1), 0), 'name') =~? 'comment'
-      endif
-
-      if a:cl[line] | continue | endif
-    endif
-
-    " Preserve indentation
-    if match(tokens[0], '^\s*$') != -1
-      let tokens = extend([join(tokens[0:1], '')], tokens[2:-1])
-    endif
+    " Calculate the maximum number of tokens for a line within the range
     let max_tokens = max([len(tokens), max_tokens])
-    if a:nth > 0
+
+    if a:nth > 0 " Positive field number
       if len(tokens) < a:nth
         continue
       endif
-      let nth = a:nth - 1 " 0-based
-    else
+      let nth = a:nth - 1 " make it 0-based
+    else " Negative field number
+      let nth = len(tokens) + a:nth
       if match(tokens[len(tokens) - 1], pattern.'$') == -1
-        let nth = len(tokens) + a:nth - 1
-      else
-        let nth = len(tokens) + a:nth
+        let nth -= 1
       endif
 
       if nth < 0 || nth == len(tokens)
@@ -102,53 +145,68 @@ function! s:do_align(just, cl, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_le
     let last   = tokens[nth]
     let prefix = (nth > 0 ? join(tokens[0 : nth - 1], '') : '')
     let token  = substitute(last, pattern.'$', '', '')
-    let suffix = substitute(join(tokens[nth + 1: -1], ''), '^\s*', '', '')
 
-    if match(last, pattern.'$') == -1
-      if a:just == 0 && get(g:, 'easy_align_ignore_unmatched', 1)
-        continue
-      else
-        let delim = ''
-      endif
-    else
-      let delim = matchlist(last, pattern)[1]
+    let delim = get(matchlist(last, pattern.'$'), 1, '')
+    if empty(delim) && a:just == 0 && get(g:, 'easy_align_ignore_unmatched', 1)
+      continue
     endif
 
-    let max_just_len  = max([s:strwidth(token.prefix), max_just_len])
+    let max_just_len  = max([s:strwidth(prefix.token), max_just_len])
     let max_delim_len = max([s:strwidth(delim), max_delim_len])
-    let lines[line]   = [prefix, token, delim, suffix]
+    let lines[line]   = [nth, prefix, token, delim]
   endfor
 
-  for [line, tokens] in items(lines)
-    let [prefix, token, delim, suffix] = tokens
+  " Phase 2
+  for [line, elems] in items(lines)
+    let tokens = a:all_tokens[line]
+    let [nth, prefix, token, delim] = elems
 
+    " Remove the leading whitespaces of the next token
+    if len(tokens) > nth + 1
+      let tokens[nth + 1] = substitute(tokens[nth + 1], '^\s*', '', '')
+    endif
+
+    " Pad the token with spaces
     let pad = repeat(' ', max_just_len - s:strwidth(prefix) - s:strwidth(token))
+    let rpad = ''
     if a:just == 0
       if a:stick_to_left
-        let suffix = pad . suffix
+        let rpad = pad
       else
         let token = token . pad
       endif
     elseif a:just == 1
       let token = pad . token
     endif
+    let tokens[nth] = token
 
+    " Pad the delimiter
     let delim   = repeat(' ', max_delim_len - s:strwidth(delim)). delim
+
+    " Before and after the range (for blockwise visual mode)
     let cline   = getline(line)
     let before  = strpart(cline, 0, a:fc - 1)
     let after   = a:lc ? strpart(cline, a:lc) : ''
 
+    " Determine the left and right margin around the delimiter
+    let rest    = join(tokens[nth + 1 : -1], '')
     let ml      = empty(prefix . token) ? '' : a:ml
-    let mr      = (empty(suffix . after) || (empty(suffix) && stridx(after, a:mr) == 0)) ? '' : a:mr
-    let aligned = join([prefix, token, ml, delim, mr, suffix], '')
-    let aligned = empty(after) ? substitute(aligned, '\s*$', '', '') : aligned
+    let mr      = (empty(rest) ||
+          \ (empty(rest) && stridx(after, a:mr) == 0)) ? '' : a:mr
 
-    call setline(line, before.aligned.after)
+    " Align the token
+    let aligned = join([token, ml, delim, mr, rpad], '')
+    let tokens[nth] = aligned
+
+    " Update the line
+    let newline = substitute(before.join(tokens, '').after, '\s*$', '', '')
+    call setline(line, newline)
   endfor
 
   if a:recursive && a:nth < max_tokens
     let just = a:recursive == 2 ? !a:just : a:just
-    call s:do_align(just, a:cl, a:fl, a:ll, a:fc, a:lc, a:pattern, a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
+    call s:do_align(just, a:all_tokens, a:fl, a:ll, a:fc, a:lc, a:pattern,
+          \ a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
   endif
 endfunction
 
@@ -178,67 +236,53 @@ function! easy_align#align(just, ...) range
       elseif c == 13 " Enter key
         let just = (just + 1) % len(s:just)
       elseif ch == '-'
-        if empty(n)
-          let n = '-'
-        elseif n == '-'
-          let n = ''
-        else
-          break
+        if empty(n)      | let n = '-'
+        elseif n == '-'  | let n = ''
+        else             | break
         endif
       elseif ch == '*'
-        if empty(n)
-          let n = '*'
-        elseif n == '*'
-          let n = '**'
-        elseif n == '**'
-          let n = ''
-        else
-          break
+        if empty(n)      | let n = '*'
+        elseif n == '*'  | let n = '**'
+        elseif n == '**' | let n = ''
+        else             | break
         endif
-      elseif c >= 48 && c <= 57
-        if n[0] == '*'
-          break
-        else
-          let n = n . ch
+      elseif c >= 48 && c <= 57 " Numbers
+        if n[0] == '*'   | break
+        else             | let n = n . ch
         end
       else
         break
       endif
     endwhile
   elseif a:0 == 1
-    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|-[0-9]*\|\*\)\?\(.\)$')
+    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\(.\)$')
     if empty(tokens)
       echo "Invalid arguments: ". a:1
       return
     endif
     let [n, ch] = tokens[1:2]
   elseif a:0 == 2
-    let n  = a:1
-    let ch = a:2
+    let [n, ch] = a:000
   else
     echo "Invalid number of arguments: ". a:0 ." (expected 0, 1, or 2)"
     return
   endif
 
-  if n == '*'
-    let nth = 1
-    let recursive = 1
-  elseif n == '**'
-    let nth = 1
-    let recursive = 2
-  elseif n == '-'
-    let nth = -1
-  elseif empty(n)
-    let nth = 1
-  elseif n != '-0' && n != string(str2nr(n))
+  if n == '*'      | let [nth, recursive] = [1, 1]
+  elseif n == '**' | let [nth, recursive] = [1, 2]
+  elseif n == '-'  | let nth = -1
+  elseif empty(n)  | let nth = 1
+  elseif n == '0' || ( n != '-0' && n != string(str2nr(n)) )
     echon "\rInvalid field number: ". n
     return
   else
     let nth = n
   endif
 
-  let delimiters = extend(copy(s:easy_align_delimiters_default),
-                   \ get(g:, 'easy_align_delimiters', {}))
+  let delimiters = s:easy_align_delimiters_default
+  if exists('g:easy_align_delimiters')
+    let delimiters = extend(copy(delimiters), g:easy_align_delimiters)
+  endif
 
   if has_key(delimiters, ch)
     let dict = delimiters[ch]

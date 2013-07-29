@@ -9,15 +9,13 @@ Features:
 - Requires minimal keystrokes
 - Extensible alignment rules
 - Aligns text around either _all or n-th_ occurrence(s) of the delimiter
-- Ignores comment lines
+- Ignores delimiters in certain syntax highlighting groups (e.g. comments, strings)
 - Ignores lines without a matching delimiter
 
 Demo
 ----
 
 ![Screencast](https://raw.github.com/junegunn/vim-easy-align/gif/vim-easy-align.gif)
-
-[Screencast](https://vimeo.com/63506219)
 
 Installation
 ------------
@@ -115,15 +113,24 @@ since the same can be easily done using the negative field number: `<Enter>-=`
 Options
 -------
 
-| Option                        | Type       | Default | Description                             |
-| ----------------------------- | ---------- | ------- | --------------------------------------- |
-| g:easy_align_ignore_comment   | boolean    | `1`     | Ignore comment lines                    |
-| g:easy_align_ignore_unmatched | boolean    | `1`     | Ignore lines without matching delimiter |
-| g:easy_align_delimiters       | dictionary | `{}`    | Extend or override alignment rules      |
+| Option                        | Type       | Default               | Description                                           |
+| ----------------------------- | ---------- | --------------------- | ----------------------------------------------------- |
+| g:easy_align_ignores          | list       | ['String', 'Comment'] | Ignore delimiters in these syntax highlighting groups |
+| g:easy_align_ignore_unmatched | boolean    | `1`                   | Ignore lines without matching delimiter               |
+| g:easy_align_delimiters       | dictionary | `{}`                  | Extend or override alignment rules                    |
 
-### Ignoring comment lines
+### Ignoring delimiters in comments or strings
 
-EasyAlign by default ignores comment lines.
+EasyAlign can be configured to ignore delimiters in certain highlight groups,
+such as code comments or strings. By default, delimiters that are highlighted as
+code comments or strings are ignored.
+
+```vim
+" Default:
+"   If a delimiter is in a highlight group whose name matches
+"   any of the followings, it will be ignored.
+let g:easy_align_ignores = ['Comment', 'String']
+```
 
 For example,
 
@@ -133,8 +140,8 @@ For example,
   apple: 1,
   # Quantity of bananas: 2
   bananas: 2,
-  # Quantity of grapefruits: 3
-  grapefruits: 3
+  # Quantity of grape:fruits: 3
+  'grape:fruits': 3
 }
 ```
 
@@ -143,39 +150,42 @@ becomes
 ```ruby
 {
   # Quantity of apples: 1
-  apple:       1,
+  apple:          1,
   # Quantity of bananas: 2
-  bananas:     2,
-  # Quantity of grapefruits: 3
-  grapefruits: 3
+  bananas:        2,
+  # Quantity of grape:fruits: 3
+  'grape:fruits': 3
 }
 ```
 
-Since finding comment lines is done heuristically using syntax highlighting feature,
-this only works when syntax highlighting is enabled.
+Naturally, this only works when syntax highlighting is enabled.
 
-If you do not want comment lines to be ignored, you can unset `g:easy_align_ignore_comment` as follows.
+You can override `g:easy_align_ignores` to change the rule.
 
 ```vim
-let g:easy_align_ignore_comment = 0
+" Ignore nothing!
+let g:easy_align_ignores = []
 ```
 
 Then you get,
 
 ```ruby
 {
-  # Quantity of apples:      1
-  apple:                     1,
-  # Quantity of bananas:     2
-  bananas:                   2,
-  # Quantity of grapefruits: 3
-  grapefruits:               3
+  # Quantity of apples:  1
+  apple:                 1,
+  # Quantity of bananas: 2
+  bananas:               2,
+  # Quantity of grape:   fruits: 3
+  'grape:                fruits': 3
 }
 ```
 
+Satisfied? :satisfied:
+
 ### Ignoring unmatched lines
 
-Lines without a matching delimiter are ignored as well (except in right-justification mode).
+Lines without a matching delimiter are ignored as well (except in
+right-justification mode).
 
 For example, when aligning the following code block around the colons,
 
@@ -222,6 +232,7 @@ Then we get,
 ### Extending alignment rules
 
 ```vim
+" Examples
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
 \ '/': { 'pattern': '//\+\|/\*\|\*/' },

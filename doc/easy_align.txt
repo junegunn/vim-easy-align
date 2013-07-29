@@ -67,10 +67,17 @@ In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only
 the selected text in the block, instead of the whole lines in the range.
 
 
-Ignoring comment lines                      *g:easy_align_ignore_comment*
+Ignoring delimiters in comments or strings         *g:easy_align_ignores*
 -------------------------------------------------------------------------
 
-EasyAlign by default ignores comment lines.
+EasyAlign can be configured to ignore delimiters in certain highlight
+groups, such as code comments or strings. By default, delimiters that are
+highlighted as code comments or strings are ignored.
+
+    " Default:
+    "   If a delimiter is in a highlight group whose name matches
+    "   any of the followings, it will be ignored.
+    let g:easy_align_ignores = ['Comment', 'String']
 
 For example,
 
@@ -79,38 +86,34 @@ For example,
       apple: 1,
       # Quantity of bananas: 2
       bananas: 2,
-      # Quantity of grapefruits: 3
-      grapefruits: 3
+      # Quantity of grape:fruits: 3
+      'grape:fruits': 3
     }
 
 becomes
 
     {
       # Quantity of apples: 1
-      apple:       1,
+      apple:          1,
       # Quantity of bananas: 2
-      bananas:     2,
-      # Quantity of grapefruits: 3
-      grapefruits: 3
+      bananas:        2,
+      # Quantity of grape:fruits: 3
+      'grape:fruits': 3
     }
 
-Since finding comment lines is done heuristically using syntax highlighting
-feature, this only works when syntax highlighting is enabled.
+You can override `g:easy_align_ignores` to change the rule.
 
-If you do not want comment lines to be ignored, you can unset
-`g:easy_align_ignore_comment` as follows.
-
-    let g:easy_align_ignore_comment = 0
+    let g:easy_align_ignores = []
 
 Then you get,
 
     {
-      # Quantity of apples:      1
-      apple:                     1,
-      # Quantity of bananas:     2
-      bananas:                   2,
-      # Quantity of grapefruits: 3
-      grapefruits:               3
+      # Quantity of apples:  1
+      apple:                 1,
+      # Quantity of bananas: 2
+      bananas:               2,
+      # Quantity of grape:   fruits: 3
+      'grape:                fruits': 3
     }
 
 
