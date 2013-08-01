@@ -70,16 +70,16 @@ the selected text in the block, instead of the whole lines in the range.
 Ignoring delimiters in comments or strings         *g:easy_align_ignores*
 -------------------------------------------------------------------------
 
-EasyAlign can be configured to ignore delimiters in certain highlight
-groups, such as code comments or strings. By default, delimiters that are
-highlighted as code comments or strings are ignored.
+EasyAlign can be configured to ignore delimiters in certain syntax
+highlight groups, such as code comments or strings. By default, delimiters
+that are highlighted as code comments or strings are ignored.
 
     " Default:
     "   If a delimiter is in a highlight group whose name matches
     "   any of the followings, it will be ignored.
     let g:easy_align_ignores = ['Comment', 'String']
 
-For example,
+For example, the following paragraph
 
     {
       # Quantity of apples: 1
@@ -90,7 +90,7 @@ For example,
       'grape:fruits': 3
     }
 
-becomes
+becomes as follows on `<Enter>:`:
 
     {
       # Quantity of apples: 1
@@ -101,8 +101,11 @@ becomes
       'grape:fruits': 3
     }
 
-You can override `g:easy_align_ignores` to change the rule.
+Naturally, this feature only works when syntax highlighting is enabled.
 
+You can change the default rule by defining `g:easy_align_ignores` array.
+
+    " Ignore nothing!
     let g:easy_align_ignores = []
 
 Then you get,
@@ -120,7 +123,7 @@ Then you get,
 Handling unmatched lines                  *g:easy_align_ignore_unmatched*
 -------------------------------------------------------------------------
 
-Lines without a matching delimiter are ignored as well (except in
+Lines without any matching delimiter are ignored as well (except in
 right-justification mode).
 
 For example, when aligning the following code block around the colons,

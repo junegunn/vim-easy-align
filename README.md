@@ -3,19 +3,20 @@ vim-easy-align
 
 A simple, easy-to-use Vim alignment plugin without too much ambition.
 
-Features:
-
-- Optimized for code editing
-- Requires minimal keystrokes
-- Extensible alignment rules
-- Aligns text around either _all or n-th_ occurrence(s) of the delimiter
-- Ignores delimiters in certain syntax highlighting groups (e.g. comments, strings)
-- Ignores lines without a matching delimiter
-
 Demo
 ----
 
 ![Screencast](https://raw.github.com/junegunn/vim-easy-align/gif/vim-easy-align.gif)
+
+Features
+--------
+
+- Optimized for code editing
+- Designed to require minimal keystrokes
+- Extensible alignment rules
+- Aligns text around either _all or n-th_ occurrence(s) of the delimiter
+- Ignores delimiters in certain syntax highlight groups (e.g. comments, strings)
+- Ignores lines without a matching delimiter
 
 Installation
 ------------
@@ -34,7 +35,8 @@ Usage
 -----
 
 _vim-easy-align_ defines interactive `:EasyAlign` command in the visual mode.
-For convenience, it is advised that you define a mapping for triggering it in your `.vimrc`.
+For convenience, it is advised that you define a mapping for triggering it in
+your `.vimrc`.
 
 ```vim
 vnoremap <silent> <Enter> :EasyAlign<cr>
@@ -96,9 +98,9 @@ my_hash = { :a => 1,
             :aaa => 3 }
 ```
 
-In non-blockwise visual mode (`v` / `V`), `<Enter>=` won't work since the assignment
-operator in the first line gets in the way.
-So we instead enter blockwise-visual mode (`CTRL-V`), and select the text *around*
+In non-blockwise visual mode (`v` / `V`), `<Enter>=` won't work since the
+assignment operator in the first line gets in the way. So we instead enter
+blockwise-visual mode (`CTRL-V`), and select the text *around*
 `=>` operators, then press `<Enter>=`.
 
 ```ruby
@@ -113,17 +115,17 @@ since the same can be easily done using the negative field number: `<Enter>-=`
 Options
 -------
 
-| Option                        | Type       | Default               | Description                                           |
-| ----------------------------- | ---------- | --------------------- | ----------------------------------------------------- |
-| g:easy_align_ignores          | list       | ['String', 'Comment'] | Ignore delimiters in these syntax highlighting groups |
-| g:easy_align_ignore_unmatched | boolean    | `1`                   | Ignore lines without matching delimiter               |
-| g:easy_align_delimiters       | dictionary | `{}`                  | Extend or override alignment rules                    |
+| Option                        | Type       | Default               | Description                                        |
+| ----------------------------- | ---------- | --------------------- | -------------------------------------------------- |
+| g:easy_align_ignores          | list       | ['String', 'Comment'] | Ignore delimiters in these syntax highlight groups |
+| g:easy_align_ignore_unmatched | boolean    | `1`                   | Ignore lines without matching delimiter            |
+| g:easy_align_delimiters       | dictionary | `{}`                  | Extend or override alignment rules                 |
 
 ### Ignoring delimiters in comments or strings
 
-EasyAlign can be configured to ignore delimiters in certain highlight groups,
-such as code comments or strings. By default, delimiters that are highlighted as
-code comments or strings are ignored.
+EasyAlign can be configured to ignore delimiters in certain syntax highlight
+groups, such as code comments or strings. By default, delimiters that are
+highlighted as code comments or strings are ignored.
 
 ```vim
 " Default:
@@ -132,7 +134,7 @@ code comments or strings are ignored.
 let g:easy_align_ignores = ['Comment', 'String']
 ```
 
-For example,
+For example, the following paragraph
 
 ```ruby
 {
@@ -145,7 +147,7 @@ For example,
 }
 ```
 
-becomes
+becomes as follows on `<Enter>:`:
 
 ```ruby
 {
@@ -158,9 +160,9 @@ becomes
 }
 ```
 
-Naturally, this only works when syntax highlighting is enabled.
+Naturally, this feature only works when syntax highlighting is enabled.
 
-You can override `g:easy_align_ignores` to change the rule.
+You can change the default rule by defining `g:easy_align_ignores` array.
 
 ```vim
 " Ignore nothing!
@@ -184,7 +186,7 @@ Satisfied? :satisfied:
 
 ### Ignoring unmatched lines
 
-Lines without a matching delimiter are ignored as well (except in
+Lines without any matching delimiter are ignored as well (except in
 right-justification mode).
 
 For example, when aligning the following code block around the colons,
