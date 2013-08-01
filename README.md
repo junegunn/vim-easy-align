@@ -147,7 +147,7 @@ For example, the following paragraph
 }
 ```
 
-becomes as follows on `<Enter>:`:
+becomes as follows on `<Enter>:`
 
 ```ruby
 {
