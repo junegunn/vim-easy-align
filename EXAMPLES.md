@@ -90,12 +90,12 @@ Formatting YAML (or JSON)
 ```yaml
 
 mysql:
-  # JDBC driver for MySQL database
+  # JDBC driver for MySQL database:
   driver: com.mysql.jdbc.Driver
   # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
   url: jdbc:mysql://localhost/test
   database: test
-  user:r00t
+  "user:pass":r00t:pa55
 
 ```
 

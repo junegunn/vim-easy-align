@@ -89,13 +89,13 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
                         \ strpart(getline(line), a:fc - 1, a:lc - a:fc + 1) :
                         \ strpart(getline(line), a:fc - 1),
                         \ pattern.'\zs')
+      let concat = 0
       if empty(ignored_syntax)
         let tokens = raw_tokens
       else
         " Concat adjacent tokens that are split by ignorable delimiters
         let tokens = []
         let idx    = 0
-        let concat = 0
         for token in raw_tokens
           let idx += len(token)
           if concat
@@ -110,6 +110,11 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
       " Preserve indentation - merge first two tokens
       if !empty(tokens) && match(tokens[0], '^\s*$') != -1
         let tokens = extend([join(tokens[0:1], '')], tokens[2:-1])
+      endif
+
+      " Skip comment line
+      if concat && len(tokens) == 1
+        let tokens = []
       endif
 
       " Remember tokens for subsequent recursive calls
