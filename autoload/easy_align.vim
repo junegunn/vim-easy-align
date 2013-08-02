@@ -185,7 +185,12 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
     let tokens[nth] = token
 
     " Pad the delimiter
-    let delim   = repeat(' ', max_delim_len - s:strwidth(delim)). delim
+    let dpad = repeat(' ', max_delim_len - s:strwidth(delim))
+    if a:stick_to_left
+      let rpad = rpad . dpad
+    else
+      let delim = dpad . delim
+    endif
 
     " Before and after the range (for blockwise visual mode)
     let cline   = getline(line)
