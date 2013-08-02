@@ -233,12 +233,27 @@ Then we get,
 
 ### Extending alignment rules
 
+Although the default predefined rules should cover the most of the use cases,
+you can extend the rules by setting a dictionary named `g:easy_align_delimiters`.
+Each entry in the dictionary can have the following attributes.
+
+| Atrribute        | Type    | Default               |
+| ---------------- | ------- | --------------------- |
+| pattern          | regexp  |                       |
+| margin_left      | string  | `' '`                 |
+| margin_right     | string  | `' '`                 |
+| stick_to_left    | boolean | 0                     |
+| ignore_unmatched | boolean | 1                     |
+| ignores          | array   | ['String', 'Comment'] |
+
+#### Example
+
 ```vim
 " Examples
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
-\ '/': { 'pattern': '//\+\|/\*\|\*/' },
-\ '#': { 'pattern': '#\+' },
+\ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
+\ '#': { 'pattern': '#\+', 'ignores': ['String'] },
 \ ']': {
 \     'pattern':       '[\[\]]',
 \     'margin_left':   '',
@@ -253,6 +268,12 @@ let g:easy_align_delimiters = {
 \   }
 \ }
 ```
+
+Examples and use cases
+----------------------
+
+See the [link](https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md)
+for more examples.
 
 Author
 ------

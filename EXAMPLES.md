@@ -1,5 +1,3 @@
-vim: set scrolloff=1 buftype=nofile colorcolumn=:
-
 vim-easy-align examples
 =======================
 
@@ -37,9 +35,12 @@ Pete Best 1941
 
 ```
 
-
 Formatting table
 ----------------
+
+Try `<Enter>*|`
+
+```
 
 | Option| Type | Default | Description |
 |--|--|--|--|
@@ -51,9 +52,20 @@ Formatting table
  |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
  |logger | Logger | nil | logger instance for debug logs |
 
+```
+
 
 Alignment around =
 ------------------
+
+The default rule for delimiter key `=` aligns around the most of the operators
+containing `=` character.
+
+Try:
+- `<Enter>=`
+- `<Enter>*=`
+- `<Enter>**=`
+- `<Enter><Enter>**=`
 
 ```ruby
 
@@ -87,15 +99,18 @@ gg <=> ee
 Formatting YAML (or JSON)
 -------------------------
 
+Try `<Enter>:` here, to align text around only the first occurrences of colons.
+In this case, you don't want to align around all the colons: `<Enter>*:`.
+
 ```yaml
 
 mysql:
   # JDBC driver for MySQL database:
-  driver: com.mysql.jdbc.Driver
+  driver:      com.mysql.jdbc.Driver
   # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
-  url: jdbc:mysql://localhost/test
-  database: test
-  "user:pass":r00t:pa55
+  url:         jdbc:mysql://localhost/test
+  database:    test
+  "user:pass": r00t:pa55
 
 ```
 
@@ -113,6 +128,9 @@ options = { :caching => nil,
 Commas
 ------
 
+There is also a predefined rule for commas, try `<Enter>*,` for the following
+lines.
+
 ```
 
 aaa,   bb,c
@@ -126,11 +144,55 @@ j,,k
 Ignoring delimiters in comments and strings
 -------------------------------------------
 
+Delimiters highlighted as comments or strings are ignored by default, try
+`<Enter>*=` for the following lines.
+
 ```c
+
 /* a */ b = c
 aa >= bb
 // aaa = bbb = cccc
 /* aaaa = */ bbbb   === cccc   " = dddd = " = eeee
 aaaaa /* bbbbb */      == ccccc /* != eeeee = */ === fffff
+
+```
+
+Aligning in-line comments
+-------------------------
+
+```ruby
+apple = 1 # comment not aligned
+banana = "string" # comment 2
+```
+
+So, how do we align the trailing comments in the above lines?
+Simply try `<Enter>-<space>`! The spaces in the comments are ignored, so the
+trailing comment in each line is considered to be a single chunk.
+
+But this doesn't work in the following case.
+
+```ruby
+apple = 1 # comment not aligned
+apricot = 'A#B'
+banana = 'string' # comment 2
+```
+
+The second line doesn't have trailing comment, and *the last space* is the one
+before `'A#B'`. So we define a custom mapping for `#`
+
+```vim
+if !exists('g:easy_align_delimiters')
+  let g:easy_align_delimiters = {}
+endif
+let g:easy_align_delimiters['#'] = { 'pattern': '#\+', 'ignores': ['String'] } }
+```
+
+Notice that the rule overrides `ignores` attribute in order *not* to ignore
+delimiters highlighted as comments. Then we try `<Enter>#`, to get
+
+```ruby
+apple = 1         # comment not aligned
+apricot = 'A#B'
+banana = 'string' # comment 2
 ```
 

@@ -73,13 +73,12 @@ function! s:ignored_syntax()
   endif
 endfunction
 
-function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, recursive)
+function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, ignore_unmatched, ignores, recursive)
   let lines          = {}
   let max_just_len   = 0
   let max_delim_len  = 0
   let max_tokens     = 0
   let pattern        = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
-  let ignored_syntax = s:ignored_syntax()
 
   " Phase 1
   for line in range(a:fl, a:ll)
@@ -90,7 +89,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
                         \ strpart(getline(line), a:fc - 1),
                         \ pattern.'\zs')
       let concat = 0
-      if empty(ignored_syntax)
+      if empty(a:ignores)
         let tokens = raw_tokens
       else
         " Concat adjacent tokens that are split by ignorable delimiters
@@ -103,7 +102,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
           else
             call add(tokens, token)
           endif
-          let concat = s:highlighted_as(line, idx + a:fc - 1, ignored_syntax)
+          let concat = s:highlighted_as(line, idx + a:fc - 1, a:ignores)
         endfor
       endif
 
@@ -152,7 +151,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
     let token  = substitute(last, pattern.'$', '', '')
 
     let delim = get(matchlist(last, pattern.'$'), 1, '')
-    if empty(delim) && a:just == 0 && get(g:, 'easy_align_ignore_unmatched', 1)
+    if empty(delim) && a:just == 0 && a:ignore_unmatched
       continue
     endif
 
@@ -211,7 +210,8 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
   if a:recursive && a:nth < max_tokens
     let just = a:recursive == 2 ? !a:just : a:just
     call s:do_align(just, a:all_tokens, a:fl, a:ll, a:fc, a:lc, a:pattern,
-          \ a:nth + 1, a:ml, a:mr, a:stick_to_left, a:recursive)
+          \ a:nth + 1, a:ml, a:mr, a:stick_to_left, a:ignore_unmatched,
+          \ a:ignores, a:recursive)
   endif
 endfunction
 
@@ -298,7 +298,10 @@ function! easy_align#align(just, ...) range
                   \ nth,
                   \ get(dict, 'margin_left', ' '),
                   \ get(dict, 'margin_right', ' '),
-                  \ get(dict, 'stick_to_left', 0), recursive)
+                  \ get(dict, 'stick_to_left', 0),
+                  \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
+                  \ get(dict, 'ignores', s:ignored_syntax()),
+                  \ recursive)
     call s:echon(just, n, ch)
   else
     echon "\rUnknown delimiter: ". ch
