@@ -231,11 +231,18 @@ becomes as follows on `<Enter>:` (or `:EasyAlign:`)
 
 Naturally, this feature only works when syntax highlighting is enabled.
 
-You can change the default rule by defining `g:easy_align_ignores` array.
+You can change the default rule by either defining global `g:easy_align_ignores`
+array,
 
 ```vim
 " Ignore nothing!
 let g:easy_align_ignores = []
+```
+
+or providing `ignores` option to :EasyAlign command
+
+```vim
+:EasyAlign:{'is':[]}
 ```
 
 Then you get,
@@ -284,8 +291,17 @@ this is usually what we want.
 
 However, this default behavior is also configurable.
 
+One way is to set the global `g:easy_align_ignore_unmatched` variable to be 0.
+
 ```vim
 let g:easy_align_ignore_unmatched = 0
+```
+
+Or in non-interactive mode, you can provide `ignore_unmatched` option to
+:EasyAlign command
+
+```vim
+:EasyAlign:{'iu':0}
 ```
 
 Then we get,
