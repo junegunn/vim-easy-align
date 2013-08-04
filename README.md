@@ -105,10 +105,10 @@ regular expressions.
 
 ```vim
 " Using predefined alignment rules
-:EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]
+:EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]
 
 " Using arbitrary regular expressions
-:EasyAlign [FIELD#] /REGEXP/ [OPTIONS]
+:EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]
 ```
 
 For example, when aligning the following lines around colons and semi-colons,
@@ -124,7 +124,8 @@ try these commands:
 - `:EasyAlign **/[:;]\+/`
 
 Notice that you can't append `\zs` to your regular expression to put delimiters
-on the left. It can be done by providing additional options.
+on the left. It can be done by providing additional options in Vim dictionary
+format.
 
 - `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'margin_left': '' }`
 
@@ -183,11 +184,11 @@ since the same can be easily done using the negative field number: `<Enter>-=`
 Global options
 --------------
 
-| Option                        | Type       | Default               | Description                                        |
-| ----------------------------- | ---------- | --------------------- | -------------------------------------------------- |
-| g:easy_align_ignores          | list       | ['String', 'Comment'] | Ignore delimiters in these syntax highlight groups |
-| g:easy_align_ignore_unmatched | boolean    | `1`                   | Ignore lines without matching delimiter            |
-| g:easy_align_delimiters       | dictionary | `{}`                  | Extend or override alignment rules                 |
+| Option                        | Type       | Default                 | Description                                        |
+| ----------------------------- | ---------- | ----------------------- | -------------------------------------------------- |
+| g:easy_align_ignores          | list       | `['String', 'Comment']` | Ignore delimiters in these syntax highlight groups |
+| g:easy_align_ignore_unmatched | boolean    | `1`                     | Ignore lines without matching delimiter            |
+| g:easy_align_delimiters       | dictionary | `{}`                    | Extend or override alignment rules                 |
 
 ### Ignoring delimiters in comments or strings
 
