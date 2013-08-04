@@ -18,7 +18,7 @@ vim-easy-align defines `:EasyAlign` command in the visual mode.
 | Using predefined rules    | :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS] |
 | Using regular expressions | :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]      |
 
-The commands will go into interactive mode when no argument is given.
+The commands will go into the interactive mode when no argument is given.
 For convenience, it is advised that you define a mapping for triggering it
 in your `.vimrc`.
 
@@ -70,7 +70,7 @@ EasyAlignRight is the right-justified version of EasyAlign command.
 Non-interactive mode
 --------------------
 
-Instead of going into the interactive mode, you can instead type in arguments to
+Instead of going into the interactive mode, you can type in arguments to
 `:EasyAlign` command. In non-interactive mode, you can even use arbitrary
 regular expressions.
 

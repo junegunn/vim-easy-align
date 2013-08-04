@@ -46,7 +46,7 @@ visual mode.
 
 ### Interactive mode
 
-The commands will go into interactive mode when no argument is given.
+The commands will go into the interactive mode when no argument is given.
 For convenience, it is advised that you define a mapping for triggering it in
 your `.vimrc`.
 
@@ -99,7 +99,7 @@ Alignment rules for the following delimiters have been defined to meet the most 
 
 ### Non-interactive mode
 
-Instead of going into the interactive mode, you can instead type in arguments to
+Instead of going into the interactive mode, you can type in arguments to
 `:EasyAlign` command. In non-interactive mode, you can even use arbitrary
 regular expressions.
 
