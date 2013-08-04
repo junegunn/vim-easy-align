@@ -7,7 +7,7 @@ A simple, easy-to-use Vim alignment plugin without too much ambition.
   Source: https://github.com/junegunn/vim-easy-align
 
 
-EasyAlign                                                     *EasyAlign*
+EasyAlign                                                    *:EasyAlign*
 -------------------------------------------------------------------------
 
 vim-easy-align defines `:EasyAlign` command in the visual mode.
@@ -61,10 +61,10 @@ Examples:
   <Enter><Enter>**=  Right-left alternating alignment around all equals signs
 
 
-EasyAlignRight                                           *EasyAlignRight*
+EasyAlign!                                                  *:EasyAlign!*
 -------------------------------------------------------------------------
 
-EasyAlignRight is the right-justified version of EasyAlign command.
+:EasyAlign! is the right-justification version of :EasyAlign command.
 
 
 Non-interactive mode

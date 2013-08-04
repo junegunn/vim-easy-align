@@ -35,8 +35,8 @@ Bundle 'junegunn/vim-easy-align'
 Usage
 -----
 
-_vim-easy-align_ defines `:EasyAlign` and `:EasyAlignRight` commands in the
-visual mode.
+_vim-easy-align_ defines `:EasyAlign` command (and the right-justification
+variant `:EasyAlign!`) in the visual mode.
 
 | Mode                      | Command                                       |
 | ------------------------- | --------------------------------------------- |
@@ -46,7 +46,7 @@ visual mode.
 
 ### Interactive mode
 
-The commands will go into the interactive mode when no argument is given.
+The command will go into the interactive mode when no argument is given.
 For convenience, it is advised that you define a mapping for triggering it in
 your `.vimrc`.
 
@@ -82,20 +82,20 @@ Alignment rules for the following delimiters have been defined to meet the most 
 
 #### Example command sequences
 
-| With visual map     | Description                                              | Equivalent command        |
-| ------------------- | -------------------------------------------------------- | ------------------------- |
-| `<Enter><space>`    | Alignment around 1st whitespaces                         | `:'<,'>EasyAlign\ `       |
-| `<Enter>2<space>`   | Alignment around 2nd whitespaces                         | `:'<,'>EasyAlign2\ `      |
-| `<Enter>-<space>`   | Alignment around the last whitespaces                    | `:'<,'>EasyAlign-\ `      |
-| `<Enter>:`          | Alignment around 1st colon                               | `:'<,'>EasyAlign:`        |
-| `<Enter>=`          | Alignment around 1st equals signs (and the likes)        | `:'<,'>EasyAlign=`        |
-| `<Enter>2=`         | Alignment around 2nd equals signs (and the likes)        | `:'<,'>EasyAlign2=`       |
-| `<Enter>3=`         | Alignment around 3rd equals signs (and the likes)        | `:'<,'>EasyAlign3=`       |
-| `<Enter>*=`         | Alignment around all equals signs (and the likes)        | `:'<,'>EasyAlign*=`       |
-| `<Enter>**=`        | Left-right alternating alignment around all equals signs | `:'<,'>EasyAlign**=`      |
-| `<Enter><Enter>=`   | Right-justified alignment around 1st equals signs        | `:'<,'>EasyAlignRight=`   |
-| `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlignRight**=` |
-| ...                 | ...                                                      |                           |
+| With visual map     | Description                                              | Equivalent command    |
+| ------------------- | -------------------------------------------------------- | --------------------- |
+| `<Enter><space>`    | Alignment around 1st whitespaces                         | `:'<,'>EasyAlign\ `   |
+| `<Enter>2<space>`   | Alignment around 2nd whitespaces                         | `:'<,'>EasyAlign2\ `  |
+| `<Enter>-<space>`   | Alignment around the last whitespaces                    | `:'<,'>EasyAlign-\ `  |
+| `<Enter>:`          | Alignment around 1st colon                               | `:'<,'>EasyAlign:`    |
+| `<Enter>=`          | Alignment around 1st equals signs (and the likes)        | `:'<,'>EasyAlign=`    |
+| `<Enter>2=`         | Alignment around 2nd equals signs (and the likes)        | `:'<,'>EasyAlign2=`   |
+| `<Enter>3=`         | Alignment around 3rd equals signs (and the likes)        | `:'<,'>EasyAlign3=`   |
+| `<Enter>*=`         | Alignment around all equals signs (and the likes)        | `:'<,'>EasyAlign*=`   |
+| `<Enter>**=`        | Left-right alternating alignment around all equals signs | `:'<,'>EasyAlign**=`  |
+| `<Enter><Enter>=`   | Right-justified alignment around 1st equals signs        | `:'<,'>EasyAlign!=`   |
+| `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlign!**=` |
+| ...                 | ...                                                      |                       |
 
 ### Non-interactive mode
 
