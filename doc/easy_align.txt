@@ -10,8 +10,15 @@ A simple, easy-to-use Vim alignment plugin without too much ambition.
 EasyAlign                                                     *EasyAlign*
 -------------------------------------------------------------------------
 
-vim-easy-align defines interactive `:EasyAlign` command in the visual mode.
+vim-easy-align defines `:EasyAlign` command in the visual mode.
 
+| Mode                      | Command                                     |
+| ------------------------- | ------------------------------------------- |
+| Interactive mode          | :EasyAlign                                  |
+| Using predefined rules    | :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS] |
+| Using regular expressions | :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]      |
+
+The commands will go into interactive mode when no argument is given.
 For convenience, it is advised that you define a mapping for triggering it
 in your `.vimrc`.
 
@@ -58,6 +65,60 @@ EasyAlignRight                                           *EasyAlignRight*
 -------------------------------------------------------------------------
 
 EasyAlignRight is the right-justified version of EasyAlign command.
+
+
+Non-interactive mode
+--------------------
+
+Instead of going into the interactive mode, you can instead type in arguments to
+`:EasyAlign` command. In non-interactive mode, you can even use arbitrary
+regular expressions.
+
+    " Using predefined alignment rules
+    :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]
+
+    " Using arbitrary regular expressions
+    :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]
+
+For example, when aligning the following lines around colons and semi-colons,
+
+    apple;:banana::cake
+    data;;exchange:;format
+
+try these commands:
+
+- :EasyAlign /[:;]\+/
+- :EasyAlign 2/[:;]\+/
+- :EasyAlign */[:;]\+/
+- :EasyAlign **/[:;]\+/
+
+Notice that you can't append `\zs` to your regular expression to put delimiters
+on the left. It can be done by providing additional options.
+
+- :EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'margin_left': '' }
+
+Then we get:
+
+    apple;: banana::   cake
+    data;;  exchange:; format
+
+Options keys are fuzzy-matched, so you can write as follows:
+
+- :EasyAlign * /[:;]\+/ { 'stl': 1, 'ml': '' }
+
+You can even omit spaces between the arguments, so concisely (or cryptically):
+
+- :EasyAlign*/[:;]\+/{'stl':1,'ml':''}
+
+Available options for each alignment are as follows.
+
+| Atrribute        | Type    | Default                 |
+| ---------------- | ------- | ----------------------- |
+| margin_left      | string  | `' '`                   |
+| margin_right     | string  | `' '`                   |
+| stick_to_left    | boolean | 0                       |
+| ignore_unmatched | boolean | 1                       |
+| ignores          | array   | `['String', 'Comment']` |
 
 
 Partial alignment in blockwise-visual mode

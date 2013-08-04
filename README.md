@@ -14,6 +14,7 @@ Features
 - Optimized for code editing
 - Designed to require minimal keystrokes
 - Extensible alignment rules
+- Supports arbitrary regular expressions
 - Aligns text around either _all or n-th_ occurrence(s) of the delimiter
 - Ignores delimiters in certain syntax highlight groups (e.g. comments, strings)
 - Ignores lines without a matching delimiter
@@ -34,7 +35,18 @@ Bundle 'junegunn/vim-easy-align'
 Usage
 -----
 
-_vim-easy-align_ defines interactive `:EasyAlign` command in the visual mode.
+_vim-easy-align_ defines `:EasyAlign` and `:EasyAlignRight` commands in the
+visual mode.
+
+| Mode                      | Command                                       |
+| ------------------------- | --------------------------------------------- |
+| Interactive mode          | `:EasyAlign`                                  |
+| Using predefined rules    | `:EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]` |
+| Using regular expressions | `:EasyAlign [FIELD#] /REGEXP/ [OPTIONS]`      |
+
+### Interactive mode
+
+The commands will go into interactive mode when no argument is given.
 For convenience, it is advised that you define a mapping for triggering it in
 your `.vimrc`.
 
@@ -68,7 +80,7 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `,`           | Multi-line method arguments                                |
 | &#124;        | Table markdown                                             |
 
-### Example command sequences
+#### Example command sequences
 
 | With visual map     | Description                                              | Equivalent command        |
 | ------------------- | -------------------------------------------------------- | ------------------------- |
@@ -84,6 +96,62 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `<Enter><Enter>=`   | Right-justified alignment around 1st equals signs        | `:'<,'>EasyAlignRight=`   |
 | `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlignRight**=` |
 | ...                 | ...                                                      |                           |
+
+### Non-interactive mode
+
+Instead of going into the interactive mode, you can instead type in arguments to
+`:EasyAlign` command. In non-interactive mode, you can even use arbitrary
+regular expressions.
+
+```vim
+" Using predefined alignment rules
+:EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]
+
+" Using arbitrary regular expressions
+:EasyAlign [FIELD#] /REGEXP/ [OPTIONS]
+```
+
+For example, when aligning the following lines around colons and semi-colons,
+
+    apple;:banana::cake
+    data;;exchange:;format
+
+try these commands:
+
+- `:EasyAlign /[:;]\+/`
+- `:EasyAlign 2/[:;]\+/`
+- `:EasyAlign */[:;]\+/`
+- `:EasyAlign **/[:;]\+/`
+
+Notice that you can't append `\zs` to your regular expression to put delimiters
+on the left. It can be done by providing additional options.
+
+- `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'margin_left': '' }`
+
+Then we get:
+
+    apple;: banana::   cake
+    data;;  exchange:; format
+
+Options keys are fuzzy-matched, so you can write as follows:
+
+- `:EasyAlign * /[:;]\+/ { 'stl': 1, 'ml': '' }`
+
+You can even omit spaces between the arguments, so concisely (or cryptically):
+
+- `:EasyAlign*/[:;]\+/{'stl':1,'ml':''}`
+
+Available options for each alignment are as follows.
+
+| Atrribute        | Type    | Default                 |
+| ---------------- | ------- | ----------------------- |
+| margin_left      | string  | `' '`                   |
+| margin_right     | string  | `' '`                   |
+| stick_to_left    | boolean | 0                       |
+| ignore_unmatched | boolean | 1                       |
+| ignores          | array   | `['String', 'Comment']` |
+
+(The last two options will be described shortly in the following sections.)
 
 ### Partial alignment in blockwise-visual mode
 
@@ -112,8 +180,8 @@ my_hash = { :a   => 1,
 However, in this case, we don't really need blockwise visual mode
 since the same can be easily done using the negative field number: `<Enter>-=`
 
-Options
--------
+Global options
+--------------
 
 | Option                        | Type       | Default               | Description                                        |
 | ----------------------------- | ---------- | --------------------- | -------------------------------------------------- |
@@ -147,7 +215,7 @@ For example, the following paragraph
 }
 ```
 
-becomes as follows on `<Enter>:`
+becomes as follows on `<Enter>:` (or `:EasyAlign:`)
 
 ```ruby
 {
@@ -233,18 +301,8 @@ Then we get,
 
 ### Extending alignment rules
 
-Although the default predefined rules should cover the most of the use cases,
+Although the default rules should cover the most of the use cases,
 you can extend the rules by setting a dictionary named `g:easy_align_delimiters`.
-Each entry in the dictionary can have the following attributes.
-
-| Atrribute        | Type    | Default               |
-| ---------------- | ------- | --------------------- |
-| pattern          | regexp  |                       |
-| margin_left      | string  | `' '`                 |
-| margin_right     | string  | `' '`                 |
-| stick_to_left    | boolean | 0                     |
-| ignore_unmatched | boolean | 1                     |
-| ignores          | array   | ['String', 'Comment'] |
 
 #### Example
 

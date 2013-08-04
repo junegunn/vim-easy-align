@@ -41,6 +41,11 @@ let s:easy_align_delimiters_default = {
 
 let s:just = ['', '[R]']
 
+let s:known_options = {
+\ 'pattern': 1, 'margin_left': 1, 'margin_right': 1, 'stick_to_left': 0,
+\ 'ignores': 3, 'ignore_unmatched': 0
+\ }
+
 if exists("*strwidth")
   function! s:strwidth(str)
     return strwidth(a:str)
@@ -71,6 +76,58 @@ function! s:ignored_syntax()
   else
     return []
   endif
+endfunction
+
+function! s:echon(l, n, d)
+  echon "\r"
+  echon "\rEasyAlign". s:just[a:l] ." (" .a:n.a:d. ")"
+endfunction
+
+function! s:exit(msg)
+  echon "\r". a:msg
+  throw 'exit'
+endfunction
+
+function! s:ltrim(str)
+  return substitute(a:str, '^\s*', '', '')
+endfunction
+
+function! s:rtrim(str)
+  return substitute(a:str, '\s*$', '', '')
+endfunction
+
+function! s:fuzzy_lu(key)
+  if has_key(s:known_options, a:key)
+    return a:key
+  endif
+
+  let regexp  = '^' . substitute(a:key, '\(.\)', '\1.*', 'g')
+  let matches = filter(keys(s:known_options), 'v:val =~ regexp')
+
+  if empty(matches)
+    call s:exit("Unknown option key: ". a:key)
+  elseif len(matches) == 1
+    return matches[0]
+  else
+    call s:exit("Ambiguous option key: ". a:key ." (" .join(matches, ', '). ")")
+  endif
+endfunction
+
+function! s:normalize_options(opts)
+  let ret = {}
+  for [k, v] in items(a:opts)
+    let ret[s:fuzzy_lu(k)] = v
+  endfor
+  return s:validate_options(ret)
+endfunction
+
+function! s:validate_options(opts)
+  for [k, v] in items(a:opts)
+    if type(v) != s:known_options[k]
+      call s:exit("Invalid type for option: ". k)
+    endif
+  endfor
+  return a:opts
 endfunction
 
 function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, ignore_unmatched, ignores, recursive)
@@ -167,7 +224,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
 
     " Remove the leading whitespaces of the next token
     if len(tokens) > nth + 1
-      let tokens[nth + 1] = substitute(tokens[nth + 1], '^\s*', '', '')
+      let tokens[nth + 1] = s:ltrim(tokens[nth + 1])
     endif
 
     " Pad the token with spaces
@@ -208,7 +265,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
     let tokens[nth] = aligned
 
     " Update the line
-    let newline = substitute(before.join(tokens, '').after, '\s*$', '', '')
+    let newline = s:rtrim(before.join(tokens, '').after)
     call setline(line, newline)
   endfor
 
@@ -220,66 +277,123 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
   endif
 endfunction
 
-function! s:echon(l, n, d)
-  echon "\r"
-  echon "\rEasyAlign". s:just[a:l] ." (" .a:n.a:d. ")"
+function! s:interactive(just)
+  let just = a:just
+  let n    = ''
+  let ch   = ''
+
+  while 1
+    call s:echon(just, n, '')
+
+    let c  = getchar()
+    let ch = nr2char(c)
+    if c == 3 || c == 27 " CTRL-C / ESC
+      throw 'exit'
+    elseif c == '€kb' " Backspace
+      if len(n) > 0
+        let n = strpart(n, 0, len(n) - 1)
+      endif
+    elseif c == 13 " Enter key
+      let just = (just + 1) % len(s:just)
+    elseif ch == '-'
+      if empty(n)      | let n = '-'
+      elseif n == '-'  | let n = ''
+      else             | break
+      endif
+    elseif ch == '*'
+      if empty(n)      | let n = '*'
+      elseif n == '*'  | let n = '**'
+      elseif n == '**' | let n = ''
+      else             | break
+      endif
+    elseif c >= 48 && c <= 57 " Numbers
+      if n[0] == '*'   | break
+      else             | let n = n . ch
+      end
+    else
+      break
+    endif
+  endwhile
+  return [just, n, ch]
 endfunction
 
-function! easy_align#align(just, ...) range
-  let just      = a:just
-  let recursive = 0
-  let n         = ''
-  let ch        = ''
+function! s:parse_args(args)
+  let n      = ''
+  let ch     = ''
+  let args   = a:args
+  let cand   = ''
+  let option = {}
 
-  if a:0 == 0
-    while 1
-      call s:echon(just, n, '')
+  " Poor man's option parser
+  let idx = 0
+  while 1
+    let midx = match(args, '{.*}\s*$', idx)
+    if midx == -1 | break | endif
 
-      let c  = getchar()
-      let ch = nr2char(c)
-      if c == 3 || c == 27 " CTRL-C / ESC
-        return
-      elseif c == '€kb' " Backspace
-        if len(n) > 0
-          let n = strpart(n, 0, len(n) - 1)
-        endif
-      elseif c == 13 " Enter key
-        let just = (just + 1) % len(s:just)
-      elseif ch == '-'
-        if empty(n)      | let n = '-'
-        elseif n == '-'  | let n = ''
-        else             | break
-        endif
-      elseif ch == '*'
-        if empty(n)      | let n = '*'
-        elseif n == '*'  | let n = '**'
-        elseif n == '**' | let n = ''
-        else             | break
-        endif
-      elseif c >= 48 && c <= 57 " Numbers
-        if n[0] == '*'   | break
-        else             | let n = n . ch
-        end
-      else
+    let cand = strpart(args, midx)
+    try
+      let o = eval(cand)
+      if type(o) == 4
+        let option = o
+        let args = strpart(args, 0, midx)
         break
       endif
-    endwhile
-  elseif a:0 == 1
-    let tokens = matchlist(a:1, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\(.\)$')
-    if empty(tokens)
-      echo "Invalid arguments: ". a:1
-      return
-    endif
-    let [n, ch] = tokens[1:2]
-  elseif a:0 == 2
-    let [n, ch] = a:000
-  else
-    echo "Invalid number of arguments: ". a:0 ." (expected 0, 1, or 2)"
-    return
+    catch
+      " Ignore
+    endtry
+    let idx = midx + 1
+  endwhile
+
+  " Invalid option dictionary
+  if len(cand) > 2 && empty(option)
+    call s:exit("Invalid option: ". cand)
   endif
 
-  if n == '*'      | let [nth, recursive] = [1, 1]
-  elseif n == '**' | let [nth, recursive] = [1, 2]
+  " Has /Regexp/?
+  let matches = matchlist(args, '^\(.\{-}\)\s*/\(.*\)/\s*$')
+
+  " Found regexp
+  if !empty(matches)
+    let regexp = matches[2]
+    " Test regexp
+    try   | call matchlist('', regexp)
+    catch | call s:exit("Invalid regular expression: ". regexp)
+    endtry
+    " Unsupported regular expression
+    if match(regexp, '\\zs') != -1
+      call s:exit("Using \\zs is not allowed. Use stick_to_left option instead.")
+    endif
+    return [matches[1], regexp, option, 1]
+  else
+    let tokens = matchlist(args, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\s*\(.\{-}\)\?$')
+    return [tokens[1], tokens[2], option, 0]
+  endif
+endfunction
+
+function! easy_align#align(just, expr) range
+  let just   = a:just
+  let recur  = 0
+  let n      = ''
+  let ch     = ''
+  let option = {}
+  let regexp = 0
+
+  try
+    if empty(a:expr)
+      let [just, n, ch] = s:interactive(just)
+    else
+      let [n, ch, option, regexp] = s:parse_args(a:expr)
+      if empty(ch)
+        " Try swapping n and ch
+        let [n, ch] = ['', n]
+      endif
+    endif
+  catch 'exit'
+    return
+  endtry
+
+  if n == '*'      | let [nth, recur] = [1, 1]
+  elseif n == '**' | let [nth, recur] = [1, 2]
   elseif n == '-'  | let nth = -1
   elseif empty(n)  | let nth = 1
   elseif n == '0' || ( n != '-0' && n != string(str2nr(n)) )
@@ -294,22 +408,40 @@ function! easy_align#align(just, ...) range
     let delimiters = extend(copy(delimiters), g:easy_align_delimiters)
   endif
 
-  if has_key(delimiters, ch)
-    let dict = delimiters[ch]
-    call s:do_align(just, {}, a:firstline, a:lastline,
-                  \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
-                  \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
-                  \ get(dict, 'pattern', ch),
-                  \ nth,
-                  \ get(dict, 'margin_left', ' '),
-                  \ get(dict, 'margin_right', ' '),
-                  \ get(dict, 'stick_to_left', 0),
-                  \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
-                  \ get(dict, 'ignores', s:ignored_syntax()),
-                  \ recursive)
-    call s:echon(just, n, ch)
+  if regexp
+    let dict = { 'pattern': ch }
   else
-    echon "\rUnknown delimiter: ". ch
+    if ch =~ '^\\\s\+$'
+      let ch = ' '
+    elseif ch =~ '^\\\\\s\+$'
+      let ch = '\'
+    endif
+    if !has_key(delimiters, ch)
+      echon "\rUnknown delimiter key: ". ch
+      return
+    endif
+    let dict = delimiters[ch]
   endif
+
+  try
+    if !empty(option)
+      let dict = extend(copy(dict), s:normalize_options(option))
+    endif
+  catch 'exit'
+    return
+  endtry
+
+  call s:do_align(just, {}, a:firstline, a:lastline,
+    \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
+    \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
+    \ get(dict, 'pattern', ch),
+    \ nth,
+    \ get(dict, 'margin_left', ' '),
+    \ get(dict, 'margin_right', ' '),
+    \ get(dict, 'stick_to_left', 0),
+    \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
+    \ get(dict, 'ignores', s:ignored_syntax()),
+    \ recur)
+  call s:echon(just, n, regexp ? '/'.ch.'/' : ch)
 endfunction
 

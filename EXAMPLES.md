@@ -1,6 +1,12 @@
 vim-easy-align examples
 =======================
 
+The description in this document assumes that you have defined this mapping.
+
+```vim
+vnoremap <silent> <Enter> :EasyAlign<cr>
+```
+
 To enable syntax highlighting in the code blocks, define and call the following
 function.
 
@@ -26,6 +32,19 @@ endfunction
 Alignment around whitespaces
 ----------------------------
 
+You can align text around whitespaces with `<space>` delimiter key.
+
+Try these commands:
+- `<Enter><space>`
+- `<Enter>2<space>`
+- `<Enter>*<space>`
+- `<Enter>-<space>`
+- `<Enter>-2<space>`
+- `<Enter><Enter><space>`
+- `<Enter><Enter>*<space>`
+
+### Example
+
 ```
 
 Paul McCartney 1942
@@ -38,7 +57,13 @@ Pete Best 1941
 Formatting table
 ----------------
 
-Try `<Enter>*|`
+Try these commands:
+- `<Enter>*|`
+- `<Enter>**|`
+- `<Enter><Enter>*|`
+- `<Enter><Enter>**|`
+
+### Example
 
 ```
 
@@ -58,14 +83,16 @@ Try `<Enter>*|`
 Alignment around =
 ------------------
 
-The default rule for delimiter key `=` aligns around the most of the operators
+The default rule for delimiter key `=` aligns around a whole family of operators
 containing `=` character.
 
-Try:
+Try these commands:
 - `<Enter>=`
 - `<Enter>*=`
 - `<Enter>**=`
 - `<Enter><Enter>**=`
+
+### Example
 
 ```ruby
 
@@ -106,16 +133,20 @@ In this case, you don't want to align around all the colons: `<Enter>*:`.
 
 mysql:
   # JDBC driver for MySQL database:
-  driver:      com.mysql.jdbc.Driver
+  driver: com.mysql.jdbc.Driver
   # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
-  url:         jdbc:mysql://localhost/test
-  database:    test
-  "user:pass": r00t:pa55
+  url: jdbc:mysql://localhost/test
+  database: test
+  "user:pass":r00t:pa55
 
 ```
 
 Partial alignment in block-visual mode / Negative field index
 -------------------------------------------------------------
+
+You can try one of these:
+- Select text around `=>` in block-wise visual mode (`<Ctrl>-V`) and `<Enter>=`
+- `<Enter>-=`
 
 ```ruby
 
@@ -145,7 +176,7 @@ Ignoring delimiters in comments and strings
 -------------------------------------------
 
 Delimiters highlighted as comments or strings are ignored by default, try
-`<Enter>*=` for the following lines.
+`<Enter>*=` on the following lines.
 
 ```c
 
@@ -162,7 +193,7 @@ Aligning in-line comments
 
 ```ruby
 apple = 1 # comment not aligned
-banana = "string" # comment 2
+banana = 'Gros Michel' # comment 2
 ```
 
 So, how do we align the trailing comments in the above lines?
@@ -173,12 +204,14 @@ But this doesn't work in the following case.
 
 ```ruby
 apple = 1 # comment not aligned
-apricot = 'A#B'
-banana = 'string' # comment 2
+apricot = 'DAD' + 'F#AD'
+banana = 'Gros Michel' # comment 2
 ```
 
-The second line doesn't have trailing comment, and *the last space* is the one
-before `'A#B'`. So we define a custom mapping for `#`
+That is because the second line doesn't have trailing comment, and
+the last space (`-`) for that line is the one just before `'F#AD'`.
+
+So, let's define a custom mapping for `#`.
 
 ```vim
 if !exists('g:easy_align_delimiters')
@@ -187,8 +220,10 @@ endif
 let g:easy_align_delimiters['#'] = { 'pattern': '#\+', 'ignores': ['String'] } }
 ```
 
-Notice that the rule overrides `ignores` attribute in order *not* to ignore
-delimiters highlighted as comments. Then we try `<Enter>#`, to get
+Notice that the rule overrides `ignores` attribute in order *not to ignore*
+delimiters highlighted as comments.
+
+Then on `<Enter>#`, we get
 
 ```ruby
 apple = 1         # comment not aligned
