@@ -345,7 +345,7 @@ function! s:parse_args(args)
   endwhile
 
   " Invalid option dictionary
-  if len(cand) > 2 && empty(option)
+  if len(substitute(cand, '\s', '', 'g')) > 2 && empty(option)
     call s:exit("Invalid option: ". cand)
   endif
 
