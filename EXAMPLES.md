@@ -242,7 +242,7 @@ So, let's define a custom mapping for `#`.
 if !exists('g:easy_align_delimiters')
   let g:easy_align_delimiters = {}
 endif
-let g:easy_align_delimiters['#'] = { 'pattern': '#\+', 'ignores': ['String'] } }
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'] } }
 ```
 
 Notice that the rule overrides `ignores` attribute in order *not to ignore*
@@ -252,7 +252,37 @@ Then on `<Enter>#`, we get
 
 ```ruby
 apple = 1         # comment not aligned
-apricot = 'A#B'
+apricot = 'DAD' + 'F#AD'
 banana = 'string' # comment 2
+```
+
+If you don't want to define a rule, you can do the same with the following
+command:
+
+```vim
+" Using regular expression /#/
+" - "is" is fuzzy-matched to "*i*gnore*s*"
+:EasyAlign/#/{'is':['String']}
+```
+
+In this case, the second line is ignored as it doesn't contain `#`. (The one
+highlighted as String is ignored.) If you don't want the second line to be
+ignored, set `g:easy_align_ignore_unmatched` to 0, or use the following
+commands:
+
+```vim
+" Using predefined rule with delimiter key #
+:EasyAlign#{'iu':0}`
+
+" Using regular expression /#/
+:EasyAlign/#/{'is':['String'],'iu':0}`
+```
+
+Then we get,
+
+```ruby
+apple = 1                # comment not aligned
+apricot = 'DAD' + 'F#AD'
+banana = 'string'        # comment 2
 ```
 

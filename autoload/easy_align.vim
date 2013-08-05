@@ -116,21 +116,25 @@ endfunction
 
 function! s:normalize_options(opts)
   let ret = {}
-  for [k, v] in items(a:opts)
+  for k in keys(a:opts)
+    let v = a:opts[k]
     let k = s:fuzzy_lu(k)
     " Backward-compatibility
     if k == 'margin_left'  | let k = 'left_margin'  | endif
     if k == 'margin_right' | let k = 'right_margin' | endif
     let ret[k] = v
+    unlet v
   endfor
   return s:validate_options(ret)
 endfunction
 
 function! s:validate_options(opts)
-  for [k, v] in items(a:opts)
+  for k in keys(a:opts)
+    let v = a:opts[k]
     if index(s:known_options[k], type(v)) == -1
       call s:exit("Invalid type for option: ". k)
     endif
+    unlet v
   endfor
   return a:opts
 endfunction
@@ -175,7 +179,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
       endif
 
       " Skip comment line
-      if concat && len(tokens) == 1
+      if concat && len(tokens) == 1 && a:ignore_unmatched
         let tokens = []
       endif
 
