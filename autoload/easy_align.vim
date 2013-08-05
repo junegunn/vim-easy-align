@@ -42,7 +42,7 @@ let s:easy_align_delimiters_default = {
 let s:just = ['', '[R]']
 
 let s:known_options = {
-\ 'pattern': [1], 'margin_left': [0, 1], 'margin_right': [0, 1], 'stick_to_left': [0],
+\ 'margin_left': [0, 1], 'margin_right': [0, 1], 'stick_to_left': [0],
 \ 'left_margin': [0, 1], 'right_margin': [0, 1],
 \ 'ignores': [3], 'ignore_unmatched': [0]
 \ }
