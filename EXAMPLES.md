@@ -141,6 +141,31 @@ mysql:
 
 ```
 
+Formatting multi-line method chaining
+-------------------------------------
+
+Try `<Enter>.` or `<Enter>*.` on the following lines.
+
+```ruby
+my_object
+      .method1().chain()
+    .second_method().call()
+      .third().call()
+     .method_4().execute()
+```
+
+Notice that the indentation is adjusted to match the shortest one among those of
+the lines starting with the delimiter.
+
+```ruby
+my_object
+    .method1()      .chain()
+    .second_method().call()
+    .third()        .call()
+    .method_4()     .execute()
+```
+
+
 Partial alignment in block-visual mode / Negative field index
 -------------------------------------------------------------
 

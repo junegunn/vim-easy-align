@@ -1,4 +1,5 @@
-source include.vim
+e!
+execute 'source '. expand('%:p:h') . '/include.vim'
 
 while line('.') < line('$')
   normal 30j
@@ -6,7 +7,7 @@ while line('.') < line('$')
 endwhile
 
 normal gg
-let @b=system('cat '. expand('%:r') . '.script')
-let @a='@b:vert diffsplit ' . expand('%:r') . '.expected'
+let @b=system('cat '. expand('%:p:r') . '.script')
+let @a='@b:vert diffsplit ' . expand('%:p:r') . '.expected'
 " Syntax highlighting doesn't work
 echo "Press @a"

@@ -27,23 +27,24 @@ endif
 let g:loaded_easy_align = 1
 
 let s:easy_align_delimiters_default = {
-\  ' ': { 'pattern': ' ',  'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
+\  ' ': { 'pattern': ' ',  'left_margin': '',  'right_margin': '',  'stick_to_left': 0 },
 \  '=': { 'pattern': '===\|<=>\|\(&&\|||\|<<\|>>\)=\|=\~\|=>\|[:+/*!%^=><&|-]\?=[#?]\?',
-\                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
-\  ':': { 'pattern': ':',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
-\  ',': { 'pattern': ',',  'margin_left': '',  'margin_right': ' ', 'stick_to_left': 1 },
-\  '|': { 'pattern': '|',  'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
-\  '.': { 'pattern': '\.', 'margin_left': '',  'margin_right': '',  'stick_to_left': 0 },
+\                          'left_margin': ' ', 'right_margin': ' ', 'stick_to_left': 0 },
+\  ':': { 'pattern': ':',  'left_margin': '',  'right_margin': ' ', 'stick_to_left': 1 },
+\  ',': { 'pattern': ',',  'left_margin': '',  'right_margin': ' ', 'stick_to_left': 1 },
+\  '|': { 'pattern': '|',  'left_margin': ' ', 'right_margin': ' ', 'stick_to_left': 0 },
+\  '.': { 'pattern': '\.', 'left_margin': '',  'right_margin': '',  'stick_to_left': 0 },
 \  '{': { 'pattern': '(\@<!{',
-\                          'margin_left': ' ', 'margin_right': ' ', 'stick_to_left': 0 },
-\  '}': { 'pattern': '}',  'margin_left': ' ', 'margin_right': '',  'stick_to_left': 0 }
+\                          'left_margin': ' ', 'right_margin': ' ', 'stick_to_left': 0 },
+\  '}': { 'pattern': '}',  'left_margin': ' ', 'right_margin': '',  'stick_to_left': 0 }
 \ }
 
 let s:just = ['', '[R]']
 
 let s:known_options = {
-\ 'pattern': 1, 'margin_left': 1, 'margin_right': 1, 'stick_to_left': 0,
-\ 'ignores': 3, 'ignore_unmatched': 0
+\ 'pattern': [1], 'margin_left': [0, 1], 'margin_right': [0, 1], 'stick_to_left': [0],
+\ 'left_margin': [0, 1], 'right_margin': [0, 1],
+\ 'ignores': [3], 'ignore_unmatched': [0]
 \ }
 
 if exists("*strwidth")
@@ -101,7 +102,7 @@ function! s:fuzzy_lu(key)
     return a:key
   endif
 
-  let regexp  = '^' . substitute(a:key, '\(.\)', '\1.*', 'g')
+  let regexp  = '^' . substitute(substitute(a:key, '-', '_', 'g'), '\(.\)', '\1.*', 'g')
   let matches = filter(keys(s:known_options), 'v:val =~ regexp')
 
   if empty(matches)
@@ -116,14 +117,18 @@ endfunction
 function! s:normalize_options(opts)
   let ret = {}
   for [k, v] in items(a:opts)
-    let ret[s:fuzzy_lu(k)] = v
+    let k = s:fuzzy_lu(k)
+    " Backward-compatibility
+    if k == 'margin_left'  | let k = 'left_margin'  | endif
+    if k == 'margin_right' | let k = 'right_margin' | endif
+    let ret[k] = v
   endfor
   return s:validate_options(ret)
 endfunction
 
 function! s:validate_options(opts)
   for [k, v] in items(a:opts)
-    if type(v) != s:known_options[k]
+    if index(s:known_options[k], type(v)) == -1
       call s:exit("Invalid type for option: ". k)
     endif
   endfor
@@ -135,6 +140,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
   let max_just_len   = 0
   let max_delim_len  = 0
   let max_tokens     = 0
+  let min_indent     = -1
   let pattern        = '\s*\(' .a:pattern. '\)\s' . (a:stick_to_left ? '*' : '\{-}')
 
   " Phase 1
@@ -212,6 +218,10 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
       continue
     endif
 
+    let indent        = len(matchstr(tokens[0], '^\s\+'))
+    if min_indent < 0 || indent < min_indent
+      let min_indent  = indent
+    endif
     let max_just_len  = max([s:strwidth(prefix.token), max_just_len])
     let max_delim_len = max([s:strwidth(delim), max_delim_len])
     let lines[line]   = [nth, prefix, token, delim]
@@ -260,8 +270,19 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
     let mr      = (empty(rest) ||
           \ (empty(rest) && stridx(after, a:mr) == 0)) ? '' : a:mr
 
+    " Adjust indentation of the lines starting with a delimiter
+    let lpad = ''
+    if nth == 0
+      let ipad = repeat(' ', min_indent - len(strpart(before.token, '^\s\+').ml))
+      if a:just == 0
+        let token = ipad . token
+      else
+        let lpad = ipad
+      endif
+    endif
+
     " Align the token
-    let aligned = join([token, ml, delim, mr, rpad], '')
+    let aligned = join([lpad, token, ml, delim, mr, rpad], '')
     let tokens[nth] = aligned
 
     " Update the line
@@ -431,13 +452,18 @@ function! easy_align#align(just, expr) range
     return
   endtry
 
+  let ml = get(dict, 'left_margin', ' ')
+  let mr = get(dict, 'right_margin', ' ')
+  if type(ml) == 0 | let ml = repeat(' ', ml) | endif
+  if type(mr) == 0 | let mr = repeat(' ', mr) | endif
+
   call s:do_align(just, {}, a:firstline, a:lastline,
     \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
     \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
     \ get(dict, 'pattern', ch),
     \ nth,
-    \ get(dict, 'margin_left', ' '),
-    \ get(dict, 'margin_right', ' '),
+    \ ml,
+    \ mr,
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignores', s:ignored_syntax()),

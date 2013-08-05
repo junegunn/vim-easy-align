@@ -127,7 +127,7 @@ Notice that you can't append `\zs` to your regular expression to put delimiters
 on the left. It can be done by providing additional options in Vim dictionary
 format.
 
-- `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'margin_left': '' }`
+- `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': '' }`
 
 Then we get:
 
@@ -136,21 +136,21 @@ Then we get:
 
 Options keys are fuzzy-matched, so you can write as follows:
 
-- `:EasyAlign * /[:;]\+/ { 'stl': 1, 'ml': '' }`
+- `:EasyAlign * /[:;]\+/ { 'stl': 1, 'l': 0 }`
 
 You can even omit spaces between the arguments, so concisely (or cryptically):
 
-- `:EasyAlign*/[:;]\+/{'stl':1,'ml':''}`
+- `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
 
 Available options for each alignment are as follows.
 
-| Atrribute        | Type    | Default                 |
-| ---------------- | ------- | ----------------------- |
-| margin_left      | string  | `' '`                   |
-| margin_right     | string  | `' '`                   |
-| stick_to_left    | boolean | 0                       |
-| ignore_unmatched | boolean | 1                       |
-| ignores          | array   | `['String', 'Comment']` |
+| Atrribute        | Type             | Default                 |
+| ---------------- | ---------------- | ----------------------- |
+| left_margin      | number or string | 0                       |
+| right_margin     | number or string | 0                       |
+| stick_to_left    | boolean          | 0                       |
+| ignore_unmatched | boolean          | 1                       |
+| ignores          | array            | `['String', 'Comment']` |
 
 (The last two options will be described shortly in the following sections.)
 
@@ -331,14 +331,14 @@ let g:easy_align_delimiters = {
 \ '#': { 'pattern': '#\+', 'ignores': ['String'] },
 \ ']': {
 \     'pattern':       '[\[\]]',
-\     'margin_left':   '',
-\     'margin_right':  '',
+\     'left_margin':   0,
+\     'right_margin':  0,
 \     'stick_to_left': 0
 \   },
 \ ')': {
 \     'pattern':       '[()]',
-\     'margin_left':   '',
-\     'margin_right':  '',
+\     'left_margin':   0,
+\     'right_margin':  0,
 \     'stick_to_left': 0
 \   }
 \ }
