@@ -7,10 +7,11 @@ A simple, easy-to-use Vim alignment plugin without too much ambition.
   Source: https://github.com/junegunn/vim-easy-align
 
 
-EasyAlign                                                    *:EasyAlign*
+EasyAlign                                      *:EasyAlign* *:EasyAlign!*
 -------------------------------------------------------------------------
 
 vim-easy-align defines `:EasyAlign` command in the visual mode.
+(:EasyAlign! is the right-justification version.)
 
 | Mode                      | Command                                     |
 | ------------------------- | ------------------------------------------- |
@@ -18,13 +19,17 @@ vim-easy-align defines `:EasyAlign` command in the visual mode.
 | Using predefined rules    | :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS] |
 | Using regular expressions | :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]      |
 
-The commands will go into the interactive mode when no argument is given.
-For convenience, it is advised that you define a mapping for triggering it
-in your `.vimrc`.
+
+Interactive mode
+-------------------------------------------------------------------------
+
+The command will go into the interactive mode when no argument is given.
+For convenience, it is advised that you define a mapping for triggering it in
+your `.vimrc`.
 
     vnoremap <silent> <Enter> :EasyAlign<cr>
 
-With this mapping, you can align selected lines with a few keystrokes.
+With this mapping, you can align selected lines of text with a few keystrokes.
 
 1. <Enter> key to start interactive EasyAlign command
 2. Optional Enter keys to switch justficiation mode (default: left)
@@ -61,24 +66,18 @@ Examples:
   <Enter><Enter>**=  Right-left alternating alignment around all equals signs
 
 
-EasyAlign!                                                  *:EasyAlign!*
--------------------------------------------------------------------------
-
-:EasyAlign! is the right-justification version of :EasyAlign command.
-
-
 Non-interactive mode
---------------------
+-------------------------------------------------------------------------
 
 Instead of going into the interactive mode, you can type in arguments to
 `:EasyAlign` command. In non-interactive mode, you can even use arbitrary
 regular expressions.
 
     " Using predefined alignment rules
-    :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]
+    :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]
 
     " Using arbitrary regular expressions
-    :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]
+    :EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]
 
 For example, when aligning the following lines around colons and semi-colons,
 
@@ -93,7 +92,8 @@ try these commands:
 - :EasyAlign **/[:;]\+/
 
 Notice that you can't append `\zs` to your regular expression to put delimiters
-on the left. It can be done by providing additional options.
+on the left. It can be done by providing additional options in Vim dictionary
+format.
 
 - :EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': '' }
 
@@ -110,7 +110,7 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 - :EasyAlign*/[:;]\+/{'s':1,'l':''}
 
-Available options for each alignment are as follows.
+Available options are as follows.
 
 | Atrribute        | Type             | Default                 |
 | ---------------- | ---------------- | ----------------------- |
@@ -164,10 +164,15 @@ becomes as follows on `<Enter>:`
 
 Naturally, this feature only works when syntax highlighting is enabled.
 
-You can change the default rule by defining `g:easy_align_ignores` array.
+You can change the default rule by either defining global `g:easy_align_ignores`
+array,
 
     " Ignore nothing!
     let g:easy_align_ignores = []
+
+or providing `ignores` option directly to :EasyAlign command
+
+    :EasyAlign:{'is':[]}
 
 Then you get,
 
@@ -181,7 +186,7 @@ Then you get,
     }
 
 
-Handling unmatched lines                  *g:easy_align_ignore_unmatched*
+Ignoring unmatched lines                  *g:easy_align_ignore_unmatched*
 -------------------------------------------------------------------------
 
 Lines without any matching delimiter are ignored as well (except in
@@ -209,7 +214,15 @@ this is usually what we want.
 
 However, this default behavior is also configurable.
 
+One way is to set the global `g:easy_align_ignore_unmatched` variable to 0.
+
     let g:easy_align_ignore_unmatched = 0
+
+Or in non-interactive mode, you can provide `ignore_unmatched` option to
+`:EasyAlign` command as follows.
+
+    :EasyAlign:{'iu':0}
+
 
 Then we get,
 
@@ -225,10 +238,14 @@ Then we get,
 Extending alignment rules                       *g:easy_align_delimiters*
 -------------------------------------------------------------------------
 
+Although the default rules should cover the most of the use cases,
+you can extend the rules by setting a dictionary named
+`g:easy_align_delimiters`.
+
     let g:easy_align_delimiters = {
     \ '>': { 'pattern': '>>\|=>\|>' },
-    \ '/': { 'pattern': '//\+' },
-    \ '#': { 'pattern': '#\+' },
+    \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
+    \ '#': { 'pattern': '#\+', 'ignores': ['String'] },
     \ ']': {
     \     'pattern':       '[\[\]]',
     \     'left_margin':   0,

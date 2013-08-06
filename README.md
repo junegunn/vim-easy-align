@@ -54,7 +54,7 @@ your `.vimrc`.
 vnoremap <silent> <Enter> :EasyAlign<cr>
 ```
 
-With the mapping, you can align selected lines with a few keystrokes.
+With the mapping, you can align selected lines of text with a few keystrokes.
 
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to toggle right-justification mode
@@ -71,14 +71,14 @@ With the mapping, you can align selected lines with a few keystrokes.
 
 Alignment rules for the following delimiters have been defined to meet the most needs.
 
-| Delimiter key | Description/Use cases                                      |
-| ------------- | ---------------------------------------------------------- |
-| `<space>`     | General alignment around spaces                            |
-| `=`           | Operators containing equals sign (=, ==, !=, +=, &&=, ...) |
-| `:`           | Suitable for formatting JSON or YAML                       |
-| `.`           | Multi-line method chaining                                 |
-| `,`           | Multi-line method arguments                                |
-| &#124;        | Table markdown                                             |
+| Delimiter key | Description/Use cases                                                |
+| ------------- | -------------------------------------------------------------------- |
+| `<space>`     | General alignment around whitespaces                                 |
+| `=`           | Operators containing equals sign (`=`, `==,` `!=`, `+=`, `&&=`, ...) |
+| `:`           | Suitable for formatting JSON or YAML                                 |
+| `.`           | Multi-line method chaining                                           |
+| `,`           | Multi-line method arguments                                          |
+| &#124;        | Table markdown                                                       |
 
 #### Example command sequences
 
@@ -142,7 +142,7 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 - `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
 
-Available options for each alignment are as follows.
+Available options are as follows.
 
 | Atrribute        | Type             | Default                 |
 | ---------------- | ---------------- | ----------------------- |
@@ -239,7 +239,7 @@ array,
 let g:easy_align_ignores = []
 ```
 
-or providing `ignores` option to :EasyAlign command
+or providing `ignores` option directly to `:EasyAlign` command
 
 ```vim
 :EasyAlign:{'is':[]}
@@ -291,14 +291,14 @@ this is usually what we want.
 
 However, this default behavior is also configurable.
 
-One way is to set the global `g:easy_align_ignore_unmatched` variable to be 0.
+One way is to set the global `g:easy_align_ignore_unmatched` variable to 0.
 
 ```vim
 let g:easy_align_ignore_unmatched = 0
 ```
 
 Or in non-interactive mode, you can provide `ignore_unmatched` option to
-:EasyAlign command
+`:EasyAlign` command as follows.
 
 ```vim
 :EasyAlign:{'iu':0}
@@ -324,7 +324,6 @@ you can extend the rules by setting a dictionary named `g:easy_align_delimiters`
 #### Example
 
 ```vim
-" Examples
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
 \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
