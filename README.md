@@ -11,13 +11,14 @@ Demo
 Features
 --------
 
+- Makes the common case easy
+  - Comes with a predefined set of alignment rules
+  - Provides a fast and intuitive interface
+- Extensible
+  - You can define your own rules
+  - Supports arbitrary regular expressions
 - Optimized for code editing
-- Designed to require minimal keystrokes
-- Extensible alignment rules
-- Supports arbitrary regular expressions
-- Aligns text around either _all or n-th_ occurrence(s) of the delimiter
-- Ignores delimiters in certain syntax highlight groups (e.g. comments, strings)
-- Ignores lines without a matching delimiter
+  - Takes advantage of syntax highlighting feature to avoid unwanted alignments
 
 Installation
 ------------
