@@ -1,7 +1,9 @@
 vim-easy-align examples
 =======================
 
-The description in this document assumes that you have defined this mapping.
+Open this document in your Vim and try it yourself.
+
+This document assumes that you have defined the following mapping.
 
 ```vim
 vnoremap <silent> <Enter> :EasyAlign<cr>
@@ -12,16 +14,11 @@ function.
 
 ```vim
 function! GFM()
-  let syntaxes = {
-  \ 'ruby':   'syntax/ruby.vim',
-  \ 'yaml':   'syntax/yaml.vim',
-  \ 'vim':    'syntax/vim.vim',
-  \ 'c':      'syntax/c.vim'
-  \ }
+  let langs = ['ruby', 'yaml', 'vim', 'c']
 
-  for [lang, syn] in items(syntaxes)
+  for lang in langs
     unlet b:current_syntax
-    silent! exec printf("syntax include @%s %s", lang, syn)
+    silent! exec printf("syntax include @%s syntax/%s.vim", lang, lang)
     exec printf("syntax region %sSnip matchgroup=Snip start='```%s' end='```' contains=@%s",
                 \ lang, lang, lang)
   endfor
@@ -166,39 +163,35 @@ my_object
 ```
 
 
-Partial alignment in block-visual mode / Negative field index
--------------------------------------------------------------
+Using blockwise-visual mode or negative field index
+---------------------------------------------------
 
-You can try one of these:
-- Select text around `=>` in block-wise visual mode (`<Ctrl>-V`) and `<Enter>=`
-- `<Enter>-=`
+You can try either:
+- select text around `=>` in blockwise-visual mode (`CTRL-V`) and `<Enter>=`
+- or `<Enter>-=`
 
 ```ruby
-
 options = { :caching => nil,
             :versions => 3,
             "cache=blocks" => false }.merge(options)
-
 ```
 
 Commas
 ------
 
-There is also a predefined rule for commas, try `<Enter>*,` for the following
+There is also a predefined rule for commas, try `<Enter>*,` on the following
 lines.
 
 ```
-
 aaa,   bb,c
 d,eeeeeee
 fffff, gggggggggg,
 h, ,           ii
 j,,k
-
 ```
 
-Ignoring delimiters in comments and strings
--------------------------------------------
+Ignoring delimiters in comments or strings
+------------------------------------------
 
 Delimiters highlighted as comments or strings are ignored by default, try
 `<Enter>*=` on the following lines.
@@ -213,6 +206,8 @@ aaaaa /* bbbbb */      == ccccc /* != eeeee = */ === fffff
 
 ```
 
+This only works when syntax highlighting is enabled.
+
 Aligning in-line comments
 -------------------------
 
@@ -222,7 +217,7 @@ banana = 'Gros Michel' # comment 2
 ```
 
 So, how do we align the trailing comments in the above lines?
-Simply try `<Enter>-<space>`! The spaces in the comments are ignored, so the
+Simply try `<Enter>-<space>`. The spaces in the comments are ignored, so the
 trailing comment in each line is considered to be a single chunk.
 
 But this doesn't work in the following case.
@@ -234,7 +229,7 @@ banana = 'Gros Michel' # comment 2
 ```
 
 That is because the second line doesn't have trailing comment, and
-the last space (`-`) for that line is the one just before `'F#AD'`.
+the last (`-`) space for that line is the one just before `'F#AD'`.
 
 So, let's define a custom mapping for `#`.
 
@@ -256,7 +251,7 @@ apricot = 'DAD' + 'F#AD'
 banana = 'string' # comment 2
 ```
 
-If you don't want to define a rule, you can do the same with the following
+If you don't want to define the rule, you can do the same with the following
 command:
 
 ```vim
@@ -265,7 +260,7 @@ command:
 :EasyAlign/#/{'is':['String']}
 ```
 
-In this case, the second line is ignored as it doesn't contain `#`. (The one
+In this case, the second line is ignored as it doesn't contain a `#`. (The one
 highlighted as String is ignored.) If you don't want the second line to be
 ignored, set `g:easy_align_ignore_unmatched` to 0, or use the following
 commands:
