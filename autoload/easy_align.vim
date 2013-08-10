@@ -218,7 +218,7 @@ function! s:do_align(just, all_tokens, fl, ll, fc, lc, pattern, nth, ml, mr, sti
     let token  = substitute(last, pattern.'$', '', '')
 
     let delim = get(matchlist(last, pattern.'$'), 1, '')
-    if empty(delim) && a:just == 0 && a:ignore_unmatched
+    if empty(delim) && !exists('tokens[nth + 1]') && a:just == 0 && a:ignore_unmatched
       continue
     endif
 

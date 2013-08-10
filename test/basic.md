@@ -107,3 +107,13 @@ my_object.
    |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
    |logger | Logger | nil | logger instance for debug logs |
 
+
+```c
+
+const char* str = "Hello";
+int64_t count = 1 + 2;
+static double pi = 3.14;
+static std::map<std::string, float>* scores = pointer;
+
+```
+

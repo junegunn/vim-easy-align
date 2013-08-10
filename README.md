@@ -340,14 +340,19 @@ let g:easy_align_delimiters = {
 \     'left_margin':   0,
 \     'right_margin':  0,
 \     'stick_to_left': 0
+\   },
+\ 'd': {
+\     'pattern': '\s\+\(\S\+\s*[;=]\)\@=',
+\     'left_margin': 0,
+\     'right_margin': 0
 \   }
 \ }
 ```
 
-Examples and use cases
-----------------------
+Advanced examples and use cases
+-------------------------------
 
-See the [link](https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md)
+See [EXAMPLES.md](https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md)
 for more examples.
 
 Author

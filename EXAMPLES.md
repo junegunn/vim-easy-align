@@ -286,3 +286,101 @@ apricot = 'DAD' + 'F#AD'
 banana = 'string'        # comment 2
 ```
 
+Aligning C-style variable definition
+------------------------------------
+
+Take the following example:
+
+```c
+const char* str = "Hello";
+int64_t count = 1 + 2;
+static double pi = 3.14;
+```
+
+We can align these lines with the predefined `=` rule. Select the lines and
+press `<Enter>=`
+
+```c
+const char* str  = "Hello";
+int64_t count    = 1 + 2;
+static double pi = 3.14;
+```
+
+Not bad. However, the names of the variables, `str`, `count`, and `pi` are not
+aligned with each other. Can we do better? You can clearly see that simple
+`<Enter><space>` won't properly align those names. So we define a rule for such
+cases.
+
+```vim
+let g:easy_align_delimiters['d'] = {
+\ 'pattern': '\(const\|static\)\@<!\s\+',
+\ 'left_margin': 0, 'right_margin': 0
+\ }
+```
+
+This new rule aligns text around whitespaces that are not preceded by
+`const` or `static`. Let's try it with `<Enter>d`.
+
+```c
+const char*   str = "Hello";
+int64_t       count = 1 + 2;
+static double pi = 3.14;
+```
+
+Okay, now the names are aligned. We select the lines again with `gv`, and then
+press `<Enter>=` to finalize our alignment.
+
+```c
+const char*   str   = "Hello";
+int64_t       count = 1 + 2;
+static double pi    = 3.14;
+```
+
+Looks good. However, this rule is not sufficient to handle more complex cases
+such as C++ templates or Java generics. Take the following examples.
+
+```c
+const char* str = "Hello";
+int64_t count = 1 + 2;
+static double pi = 3.14;
+static std::map<std::string, float>* scores = pointer;
+```
+
+We see that our rule fails with the new fourth line.
+
+```c
+const char*                  str = "Hello";
+int64_t                      count = 1 + 2;
+static double                pi = 3.14;
+static std::map<std::string, float>* scores = pointer;
+```
+
+So what do we do? Let's try to improve our alignment rule.
+
+```vim
+let g:easy_align_delimiters['d'] = {
+\ 'pattern': '\s\+\(\S\+\s*[;=]\)\@=',
+\ 'left_margin': 0, 'right_margin': 0
+\ }
+```
+
+Now the new rule has changed to align text around whitespaces that are followed
+by some non-whitespace characters and then an equals sign or a semi-colon.
+Try `<Enter>d`
+
+```c
+const char*                          str = "Hello";
+int64_t                              count = 1 + 2;
+static double                        pi = 3.14;
+static std::map<std::string, float>* scores = pointer;
+```
+
+Okay, now press `gv<Enter>=` and voila!
+
+```c
+const char*                          str    = "Hello";
+int64_t                              count  = 1 + 2;
+static double                        pi     = 3.14;
+static std::map<std::string, float>* scores = pointer;
+```
+
