@@ -39,4 +39,5 @@ set buftype=nofile
 silent! ScrollPositionHide
 
 call GFM()
+syntax sync fromstart
 

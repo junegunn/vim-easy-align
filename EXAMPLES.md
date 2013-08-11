@@ -127,7 +127,6 @@ Try `<Enter>:` here, to align text around only the first occurrences of colons.
 In this case, you don't want to align around all the colons: `<Enter>*:`.
 
 ```yaml
-
 mysql:
   # JDBC driver for MySQL database:
   driver: com.mysql.jdbc.Driver
@@ -135,7 +134,6 @@ mysql:
   url: jdbc:mysql://localhost/test
   database: test
   "user:pass":r00t:pa55
-
 ```
 
 Formatting multi-line method chaining
@@ -220,7 +218,7 @@ So, how do we align the trailing comments in the above lines?
 Simply try `<Enter>-<space>`. The spaces in the comments are ignored, so the
 trailing comment in each line is considered to be a single chunk.
 
-But this doesn't work in the following case.
+But that doesn't work in the following case.
 
 ```ruby
 apple = 1 # comment not aligned
@@ -262,15 +260,24 @@ command:
 
 In this case, the second line is ignored as it doesn't contain a `#`. (The one
 highlighted as String is ignored.) If you don't want the second line to be
-ignored, set `g:easy_align_ignore_unmatched` to 0, or use the following
-commands:
+ignored, there are three options:
+
+1. Set `g:easy_align_ignore_unmatched` to 0
+2. Use the following commands:
 
 ```vim
 " Using predefined rule with delimiter key #
+" - "iu" is fuzzy-matched to "*i*gnore_*u*nmatched"
 :EasyAlign#{'iu':0}`
 
 " Using regular expression /#/
 :EasyAlign/#/{'is':['String'],'iu':0}`
+```
+
+3. Update the rule with `ignore_unmatched`
+
+```vim
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 } }
 ```
 
 Then we get,
@@ -302,18 +309,18 @@ static double pi = 3.14;
 ```
 
 Not bad. However, the names of the variables, `str`, `count`, and `pi` are not
-aligned with each other. Can we do better? You can clearly see that simple
-`<Enter><space>` won't properly align those names. So we define a rule for such
-cases.
+aligned with each other. Can we do better? We can clearly see that simple
+`<Enter><space>` won't properly align those names.
+So let's define an alignment rule than can handle this case.
 
 ```vim
 let g:easy_align_delimiters['d'] = {
-\ 'pattern': '\(const\|static\)\@<!\s\+',
+\ 'pattern': '\(const\|static\)\@<! ',
 \ 'left_margin': 0, 'right_margin': 0
 \ }
 ```
 
-This new rule aligns text around whitespaces that are not preceded by
+This new rule aligns text around spaces that are *not* preceded by
 `const` or `static`. Let's try it with `<Enter>d`.
 
 ```c
@@ -322,8 +329,8 @@ int64_t       count = 1 + 2;
 static double pi = 3.14;
 ```
 
-Okay, now the names are aligned. We select the lines again with `gv`, and then
-press `<Enter>=` to finalize our alignment.
+Okay, the names are now aligned. We select the lines again with `gv`, and then
+press `<Enter>=` to finish our alignment.
 
 ```c
 const char*   str   = "Hello";
@@ -331,35 +338,35 @@ int64_t       count = 1 + 2;
 static double pi    = 3.14;
 ```
 
-Looks good. However, this rule is not sufficient to handle more complex cases
-such as C++ templates or Java generics. Take the following examples.
+So far, so good. However, this rule is not sufficient to handle more complex
+cases involving C++ templates or Java generics. Take the following examples:
 
 ```c
 const char* str = "Hello";
 int64_t count = 1 + 2;
 static double pi = 3.14;
-static std::map<std::string, float>* scores = pointer;
+static std::map<std::string, float>*    scores = pointer;
 ```
 
-We see that our rule fails with the new fourth line.
+We see that our rule above doesn't work anymore.
 
 ```c
 const char*                  str = "Hello";
 int64_t                      count = 1 + 2;
 static double                pi = 3.14;
-static std::map<std::string, float>* scores = pointer;
+static std::map<std::string, float>*    scores = pointer;
 ```
 
 So what do we do? Let's try to improve our alignment rule.
 
 ```vim
 let g:easy_align_delimiters['d'] = {
-\ 'pattern': '\s\+\(\S\+\s*[;=]\)\@=',
+\ 'pattern': ' \(\S\+\s*[;=]\)\@=',
 \ 'left_margin': 0, 'right_margin': 0
 \ }
 ```
 
-Now the new rule has changed to align text around whitespaces that are followed
+Now the new rule has changed to align text around spaces that are followed
 by some non-whitespace characters and then an equals sign or a semi-colon.
 Try `<Enter>d`
 

@@ -113,7 +113,7 @@ my_object.
 const char* str = "Hello";
 int64_t count = 1 + 2;
 static double pi = 3.14;
-static std::map<std::string, float>* scores = pointer;
+static std::map<std::string, float>* scores =    pointer;
 
 ```
 
