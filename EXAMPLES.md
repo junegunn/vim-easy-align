@@ -273,10 +273,10 @@ let g:easy_align_ignore_unmatched = 0
 " 2. Using :EasyAlign command with ignore_unmatched option
 " 2-1. Using predefined rule with delimiter key #
 "      - "iu" is fuzzy-matched to "*i*gnore_*u*nmatched"
-:EasyAlign#{'iu':0}`
+:EasyAlign#{'iu':0}
 
 " 2-2. Using regular expression /#/
-:EasyAlign/#/{'is':['String'],'iu':0}`
+:EasyAlign/#/{'is':['String'],'iu':0}
 
 " 3. Update the alignment rule with ignore_unmatched option
 let g:easy_align_delimiters['#'] = {
