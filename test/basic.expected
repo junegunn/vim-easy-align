@@ -374,3 +374,8 @@ static std::map<std::string, float>* scores = pointer;
 
 ```
 
+  Paul McCartney 1942
+George  Harrison 1943
+ Ringo     Starr 1940
+  Pete      Best 1941
+

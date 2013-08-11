@@ -180,6 +180,13 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
     call add(delims, '')
   endif
 
+  " Preserve indentation - merge first two tokens
+  if len(tokens) > 1 && empty(s:rtrim(tokens[0]))
+    let tokens[1] = tokens[0] . tokens[1]
+    call remove(tokens, 0)
+    call remove(delims, 0)
+  endif
+
   " Skip comment line
   if ignorable && len(tokens) == 1 && a:ignore_unmatched
     let tokens = []
