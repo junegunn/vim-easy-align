@@ -478,10 +478,17 @@ function! easy_align#align(just, expr) range
   if type(ml) == 0 | let ml = repeat(' ', ml) | endif
   if type(mr) == 0 | let mr = repeat(' ', mr) | endif
 
+  let bvisual = visualmode() == ''
+
+  if recur && bvisual
+    echon "\rRecursive alignment is currently not supported in blockwise-visual mode"
+    return
+  endif
+
   try
     call s:do_align(just, {}, {}, a:firstline, a:lastline,
-    \ visualmode() == '' ? min([col("'<"), col("'>")]) : 1,
-    \ visualmode() == '' ? max([col("'<"), col("'>")]) : 0,
+    \ bvisual ? min([col("'<"), col("'>")]) : 1,
+    \ bvisual ? max([col("'<"), col("'>")]) : 0,
     \ get(dict, 'pattern', ch),
     \ nth,
     \ ml,
