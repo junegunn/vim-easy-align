@@ -262,22 +262,25 @@ In this case, the second line is ignored as it doesn't contain a `#`. (The one
 highlighted as String is ignored.) If you don't want the second line to be
 ignored, there are three options:
 
-1. Set `g:easy_align_ignore_unmatched` to 0
-2. Use the following commands:
+1. Set global `g:easy_align_ignore_unmatched` flag to 0
+2. Use `:EasyAlign` command with `ignore_unmatched` option
+3. Update the alignment rule with `ignore_unmatched` option
 
 ```vim
-" Using predefined rule with delimiter key #
-" - "iu" is fuzzy-matched to "*i*gnore_*u*nmatched"
+" 1. Set global g:easy_align_ignore_unmatched to zero
+let g:easy_align_ignore_unmatched = 0
+
+" 2. Using :EasyAlign command with ignore_unmatched option
+" 2-1. Using predefined rule with delimiter key #
+"      - "iu" is fuzzy-matched to "*i*gnore_*u*nmatched"
 :EasyAlign#{'iu':0}`
 
-" Using regular expression /#/
+" 2-2. Using regular expression /#/
 :EasyAlign/#/{'is':['String'],'iu':0}`
-```
 
-3. Update the rule with `ignore_unmatched`
-
-```vim
-let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 } }
+" 3. Update the alignment rule with ignore_unmatched option
+let g:easy_align_delimiters['#'] = {
+  \ 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 } }
 ```
 
 Then we get,
