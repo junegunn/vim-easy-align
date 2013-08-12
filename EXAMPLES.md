@@ -342,7 +342,7 @@ static double pi    = 3.14;
 ```
 
 So far, so good. However, this rule is not sufficient to handle more complex
-cases involving C++ templates or Java generics. Take the following examples:
+cases involving C++ templates or Java generics. Take the following example:
 
 ```c
 const char* str = "Hello";
@@ -380,7 +380,7 @@ static double                        pi = 3.14;
 static std::map<std::string, float>* scores = pointer;
 ```
 
-Okay, now press `gv<Enter>=` and voila!
+We're right on track, now press `gv<Enter>=` and voila!
 
 ```c
 const char*                          str    = "Hello";
