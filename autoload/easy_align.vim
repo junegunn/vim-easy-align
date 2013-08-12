@@ -44,7 +44,7 @@ let s:just = ['', '[R]']
 let s:known_options = {
 \ 'margin_left': [0, 1], 'margin_right': [0, 1], 'stick_to_left': [0],
 \ 'left_margin': [0, 1], 'right_margin': [0, 1],
-\ 'ignores': [3], 'ignore_unmatched': [0]
+\ 'ignores': [3], 'ignore_unmatched': [0], 'delimiter_align': [1]
 \ }
 
 if exists("*strwidth")
@@ -200,7 +200,7 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
   return [tokens, delims]
 endfunction
 
-function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth, ml, mr, stick_to_left, ignore_unmatched, ignores, recursive)
+function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth, ml, mr, da, stick_to_left, ignore_unmatched, ignores, recursive)
   let lines          = {}
   let max_just_len   = 0
   let max_delim_len  = 0
@@ -288,11 +288,16 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     let tokens[nth] = token
 
     " Pad the delimiter
-    let dpad = repeat(' ', max_delim_len - s:strwidth(delim))
-    if a:stick_to_left
-      let rpad = rpad . dpad
+    let dpadl = max_delim_len - s:strwidth(delim)
+    if a:da == 'l'
+      let [dl, dr] = ['', repeat(' ', dpadl)]
+    elseif a:da == 'c'
+      let dl = repeat(' ', dpadl / 2)
+      let dr = repeat(' ', dpadl - dpadl / 2)
+    elseif a:da == 'r'
+      let [dl, dr] = [repeat(' ', dpadl), '']
     else
-      let delim = dpad . delim
+      call s:exit('Invalid delimiter_align: ' . a:da)
     endif
 
     " Before and after the range (for blockwise visual mode)
@@ -318,7 +323,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     endif
 
     " Align the token
-    let aligned = join([lpad, token, ml, delim, mr, rpad], '')
+    let aligned = join([lpad, token, ml, dl, delim, dr, mr, rpad], '')
     let tokens[nth] = aligned
 
     " Update the line
@@ -329,7 +334,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
   if a:recursive && a:nth < max_tokens
     let just = a:recursive == 2 ? !a:just : a:just
     call s:do_align(just, a:all_tokens, a:all_delims, a:fl, a:ll, a:fc, a:lc, a:pattern,
-          \ a:nth + 1, a:ml, a:mr, a:stick_to_left, a:ignore_unmatched,
+          \ a:nth + 1, a:ml, a:mr, a:da, a:stick_to_left, a:ignore_unmatched,
           \ a:ignores, a:recursive)
   endif
 endfunction
@@ -389,6 +394,7 @@ function! s:parse_args(args)
 
     let cand = strpart(args, midx)
     try
+      let [l, r, c] = ['l', 'r', 'c']
       let o = eval(cand)
       if type(o) == 4
         let option = o
@@ -504,6 +510,7 @@ function! easy_align#align(just, expr) range
     \ nth,
     \ ml,
     \ mr,
+    \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r')),
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignores', s:ignored_syntax()),

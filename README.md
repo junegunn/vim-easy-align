@@ -29,9 +29,13 @@ or [Pathogen](https://github.com/tpope/vim-pathogen).
 
 ### With Vundle
 
+Add the following line to your .vimrc,
+
 ```vim
 Bundle 'junegunn/vim-easy-align'
 ```
+
+then execute `:BundleInstall` command.
 
 Usage
 -----
@@ -55,7 +59,7 @@ your `.vimrc`.
 vnoremap <silent> <Enter> :EasyAlign<cr>
 ```
 
-With the mapping, you can align selected lines of text with a few keystrokes.
+With the mapping, you can align selected lines of text with only a few keystrokes.
 
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to toggle right-justification mode
@@ -143,17 +147,7 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 - `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
 
-Available options are as follows.
-
-| Atrribute        | Type             | Default                 |
-| ---------------- | ---------------- | ----------------------- |
-| left_margin      | number or string | 0                       |
-| right_margin     | number or string | 0                       |
-| stick_to_left    | boolean          | 0                       |
-| ignore_unmatched | boolean          | 1                       |
-| ignores          | array            | `['String', 'Comment']` |
-
-(The last two options will be described shortly in the following sections.)
+Available options will be shown later in the document.
 
 ### Partial alignment in blockwise-visual mode
 
@@ -182,14 +176,35 @@ my_hash = { :a   => 1,
 However, in this case, we don't really need blockwise visual mode
 since the same can be easily done using the negative field number: `<Enter>-=`
 
-Global options
---------------
+Alignment options
+-----------------
 
-| Option                        | Type       | Default                 | Description                                        |
-| ----------------------------- | ---------- | ----------------------- | -------------------------------------------------- |
-| g:easy_align_ignores          | list       | `['String', 'Comment']` | Ignore delimiters in these syntax highlight groups |
-| g:easy_align_ignore_unmatched | boolean    | `1`                     | Ignore lines without matching delimiter            |
-| g:easy_align_delimiters       | dictionary | `{}`                    | Extend or override alignment rules                 |
+Options values can be 1) specified as global variables, 2) set on each alignment
+rule in `g:easy_align_delimiters`, 3) or given to every `:EasyAlign` command.
+
+Command-line options have the highest precedence, and global variables have the
+lowest precedence.
+
+### List of options
+
+| Option             | Type              | Default                 | Description                                             |
+| ------------------ | ----------------- | ----------------------- | ------------------------------------------------------- |
+| `left_margin`      | number            | 0                       | Number of spaces to attach before delimiter             |
+| `left_margin`      | string            | `''`                    | String to attach before delimiter                       |
+| `right_margin`     | number            | 0                       | Number of spaces to attach after delimiter              |
+| `right_margin`     | string            | `''`                    | String to attach after delimiter                        |
+| `stick_to_left`    | boolean           | 0                       | Whether to position delimiter on the left-side          |
+| `ignore_unmatched` | boolean           | 1                       | Whether to ignore lines without matching delimiter      |
+| `ignores`          | array             | `['String', 'Comment']` | Delimiters in these syntax highlight groups are ignored |
+| `delimiter_align`  | string            | `r`                     | Determines how to align delimiters of different lengths |
+
+Some of the options can be specified using corresponding global variables.
+
+| Option             | Global variable                 |
+| ------------------ | ------------------------------- |
+| `ignore_unmatched` | `g:easy_align_ignore_unmatched` |
+| `ignores`          | `g:easy_align_ignores`          |
+| `delimiter_align`  | `g:easy_align_delimiter_align`  |
 
 ### Ignoring delimiters in comments or strings
 
@@ -232,21 +247,13 @@ becomes as follows on `<Enter>:` (or `:EasyAlign:`)
 
 Naturally, this feature only works when syntax highlighting is enabled.
 
-You can change the default rule by either defining global `g:easy_align_ignores`
-array,
+You can change the default rule by using one of these 3 methods.
 
-```vim
-" Ignore nothing!
-let g:easy_align_ignores = []
-```
+1. Define global `g:easy_align_ignores` list
+2. Define a custom alignment rule in `g:easy_align_delimiters` with `ignores` option
+3. Provide `ignores` option to `:EasyAlign` command. e.g. `:EasyAlign:{'is':[]}`
 
-or providing `ignores` option directly to `:EasyAlign` command
-
-```vim
-:EasyAlign:{'is':[]}
-```
-
-Then you get,
+For example if you set `ignores` option to be an empty list, you get
 
 ```ruby
 {
@@ -290,20 +297,12 @@ this is usually what we want.
 }
 ```
 
-However, this default behavior is also configurable.
+However, this default behavior is also configurable by using one of these 3
+methods.
 
-One way is to set the global `g:easy_align_ignore_unmatched` variable to 0.
-
-```vim
-let g:easy_align_ignore_unmatched = 0
-```
-
-Or in non-interactive mode, you can provide `ignore_unmatched` option to
-`:EasyAlign` command as follows.
-
-```vim
-:EasyAlign:{'iu':0}
-```
+1. Set the global `g:easy_align_ignore_unmatched` variable to 0
+2. Define a custom alignment rule with `ignore_unmatched` option set to 0
+3. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g. `:EasyAlign:{'iu':0}`
 
 Then we get,
 
@@ -317,6 +316,42 @@ Then we get,
 }
 ```
 
+### Aligning delimiters of different lengths
+
+Global `g:easy_align_delimiter_align` option and rule-wise/command-wise
+`delimiter_align` option determines how matched delimiters of different lengths
+are aligned.
+
+```ruby
+apple = 1
+banana += apple
+cake ||= banana
+```
+
+By default, delimiters are right-aligned as follows.
+
+```ruby
+apple    = 1
+banana  += apple
+cake   ||= banana
+```
+
+However, with `:EasyAlign={'da':l}`, delimiters are left-aligned.
+
+```ruby
+apple  =   1
+banana +=  apple
+cake   ||= banana
+```
+
+And on `:EasyAlign={'da':c}`, center-aligned.
+
+```ruby
+apple   =  1
+banana +=  apple
+cake   ||= banana
+```
+
 ### Extending alignment rules
 
 Although the default rules should cover the most of the use cases,
@@ -328,7 +363,7 @@ you can extend the rules by setting a dictionary named `g:easy_align_delimiters`
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
 \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
-\ '#': { 'pattern': '#\+', 'ignores': ['String'] },
+\ '#': { 'pattern': '#\+', 'ignores': ['String'], 'delimiter_align': 'l' },
 \ ']': {
 \     'pattern':       '[\[\]]',
 \     'left_margin':   0,

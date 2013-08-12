@@ -1,3 +1,5 @@
+*easy_align.txt*  A simple, easy-to-use Vim alignment plugin
+
 vim-easy-align                              *vim-easy-align* *easy-align*
 =========================================================================
 
@@ -117,6 +119,7 @@ Available options are as follows.
 | left_margin      | number or string | 0                       |
 | right_margin     | number or string | 0                       |
 | stick_to_left    | boolean          | 0                       |
+| delimiter_align  | string           | 'r'                     |
 | ignore_unmatched | boolean          | 1                       |
 | ignores          | array            | `['String', 'Comment']` |
 
@@ -234,6 +237,36 @@ Then we get,
       grapefruits:                       3
     }
 
+
+
+Aligning delimiters of different lengths   *g:easy_align_delimiter_align*
+-------------------------------------------------------------------------
+
+Global `g:easy_align_delimiter_align` option and rule-wise/command-wise
+`delimiter_align` option determines how matched delimiters of different
+lengths are aligned.
+
+    apple = 1
+    banana += apple
+    cake ||= banana
+
+By default, delimiters are right-aligned as follows.
+
+    apple    = 1
+    banana  += apple
+    cake   ||= banana
+
+However, with `:EasyAlign={'da':l}`, delimiters are left-aligned.
+
+    apple  =   1
+    banana +=  apple
+    cake   ||= banana
+
+And on `:EasyAlign={'da':c}`, center-aligned.
+
+    apple   =  1
+    banana +=  apple
+    cake   ||= banana
 
 Extending alignment rules                       *g:easy_align_delimiters*
 -------------------------------------------------------------------------
