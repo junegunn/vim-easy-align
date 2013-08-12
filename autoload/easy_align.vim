@@ -289,12 +289,12 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
 
     " Pad the delimiter
     let dpadl = max_delim_len - s:strwidth(delim)
-    if a:da == 'l'
+    if a:da ==? 'l'
       let [dl, dr] = ['', repeat(' ', dpadl)]
-    elseif a:da == 'c'
+    elseif a:da ==? 'c'
       let dl = repeat(' ', dpadl / 2)
       let dr = repeat(' ', dpadl - dpadl / 2)
-    elseif a:da == 'r'
+    elseif a:da ==? 'r'
       let [dl, dr] = [repeat(' ', dpadl), '']
     else
       call s:exit('Invalid delimiter_align: ' . a:da)
@@ -395,6 +395,7 @@ function! s:parse_args(args)
     let cand = strpart(args, midx)
     try
       let [l, r, c] = ['l', 'r', 'c']
+      let [L, R, C] = ['l', 'r', 'c']
       let o = eval(cand)
       if type(o) == 4
         let option = o
