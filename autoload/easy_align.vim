@@ -158,20 +158,24 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
   while 1
     let matches = matchlist(left, pattern, idx)
     if empty(matches) | break | endif
-
-    let ignorable = s:highlighted_as(a:line, idx + len(matches[2]) + a:fc, a:ignores)
-    if ignorable
-      let token .= matches[1]
+    if empty(matches[1])
+      let char = strpart(left, idx, 1)
+      if empty(char) | break | endif
+      let [match, part, delim] = [char, char, '']
     else
-      call add(tokens, token . matches[1])
-      call add(delims, matches[3])
+      let [match, part, delim] = matches[1 : 3]
+    endif
+
+    let ignorable = s:highlighted_as(a:line, idx + len(part) + a:fc, a:ignores)
+    if ignorable
+      let token .= match
+    else
+      call add(tokens, token . match)
+      call add(delims, delim)
       let token = ''
     endif
 
-    if empty(matches[1])
-      call s:exit("Invalid regular expression")
-    endif
-    let idx += len(matches[1])
+    let idx += len(match)
   endwhile
 
   let leftover = token . strpart(left, idx)
