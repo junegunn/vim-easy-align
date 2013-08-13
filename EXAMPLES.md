@@ -23,6 +23,8 @@ function! GFM()
                 \ lang, lang, lang)
   endfor
   let b:current_syntax='mkd'
+
+  syntax sync fromstart
 endfunction
 ```
 

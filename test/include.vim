@@ -16,6 +16,8 @@ function! GFM()
                 \ lang, lang, lang)
   endfor
   let b:current_syntax='mkd'
+
+  syntax sync fromstart
 endfunction
 
 silent! unlet g:easy_align_delimiters
@@ -39,5 +41,4 @@ set buftype=nofile
 silent! ScrollPositionHide
 
 call GFM()
-syntax sync fromstart
 

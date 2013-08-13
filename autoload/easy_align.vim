@@ -389,7 +389,7 @@ function! s:parse_args(args)
   " Poor man's option parser
   let idx = 0
   while 1
-    let midx = match(args, '{.*}\s*$', idx)
+    let midx = match(args, '\s*{.*}\s*$', idx)
     if midx == -1 | break | endif
 
     let cand = strpart(args, midx)
@@ -399,6 +399,9 @@ function! s:parse_args(args)
       let o = eval(cand)
       if type(o) == 4
         let option = o
+        if args[midx - 1 : midx] == '\ '
+          let midx += 1
+        endif
         let args = strpart(args, 0, midx)
         break
       endif
@@ -471,10 +474,15 @@ function! easy_align#align(just, expr) range
   if regexp
     let dict = { 'pattern': ch }
   else
-    if ch =~ '^\\\s\+$'
-      let ch = ' '
-    elseif ch =~ '^\\\\\s\+$'
-      let ch = '\'
+    " Resolving command-line ambiguity
+    if !empty(a:expr)
+      " '\ ' => ' '
+      if ch =~ '^\\\s\+$'
+        let ch = ' '
+      " '\\' => '\'
+      elseif ch =~ '^\\\\\s*$'
+        let ch = '\'
+      endif
     endif
     if !has_key(delimiters, ch)
       echon "\rUnknown delimiter key: ". ch
