@@ -355,15 +355,15 @@ my_object        .
   |batch_size     |Fixnum      |nil         |number of maximum items to be assigned at once     |
   |logger         |Logger      |nil         |logger instance for debug logs                     |
 
-  |    Option    <|    Type   <|    Default<|    Description                                   <|
-  |    --        <|    --     <|    --     <|    --                                            <|
-  |    threads   <|    Fixnum <|    1      <|    number of threads in the thread pool          <|
-  |    queues    <|    Fixnum <|    1      <|    number of concurrent queues                   <|
-  |    queue_size<|    Fixnum <|    1000   <|    size of each queue                            <|
-  |    interval  <|    Numeric<|    0      <|    dispatcher interval for batch processing      <|
-  |    batch     <|    Boolean<|    false  <|    enables batch processing mode                 <|
-  |    batch_size<|    Fixnum <|    nil    <|    number of maximum items to be assigned at once<|
-  |    logger    <|    Logger <|    nil    <|    logger instance for debug logs                <|
+  |    Option    ~|    Type   ~|    Default~|    Description                                   ~|
+  |    --        ~|    --     ~|    --     ~|    --                                            ~|
+  |    threads   ~|    Fixnum ~|    1      ~|    number of threads in the thread pool          ~|
+  |    queues    ~|    Fixnum ~|    1      ~|    number of concurrent queues                   ~|
+  |    queue_size~|    Fixnum ~|    1000   ~|    size of each queue                            ~|
+  |    interval  ~|    Numeric~|    0      ~|    dispatcher interval for batch processing      ~|
+  |    batch     ~|    Boolean~|    false  ~|    enables batch processing mode                 ~|
+  |    batch_size~|    Fixnum ~|    nil    ~|    number of maximum items to be assigned at once~|
+  |    logger    ~|    Logger ~|    nil    ~|    logger instance for debug logs                ~|
 
 ```c
 
@@ -374,10 +374,10 @@ static std::map<std::string, float>* scores = pointer;
 
 ```
 
-  Paul<<< McCartney{{{ 1942
-George<<< Harrison {{{ 1943
- Ringo<<< Starr    {{{ 1940
-  Pete<<< Best     {{{ 1941
+  Paul@@@ McCartney{{{ 1942
+George@@@ Harrison {{{ 1943
+ Ringo@@@ Starr    {{{ 1940
+  Pete@@@ Best     {{{ 1941
 
   Paul McCartney 1942
 George  Harrison 1943
@@ -623,4 +623,31 @@ eggplant = 5
       cake    = 3
         daisy = 4
      eggplant = 5
+
+
+```c
+
+                        int a = 1;
+                       long b = 2;
+                      float c = 3;
+                     string d = 4;
+// this line should not get aligned
+                   long int e = 5;
+                  std::map f;
+std::map g; /* this? */
+short h /* how about this? */ = 6;
+                     string i = "asdf";
+
+int a                         = 1;
+long b                        = 2;
+float c                       = 3;
+string d                      = 4;
+// this line should not get aligned
+long int e                    = 5;
+std::map f;
+std::map g; /* this? */
+short h /* how about this? */ = 6;
+string i                      = "asdf";
+
+```
 

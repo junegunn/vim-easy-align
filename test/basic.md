@@ -136,3 +136,19 @@ Pete Best 1941
         daisy = 4
      eggplant = 5
 
+
+```c
+
+int a = 1;
+long b = 2;
+float c = 3;
+string d = 4;
+// this line should not get aligned
+long int e = 5;
+std::map f;
+std::map g; /* this? */
+short h /* how about this? */ = 6;
+string i = "asdf";
+
+```
+

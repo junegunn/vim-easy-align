@@ -251,8 +251,14 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     let delim  = delims[nth]
     let token  = s:rtrim( tokens[nth] )
     let token  = s:rtrim( strpart(token, 0, len(token) - len(s:rtrim(delim))) )
-    if empty(delim) && !exists('tokens[nth + 1]') && a:just == 0 && a:ignore_unmatched
-      continue
+    if empty(delim) && !exists('tokens[nth + 1]') && a:ignore_unmatched
+      if a:just == 0
+        continue
+      " Do not ignore on right-justification mode, except when the end of the
+      " line is highlighted as ignored syntax (e.g. comments or strings).
+      elseif s:highlighted_as(line, a:fc + len(token) - 1, a:ignores)
+        continue
+      endif
     endif
 
     let indent        = len(matchstr(tokens[0], '^\s\+'))
