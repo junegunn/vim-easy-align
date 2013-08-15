@@ -269,41 +269,50 @@ And on ':EasyAlign={'da':c}', center-aligned.
     cake   ||= banana
 
 
-Adjusting indentation
+Adjusting indentation                          *g:easy_align_indentation*
 -------------------------------------------------------------------------
 
 By default :EasyAlign command keeps the original indentation of the lines.
 But then again we have 'indentation' option. See the following example.
 
+    # Lines with different indentation
       apple = 1
         banana = 2
           cake = 3
             daisy = 4
          eggplant = 5
 
-      # Default: _k_eep the original indentation
-      #   :EasyAlign=
+    # Default: _k_eep the original indentation
+    #   :EasyAlign=
       apple       = 1
         banana    = 2
           cake    = 3
             daisy = 4
          eggplant = 5
 
-      # Use the _s_hallowest indentation among the lines
-      #   :EasyAlign={'idt':s}
+    # Use the _s_hallowest indentation among the lines
+    #   :EasyAlign={'idt':s}
       apple    = 1
       banana   = 2
       cake     = 3
       daisy    = 4
       eggplant = 5
 
-      # Use the _d_eepest indentation among the lines
-      #   :EasyAlign={'idt':d}
+    # Use the _d_eepest indentation among the lines
+    #   :EasyAlign={'idt':d}
             apple    = 1
             banana   = 2
             cake     = 3
             daisy    = 4
             eggplant = 5
+
+    # Indentation: _n_one
+    #   :EasyAlign={'idt':n}
+    apple    = 1
+    banana   = 2
+    cake     = 3
+    daisy    = 4
+    eggplant = 5
 
 Notice that 'idt' is fuzzy-matched to 'indentation'.
 

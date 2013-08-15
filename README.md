@@ -85,6 +85,9 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `,`           | Multi-line method arguments                                          |
 | &#124;        | Table markdown                                                       |
 
+You can override these default rules or define your own rules with
+`g:easy_align_delimiters`, which will be described in the later section.
+
 #### Example command sequences
 
 | With visual map     | Description                                              | Equivalent command    |
@@ -196,7 +199,7 @@ lowest precedence.
 | `stick_to_left`    | boolean           | 0                     | Whether to position delimiter on the left-side          |
 | `ignore_unmatched` | boolean           | 1                     | Whether to ignore lines without matching delimiter      |
 | `ignores`          | list              | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
-| `indentation`      | string            | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow)          |
+| `indentation`      | string            | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
 | `delimiter_align`  | string            | `r`                   | Determines how to align delimiters of different lengths |
 
 Some of the options can be specified using corresponding global variables.
@@ -206,6 +209,7 @@ Some of the options can be specified using corresponding global variables.
 | `ignore_unmatched` | `g:easy_align_ignore_unmatched` |
 | `ignores`          | `g:easy_align_ignores`          |
 | `delimiter_align`  | `g:easy_align_delimiter_align`  |
+| `indentation`      | `g:easy_align_indentation`      |
 
 ### Ignoring delimiters in comments or strings
 
@@ -359,35 +363,44 @@ By default :EasyAlign command keeps the original indentation of the lines. But
 then again we have `indentation` option. See the following example.
 
 ```ruby
+# Lines with different indentation
   apple = 1
     banana = 2
       cake = 3
         daisy = 4
      eggplant = 5
 
-  # Default: _k_eep the original indentation
-  #   :EasyAlign=
+# Default: _k_eep the original indentation
+#   :EasyAlign=
   apple       = 1
     banana    = 2
       cake    = 3
         daisy = 4
      eggplant = 5
 
-  # Use the _s_hallowest indentation among the lines
-  #   :EasyAlign={'idt':s}
+# Use the _s_hallowest indentation among the lines
+#   :EasyAlign={'idt':s}
   apple    = 1
   banana   = 2
   cake     = 3
   daisy    = 4
   eggplant = 5
 
-  # Use the _d_eepest indentation among the lines
-  #   :EasyAlign={'idt':d}
+# Use the _d_eepest indentation among the lines
+#   :EasyAlign={'idt':d}
         apple    = 1
         banana   = 2
         cake     = 3
         daisy    = 4
         eggplant = 5
+
+  # Indentation: _n_one
+  #   :EasyAlign={'idt':n}
+apple    = 1
+banana   = 2
+cake     = 3
+daisy    = 4
+eggplant = 5
 ```
 
 Notice that `idt` is fuzzy-matched to `indentation`.

@@ -271,6 +271,8 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
       let indent = repeat(' ', max_indent)
     elseif a:indentation ==? 's'
       let indent = repeat(' ', min_indent)
+    elseif a:indentation ==? 'n'
+      let indent = ''
     elseif a:indentation !=? 'k'
       call s:exit('Invalid indentation: ' . a:indentation)
     end
@@ -420,8 +422,8 @@ function! s:parse_args(args)
 
     let cand = strpart(args, midx)
     try
-      let [l, r, c, k, s, d] = ['l', 'r', 'c', 'k', 's', 'd']
-      let [L, R, C, K, S, D] = ['l', 'r', 'c', 'k', 's', 'd']
+      let [l, r, c, k, s, d, n] = ['l', 'r', 'c', 'k', 's', 'd', 'n']
+      let [L, R, C, K, S, D, N] = ['l', 'r', 'c', 'k', 's', 'd', 'n']
       let o = eval(cand)
       if type(o) == 4
         let option = o
@@ -546,7 +548,7 @@ function! easy_align#align(just, expr) range
     \ ml,
     \ mr,
     \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r')),
-    \ get(dict, 'indentation', 'k'),
+    \ get(dict, 'indentation', get(g:, 'easy_align_indentation', 'k')),
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignores', s:ignored_syntax()),
