@@ -394,8 +394,8 @@ then again we have `indentation` option. See the following example.
         daisy    = 4
         eggplant = 5
 
-  # Indentation: _n_one
-  #   :EasyAlign={'idt':n}
+# Indentation: _n_one
+#   :EasyAlign={'idt':n}
 apple    = 1
 banana   = 2
 cake     = 3
