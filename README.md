@@ -182,7 +182,7 @@ since the same can be easily done using the negative field number: `<Enter>-=`
 Alignment options
 -----------------
 
-Options values can be 1) specified as global variables, 2) set on each alignment
+Option values can be 1) specified as global variables, 2) set on each alignment
 rule in `g:easy_align_delimiters`, 3) or given to every `:EasyAlign` command.
 
 Command-line options have the highest precedence, and global variables have the
