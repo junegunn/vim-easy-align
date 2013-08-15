@@ -40,7 +40,7 @@ With this mapping, you can align selected lines of text with a few keystrokes.
     2        Around the 2nd occurrences of delimiters
     *        Around all occurrences of delimiters
     **       Left-right alternating alignment around all delimiters
-    -        Around the last occurrences of delimiters (`-1`)
+    -        Around the last occurrences of delimiters (-1)
     -2       Around the second to last occurrences of delimiters
     ...
 4. Delimiter key (a single keystroke)
@@ -93,7 +93,7 @@ try these commands:
 - :EasyAlign */[:;]\+/
 - :EasyAlign **/[:;]\+/
 
-Notice that you can't append `\zs` to your regular expression to put delimiters
+Notice that you can't append '\zs' to your regular expression to put delimiters
 on the left. It can be done by providing additional options in Vim dictionary
 format.
 
@@ -114,20 +114,21 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 Available options are as follows.
 
-| Atrribute        | Type             | Default                 |
-| ---------------- | ---------------- | ----------------------- |
-| left_margin      | number or string | 0                       |
-| right_margin     | number or string | 0                       |
-| stick_to_left    | boolean          | 0                       |
-| delimiter_align  | string           | 'r'                     |
-| ignore_unmatched | boolean          | 1                       |
-| ignores          | array            | `['String', 'Comment']` |
+| Atrribute        | Type             | Default               |
+| ---------------- | ---------------- | --------------------- |
+| left_margin      | number or string | 0                     |
+| right_margin     | number or string | 0                     |
+| stick_to_left    | boolean          | 0                     |
+| delimiter_align  | string           | 'r'                   |
+| ignore_unmatched | boolean          | 1                     |
+| ignores          | array            | ['String', 'Comment'] |
+| indentation      | string           | 'k'                   |
 
 
 Partial alignment in blockwise-visual mode
 -------------------------------------------------------------------------
 
-In blockwise-visual mode (`CTRL-V`), EasyAlign command aligns only
+In blockwise-visual mode (CTRL-V), EasyAlign command aligns only
 the selected text in the block, instead of the whole lines in the range.
 
 
@@ -154,7 +155,7 @@ For example, the following paragraph
       'grape:fruits': 3
     }
 
-becomes as follows on `<Enter>:`
+becomes as follows on '<Enter>:'
 
     {
       # Quantity of apples: 1
@@ -173,7 +174,7 @@ array,
     " Ignore nothing!
     let g:easy_align_ignores = []
 
-or providing `ignores` option directly to :EasyAlign command
+or providing 'ignores' option directly to :EasyAlign command
 
     :EasyAlign:{'is':[]}
 
@@ -221,7 +222,7 @@ One way is to set the global `g:easy_align_ignore_unmatched` variable to 0.
 
     let g:easy_align_ignore_unmatched = 0
 
-Or in non-interactive mode, you can provide `ignore_unmatched` option to
+Or in non-interactive mode, you can provide 'ignore_unmatched' option to
 `:EasyAlign` command as follows.
 
     :EasyAlign:{'iu':0}
@@ -238,12 +239,11 @@ Then we get,
     }
 
 
-
 Aligning delimiters of different lengths   *g:easy_align_delimiter_align*
 -------------------------------------------------------------------------
 
 Global `g:easy_align_delimiter_align` option and rule-wise/command-wise
-`delimiter_align` option determines how matched delimiters of different
+'delimiter_align' option determines how matched delimiters of different
 lengths are aligned.
 
     apple = 1
@@ -256,17 +256,57 @@ By default, delimiters are right-aligned as follows.
     banana  += apple
     cake   ||= banana
 
-However, with `:EasyAlign={'da':l}`, delimiters are left-aligned.
+However, with ':EasyAlign={'da':l}', delimiters are left-aligned.
 
     apple  =   1
     banana +=  apple
     cake   ||= banana
 
-And on `:EasyAlign={'da':c}`, center-aligned.
+And on ':EasyAlign={'da':c}', center-aligned.
 
     apple   =  1
     banana +=  apple
     cake   ||= banana
+
+
+Adjusting indentation
+-------------------------------------------------------------------------
+
+By default :EasyAlign command keeps the original indentation of the lines.
+But then again we have 'indentation' option. See the following example.
+
+      apple = 1
+        banana = 2
+          cake = 3
+            daisy = 4
+         eggplant = 5
+
+      # Default: _k_eep the original indentation
+      #   :EasyAlign=
+      apple       = 1
+        banana    = 2
+          cake    = 3
+            daisy = 4
+         eggplant = 5
+
+      # Use the _s_hallowest indentation among the lines
+      #   :EasyAlign={'idt':s}
+      apple    = 1
+      banana   = 2
+      cake     = 3
+      daisy    = 4
+      eggplant = 5
+
+      # Use the _d_eepest indentation among the lines
+      #   :EasyAlign={'idt':d}
+            apple    = 1
+            banana   = 2
+            cake     = 3
+            daisy    = 4
+            eggplant = 5
+
+Notice that 'idt' is fuzzy-matched to 'indentation'.
+
 
 Extending alignment rules                       *g:easy_align_delimiters*
 -------------------------------------------------------------------------

@@ -187,16 +187,17 @@ lowest precedence.
 
 ### List of options
 
-| Option             | Type              | Default                 | Description                                             |
-| ------------------ | ----------------- | ----------------------- | ------------------------------------------------------- |
-| `left_margin`      | number            | 0                       | Number of spaces to attach before delimiter             |
-| `left_margin`      | string            | `''`                    | String to attach before delimiter                       |
-| `right_margin`     | number            | 0                       | Number of spaces to attach after delimiter              |
-| `right_margin`     | string            | `''`                    | String to attach after delimiter                        |
-| `stick_to_left`    | boolean           | 0                       | Whether to position delimiter on the left-side          |
-| `ignore_unmatched` | boolean           | 1                       | Whether to ignore lines without matching delimiter      |
-| `ignores`          | array             | `['String', 'Comment']` | Delimiters in these syntax highlight groups are ignored |
-| `delimiter_align`  | string            | `r`                     | Determines how to align delimiters of different lengths |
+| Option             | Type              | Default               | Description                                             |
+| ------------------ | ----------------- | --------------------- | ------------------------------------------------------- |
+| `left_margin`      | number            | 0                     | Number of spaces to attach before delimiter             |
+| `left_margin`      | string            | `''`                  | String to attach before delimiter                       |
+| `right_margin`     | number            | 0                     | Number of spaces to attach after delimiter              |
+| `right_margin`     | string            | `''`                  | String to attach after delimiter                        |
+| `stick_to_left`    | boolean           | 0                     | Whether to position delimiter on the left-side          |
+| `ignore_unmatched` | boolean           | 1                     | Whether to ignore lines without matching delimiter      |
+| `ignores`          | list              | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
+| `indentation`      | string            | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow)          |
+| `delimiter_align`  | string            | `r`                   | Determines how to align delimiters of different lengths |
 
 Some of the options can be specified using corresponding global variables.
 
@@ -352,6 +353,45 @@ banana +=  apple
 cake   ||= banana
 ```
 
+### Adjusting indentation
+
+By default :EasyAlign command keeps the original indentation of the lines. But
+then again we have `indentation` option. See the following example.
+
+```ruby
+  apple = 1
+    banana = 2
+      cake = 3
+        daisy = 4
+     eggplant = 5
+
+  # Default: _k_eep the original indentation
+  #   :EasyAlign=
+  apple       = 1
+    banana    = 2
+      cake    = 3
+        daisy = 4
+     eggplant = 5
+
+  # Use the _s_hallowest indentation among the lines
+  #   :EasyAlign={'idt':s}
+  apple    = 1
+  banana   = 2
+  cake     = 3
+  daisy    = 4
+  eggplant = 5
+
+  # Use the _d_eepest indentation among the lines
+  #   :EasyAlign={'idt':d}
+        apple    = 1
+        banana   = 2
+        cake     = 3
+        daisy    = 4
+        eggplant = 5
+```
+
+Notice that `idt` is fuzzy-matched to `indentation`.
+
 ### Extending alignment rules
 
 Although the default rules should cover the most of the use cases,
@@ -365,7 +405,7 @@ let g:easy_align_delimiters = {
 \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
 \ '#': { 'pattern': '#\+', 'ignores': ['String'], 'delimiter_align': 'l' },
 \ ']': {
-\     'pattern':       '[\[\]]',
+\     'pattern':       '[[\]]',
 \     'left_margin':   0,
 \     'right_margin':  0,
 \     'stick_to_left': 0

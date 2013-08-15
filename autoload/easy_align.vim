@@ -42,9 +42,9 @@ let s:easy_align_delimiters_default = {
 let s:just = ['', '[R]']
 
 let s:known_options = {
-\ 'margin_left': [0, 1], 'margin_right': [0, 1], 'stick_to_left': [0],
-\ 'left_margin': [0, 1], 'right_margin': [0, 1],
-\ 'ignores': [3], 'ignore_unmatched': [0], 'delimiter_align': [1]
+\ 'margin_left': [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
+\ 'left_margin': [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
+\ 'ignores':     [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1]
 \ }
 
 if exists("*strwidth")
@@ -200,12 +200,14 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
   return [tokens, delims]
 endfunction
 
-function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth, ml, mr, da, stick_to_left, ignore_unmatched, ignores, recursive)
+function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
+      \ ml, mr, da, indentation, stick_to_left, ignore_unmatched, ignores, recursive)
   let lines          = {}
   let max_just_len   = 0
   let max_delim_len  = 0
   let max_tokens     = 0
   let min_indent     = -1
+  let max_indent     = 0
 
   " Phase 1
   for line in range(a:fl, a:ll)
@@ -257,10 +259,34 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     if min_indent < 0 || indent < min_indent
       let min_indent  = indent
     endif
+    let max_indent    = max([indent, max_indent])
     let max_just_len  = max([s:strwidth(prefix.token), max_just_len])
     let max_delim_len = max([s:strwidth(delim), max_delim_len])
     let lines[line]   = [nth, prefix, token, delim]
   endfor
+
+  " Phase 1-5: indentation handling (only on a:nth == 1)
+  if a:nth == 1
+    if a:indentation ==? 'd'
+      let indent = repeat(' ', max_indent)
+    elseif a:indentation ==? 's'
+      let indent = repeat(' ', min_indent)
+    elseif a:indentation !=? 'k'
+      call s:exit('Invalid indentation: ' . a:indentation)
+    end
+
+    if a:indentation !=? 'k'
+      let max_just_len = 0
+      for [line, elems] in items(lines)
+        let [nth, prefix, token, delim] = elems
+
+        let token = substitute(token, '^\s*', indent, '')
+        let max_just_len = max([max_just_len, s:strwidth(token)])
+
+        let lines[line][2] = token
+      endfor
+    endif
+  endif
 
   " Phase 2
   for [line, elems] in items(lines)
@@ -314,7 +340,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     " Adjust indentation of the lines starting with a delimiter
     let lpad = ''
     if nth == 0
-      let ipad = repeat(' ', min_indent - len(strpart(before.token, '^\s\+').ml))
+      let ipad = repeat(' ', min_indent - len(token.ml))
       if a:just == 0
         let token = ipad . token
       else
@@ -334,8 +360,8 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
   if a:recursive && a:nth < max_tokens
     let just = a:recursive == 2 ? !a:just : a:just
     call s:do_align(just, a:all_tokens, a:all_delims, a:fl, a:ll, a:fc, a:lc, a:pattern,
-          \ a:nth + 1, a:ml, a:mr, a:da, a:stick_to_left, a:ignore_unmatched,
-          \ a:ignores, a:recursive)
+          \ a:nth + 1, a:ml, a:mr, a:da, a:indentation, a:stick_to_left,
+          \ a:ignore_unmatched, a:ignores, a:recursive)
   endif
 endfunction
 
@@ -394,8 +420,8 @@ function! s:parse_args(args)
 
     let cand = strpart(args, midx)
     try
-      let [l, r, c] = ['l', 'r', 'c']
-      let [L, R, C] = ['l', 'r', 'c']
+      let [l, r, c, k, s, d] = ['l', 'r', 'c', 'k', 's', 'd']
+      let [L, R, C, K, S, D] = ['l', 'r', 'c', 'k', 's', 'd']
       let o = eval(cand)
       if type(o) == 4
         let option = o
@@ -520,6 +546,7 @@ function! easy_align#align(just, expr) range
     \ ml,
     \ mr,
     \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r')),
+    \ get(dict, 'indentation', 'k'),
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignores', s:ignored_syntax()),

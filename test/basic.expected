@@ -504,3 +504,105 @@ George  Harrison 1943
 ..    -- ......
 ...    - .....-
 
+        apple    = 1       = 2
+        banana   = 2    = 2
+        cake     = 3    = 2
+        daisy    = 4 = 2
+        eggplant = 5 = 2
+
+     apple = 1 = 2
+    banana = 2 = 2
+      cake = 3 = 2
+     daisy = 4 = 2
+  eggplant = 5 = 2
+
+  apple    = 1 = 2
+  banana   = 2 = 2
+  cake     = 3 = 2
+  daisy    = 4 = 2
+  eggplant = 5 = 2
+
+1 apple    = 1       = 2
+1 banana   = 2    = 2
+1 cake     = 3    = 2
+1 daisy    = 4 = 2
+1 eggplant = 5 = 2
+
+apple    = 1
+banana   = 2
+cake     = 3
+daisy    = 4
+eggplant = 5
+
+  a     pple     = 1
+        banana   = 2
+        cake     = 3
+        daisy    = 4
+        eggplant = 5
+
+  apple     = 1
+   banana   = 2
+   cake     = 3
+   daisy    = 4
+   eggplant = 5
+
+  apple = 1       = 2
+    banana = 2    = 2
+      cake = 3    = 2
+        daisy = 4 = 2
+     eggplant = 5 = 2
+
+  apple       = 1
+    banana    = 2
+      cake    = 3
+        daisy = 4
+     eggplant = 5
+
+     apple = 1
+    banana = 2
+      cake = 3
+     daisy = 4
+  eggplant = 5
+
+           apple = 1
+          banana = 2
+            cake = 3
+           daisy = 4
+        eggplant = 5
+
+     apple = 1
+    banana = 2
+      cake = 3
+     daisy = 4
+  eggplant = 5
+
+        apple = 1
+       banana = 2
+         cake = 3
+        daisy = 4
+     eggplant = 5
+
+        apple    = 1
+        banana   = 2
+        cake     = 3
+        daisy    = 4
+        eggplant = 5
+
+        apple    = 1
+        banana   = 2
+        cake     = 3
+        daisy    = 4
+        eggplant = 5
+
+  apple    = 1
+  banana   = 2
+  cake     = 3
+  daisy    = 4
+  eggplant = 5
+
+  apple       = 1
+    banana    = 2
+      cake    = 3
+        daisy = 4
+     eggplant = 5
+
