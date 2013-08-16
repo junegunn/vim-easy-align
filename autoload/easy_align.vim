@@ -256,7 +256,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
         continue
       " Do not ignore on right-justification mode, except when the end of the
       " line is highlighted as ignored syntax (e.g. comments or strings).
-      elseif s:highlighted_as(line, a:fc + len(token) - 1, a:ignores)
+      elseif s:highlighted_as(line, a:fc + len(prefix.token) - 1, a:ignores)
         continue
       endif
     endif
