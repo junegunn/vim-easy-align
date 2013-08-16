@@ -37,6 +37,7 @@ vnoremap <silent> <C-l> <nop>
 
 set nolazyredraw
 set buftype=nofile
+set colorcolumn=
 
 silent! ScrollPositionHide
 

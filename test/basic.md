@@ -29,10 +29,10 @@ a = 1
 bbbb = 2
 ccccccc = 3
 ccccccccccccccc
-ddd = 4
+ddd = #
 eeee === eee = eee = eee=f
 fff = ggg += gg &&= gg
-g != hhhhhhhh == 888
+g != hhhhhhhh == # 8
 i   := 5
 i     %= 5
 i       *= 5
@@ -149,6 +149,42 @@ std::map f;
 std::map g; /* this? */
 short h /* how about this? */ = 6;
 string i = "asdf";
+
+```
+
+```ruby
+
+a =
+a = 1
+bbbb = 2
+ccccccc = 3
+ccccccccccccccc
+# eeeeeeeeeeeeeeee
+e # asdf
+ddd = #
+eeee === eee = eee = eee=f
+fff = ggg += gg &&= gg
+g != hhhhhhhh == # 8
+i   := 5
+i     %= 5
+i       *= 5
+j     =~ 5
+j   >= 5
+aa      =>         123
+aa <<= 123
+aa        >>= 123
+bbb               => 123
+c     => 1233123
+d   =>      123
+dddddd &&= 123
+dddddd ||= 123
+dddddd /= 123
+gg <=> ee
+
+a = 1
+bb = 22
+ccc = 333
+dddd = "asdf"
 
 ```
 

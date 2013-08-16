@@ -139,8 +139,10 @@ function! s:validate_options(opts)
   return a:opts
 endfunction
 
-function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, ignores)
-  let left    = a:lc ?
+function! s:split_line(line, nth, just, recur, fc, lc, pattern, stick_to_left, ignore_unmatched, ignores)
+  let pjust  = a:just
+  let just   = a:just
+  let string = a:lc ?
     \ strpart(getline(a:line), a:fc - 1, a:lc - a:fc + 1) :
     \ strpart(getline(a:line), a:fc - 1)
   let idx     = 0
@@ -156,12 +158,16 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
   let ignorable = 0
   let token = ''
   while 1
-    let matches = matchlist(left, pattern, idx)
+    let matches = matchlist(string, pattern, idx)
+    " No match
     if empty(matches) | break | endif
+
+    " Match, but empty delimiter
     if empty(matches[1])
-      let char = strpart(left, idx, 1)
+      let char = strpart(string, idx, 1)
       if empty(char) | break | endif
       let [match, part, delim] = [char, char, '']
+    " Match
     else
       let [match, part, delim] = matches[1 : 3]
     endif
@@ -172,16 +178,27 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
     else
       call add(tokens, token . match)
       call add(delims, delim)
+      let [pjust, just] = [just, a:recur == 2 ? !just : just]
       let token = ''
     endif
 
     let idx += len(match)
+
+    " If the string is non-empty and ends with the delimiter,
+    " append an empty token to the list
+    if idx == len(string)
+      call add(tokens, '')
+      call add(delims, '')
+      break
+    endif
   endwhile
 
-  let leftover = token . strpart(left, idx)
+  let leftover = token . strpart(string, idx)
   if !empty(leftover)
+    let ignorable = s:highlighted_as(a:line, len(string) + a:fc - 1, a:ignores)
     call add(tokens, leftover)
     call add(delims, '')
+    let [pjust, just] = [just, a:recur == 2 ? !just : just]
   endif
 
   " Preserve indentation - merge first two tokens
@@ -195,6 +212,11 @@ function! s:split_line(line, fc, lc, pattern, stick_to_left, ignore_unmatched, i
   if ignorable && len(tokens) == 1 && a:ignore_unmatched
     let tokens = []
     let delims = []
+  " Append an empty item to enable right justification of the last token
+  " - if the last token is not ignorable or ignorable but not the only token
+  elseif pjust == 1 && (!ignorable || len(tokens) > 1) && a:nth >= 0 " includes -0
+    call add(tokens, '')
+    call add(delims, '')
   endif
 
   return [tokens, delims]
@@ -213,7 +235,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
   for line in range(a:fl, a:ll)
     if !has_key(a:all_tokens, line)
       " Split line into the tokens by the delimiters
-      let [tokens, delims] = s:split_line(line, a:fc, a:lc, a:pattern, a:stick_to_left, a:ignore_unmatched, a:ignores)
+      let [tokens, delims] = s:split_line(line, a:nth, a:just, a:recursive, a:fc, a:lc, a:pattern, a:stick_to_left, a:ignore_unmatched, a:ignores)
 
       " Remember tokens for subsequent recursive calls
       let a:all_tokens[line] = tokens
@@ -236,8 +258,12 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
         continue
       endif
       let nth = a:nth - 1 " make it 0-based
-    else " Negative field number
-      let nth = len(tokens) + a:nth
+    else " -0 or Negative field number
+      if a:nth == 0 && a:just == 1
+        let nth = len(tokens) - 1
+      else
+        let nth = len(tokens) + a:nth
+      endif
       if empty(delims[len(delims) - 1])
         let nth -= 1
       endif
@@ -252,13 +278,7 @@ function! s:do_align(just, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
     let token  = s:rtrim( tokens[nth] )
     let token  = s:rtrim( strpart(token, 0, len(token) - len(s:rtrim(delim))) )
     if empty(delim) && !exists('tokens[nth + 1]') && a:ignore_unmatched
-      if a:just == 0
-        continue
-      " Do not ignore on right-justification mode, except when the end of the
-      " line is highlighted as ignored syntax (e.g. comments or strings).
-      elseif s:highlighted_as(line, a:fc + len(prefix.token) - 1, a:ignores)
-        continue
-      endif
+      continue
     endif
 
     let indent        = len(matchstr(tokens[0], '^\s\+'))
