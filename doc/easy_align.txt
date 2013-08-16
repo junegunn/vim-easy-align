@@ -3,10 +3,11 @@
 vim-easy-align                              *vim-easy-align* *easy-align*
 =========================================================================
 
-A simple, easy-to-use Vim alignment plugin without too much ambition.
+A simple, easy-to-use Vim alignment plugin.
 
-  Author: Junegunn Choi
-  Source: https://github.com/junegunn/vim-easy-align
+  Author:  Junegunn Choi
+  Source:  https://github.com/junegunn/vim-easy-align
+  License: MIT
 
 
 EasyAlign                                      *:EasyAlign* *:EasyAlign!*
@@ -15,11 +16,11 @@ EasyAlign                                      *:EasyAlign* *:EasyAlign!*
 vim-easy-align defines `:EasyAlign` command in the visual mode.
 (:EasyAlign! is the right-justification version.)
 
-| Mode                      | Command                                     |
-| ------------------------- | ------------------------------------------- |
-| Interactive mode          | :EasyAlign                                  |
-| Using predefined rules    | :EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS] |
-| Using regular expressions | :EasyAlign [FIELD#] /REGEXP/ [OPTIONS]      |
+| Mode                      | Command                                        |
+| ------------------------- | ---------------------------------------------- |
+| Interactive mode          | :EasyAlign[!]                                  |
+| Using predefined rules    | :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS] |
+| Using regular expressions | :EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]      |
 
 
 Interactive mode
@@ -43,13 +44,16 @@ With this mapping, you can align selected lines of text with a few keystrokes.
     -        Around the last occurrences of delimiters (-1)
     -2       Around the second to last occurrences of delimiters
     ...
-4. Delimiter key (a single keystroke)
+4. Delimiter key for the predefined rules (a single keystroke)
     <space>  General alignment around whitespaces
     =        Operators containing equals sign (=, ==, !=, +=, &&=, ...)
     :        Suitable for formatting JSON or YAML
     .        Multi-line method chaining
     ,        Multi-line method arguments. CSV.
     |        Table markdown
+
+    (You can override these default rules or define your own rules with
+    `g:easy_align_delimiters`, which will be described in the later section.)
 
 During the key sequence, <Enter> key will toggle right-justification mode.
 
@@ -114,15 +118,17 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 Available options are as follows.
 
-| Atrribute        | Type             | Default               |
-| ---------------- | ---------------- | --------------------- |
-| left_margin      | number or string | 0                     |
-| right_margin     | number or string | 0                     |
-| stick_to_left    | boolean          | 0                     |
-| delimiter_align  | string           | 'r'                   |
-| ignore_unmatched | boolean          | 1                     |
-| ignores          | array            | ['String', 'Comment'] |
-| indentation      | string           | 'k'                   |
+| Atrribute        | Type             | Default                       |
+| ---------------- | ---------------- | ----------------------------- |
+| left_margin      | number or string | 0                             |
+| right_margin     | number or string | 0                             |
+| stick_to_left    | boolean          | 0                             |
+| ignore_unmatched | boolean          | 1                             |
+| ignores          | array            | ['String', 'Comment']         |
+| delimiter_align  | string           | 'r'                           |
+|                  |                  |   (right, left, center)       |
+| indentation      | string           | 'k'                           |
+|                  |                  |   (keep, shallow, deep, none) |
 
 
 Partial alignment in blockwise-visual mode
@@ -155,7 +161,7 @@ For example, the following paragraph
       'grape:fruits': 3
     }
 
-becomes as follows on '<Enter>:'
+becomes as follows on '<Enter>:' (or `:EasyAlign:`)
 
     {
       # Quantity of apples: 1
@@ -168,17 +174,13 @@ becomes as follows on '<Enter>:'
 
 Naturally, this feature only works when syntax highlighting is enabled.
 
-You can change the default rule by either defining global `g:easy_align_ignores`
-array,
+You can change the default rule by using one of these 3 methods.
 
-    " Ignore nothing!
-    let g:easy_align_ignores = []
+1. Define global `g:easy_align_ignores` list
+2. Define a custom rule in `g:easy_align_delimiters` with 'ignores' option
+3. Provide 'ignores' option to `:EasyAlign` command. e.g. :EasyAlign:{'is':[]}
 
-or providing 'ignores' option directly to :EasyAlign command
-
-    :EasyAlign:{'is':[]}
-
-Then you get,
+For example if you set 'ignores' option to be an empty list, you get
 
     {
       # Quantity of apples:  1
@@ -216,17 +218,13 @@ this is usually what we want.
       grapefruits: 3
     }
 
-However, this default behavior is also configurable.
+However, this default behavior is also configurable by using one of these 3
+methods.
 
-One way is to set the global `g:easy_align_ignore_unmatched` variable to 0.
-
-    let g:easy_align_ignore_unmatched = 0
-
-Or in non-interactive mode, you can provide 'ignore_unmatched' option to
-`:EasyAlign` command as follows.
-
-    :EasyAlign:{'iu':0}
-
+1. Set the global `g:easy_align_ignore_unmatched` variable to 0
+2. Define a custom alignment rule with 'ignore_unmatched' option set to 0
+3. Provide 'ignore_unmatched' option to `:EasyAlign` command.
+   e.g. :EasyAlign:{'iu':0}
 
 Then we get,
 
@@ -329,7 +327,7 @@ you can extend the rules by setting a dictionary named
     \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
     \ '#': { 'pattern': '#\+', 'ignores': ['String'] },
     \ ']': {
-    \     'pattern':       '[\[\]]',
+    \     'pattern':       '[[\]]',
     \     'left_margin':   0,
     \     'right_margin':  0,
     \     'stick_to_left': 0

@@ -1,7 +1,7 @@
 vim-easy-align
 ==============
 
-A simple, easy-to-use Vim alignment plugin without too much ambition.
+A simple, easy-to-use Vim alignment plugin.
 
 Demo
 ----
@@ -45,11 +45,11 @@ Usage
 _vim-easy-align_ defines `:EasyAlign` command (and the right-justification
 variant `:EasyAlign!`) in the visual mode.
 
-| Mode                      | Command                                       |
-| ------------------------- | --------------------------------------------- |
-| Interactive mode          | `:EasyAlign`                                  |
-| Using predefined rules    | `:EasyAlign [FIELD#] DELIMITER_KEY [OPTIONS]` |
-| Using regular expressions | `:EasyAlign [FIELD#] /REGEXP/ [OPTIONS]`      |
+| Mode                      | Command                                          |
+| ------------------------- | ------------------------------------------------ |
+| Interactive mode          | `:EasyAlign[!]`                                  |
+| Using predefined rules    | `:EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]` |
+| Using regular expressions | `:EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]`      |
 
 ### Interactive mode
 
