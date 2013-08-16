@@ -206,6 +206,7 @@ function! s:split_line(line, nth, just, recur, fc, lc, pattern, stick_to_left, i
     let tokens[1] = tokens[0] . tokens[1]
     call remove(tokens, 0)
     call remove(delims, 0)
+    let pjust = just
   endif
 
   " Skip comment line
