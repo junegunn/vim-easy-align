@@ -47,7 +47,7 @@ variant `:EasyAlign!`) in the visual mode.
 
 | Mode                      | Command                                          |
 | ------------------------- | ------------------------------------------------ |
-| Interactive mode          | `:EasyAlign[!]`                                  |
+| Interactive mode          | `:EasyAlign[!] [OPTIONS]`                        |
 | Using predefined rules    | `:EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]` |
 | Using regular expressions | `:EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]`      |
 
@@ -60,6 +60,8 @@ your `.vimrc`.
 ```vim
 vnoremap <silent> <Enter> :EasyAlign<cr>
 ```
+
+(Of course you can use any key combination as the trigger. e.g. `<Leader>a`)
 
 With the mapping, you can align selected lines of text with only a few keystrokes.
 

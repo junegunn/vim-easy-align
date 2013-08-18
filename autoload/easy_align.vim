@@ -544,7 +544,9 @@ function! easy_align#align(bang, expr) range
       let [mode, n, ch] = s:interactive(copy(modes))
     else
       let [n, ch, option, regexp] = s:parse_args(a:expr)
-      if empty(ch)
+      if empty(n) && empty(ch)
+        let [mode, n, ch] = s:interactive(copy(modes))
+      elseif empty(ch)
         " Try swapping n and ch
         let [n, ch] = ['', n]
       endif

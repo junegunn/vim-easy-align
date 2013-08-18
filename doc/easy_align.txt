@@ -18,7 +18,7 @@ vim-easy-align defines `:EasyAlign` command in the visual mode.
 
 | Mode                      | Command                                        |
 | ------------------------- | ---------------------------------------------- |
-| Interactive mode          | :EasyAlign[!]                                  |
+| Interactive mode          | :EasyAlign[!] [OPTIONS]                        |
 | Using predefined rules    | :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS] |
 | Using regular expressions | :EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]      |
 
