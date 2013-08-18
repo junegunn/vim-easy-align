@@ -430,8 +430,8 @@ let g:easy_align_bang_interactive_modes = ['c', 'r']
 
 ### Alignments over multiple occurrences of delimiters
 
-As we have seen before, the field number allows you to target specific
-occurrences of delimiters when the lines contains multiple delimiter.
+As we have seen before, you can use 'field number' to target specific
+occurrences of delimiters when the lines contain multiple delimiters.
 
 To recap:
 
