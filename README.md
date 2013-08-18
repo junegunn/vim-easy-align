@@ -205,6 +205,7 @@ lowest precedence.
 | `ignores`          | list              | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
 | `indentation`      | string            | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
 | `delimiter_align`  | string            | `r`                   | Determines how to align delimiters of different lengths |
+| `mode_sequence`    | string            |                       | Alignment modes for multiple occurrences of delimiters  |
 
 Some of the options can be specified using corresponding global variables.
 
@@ -408,6 +409,73 @@ eggplant = 5
 ```
 
 Notice that `idt` is fuzzy-matched to `indentation`.
+
+### Left/right/center mode transition in interactive mode
+
+In interactive mode, you can choose the alignment mode you want by pressing
+enter keys. When started with the non-bang command (`:EasyAlign`), it will
+start in left-align mode, and as you press enter keys, it will change to
+right-align mode, then to center-align mode, and then to left mode again.
+(`['l', 'r', 'c']`)
+With the bang-command (`:EasyAlign!`), it will start in right-align mode,
+then goes to left and center mode. (`['r', 'l', 'c']`)
+
+If you don't prefer this default mode transition, you can define your own
+settings as follows.
+
+```vim
+let g:easy_align_interactive_modes = ['l', 'r']
+let g:easy_align_bang_interactive_modes = ['c', 'r']
+```
+
+### Alignments over multiple occurrences of delimiters
+
+As we have seen before, the field number allows you to target specific
+occurrences of delimiters when the lines contains multiple delimiter.
+
+To recap:
+
+```vim
+" Left-alignment around the FIRST occurrences of delimiters
+:EasyAlign =
+
+" Left-alignment around the SECOND occurrences of delimiters
+:EasyAlign 2=
+
+" Left-alignment around the LAST occurrences of delimiters
+:EasyAlign -=
+
+" Left-alignment around ALL occurrences of delimiters
+:EasyAlign *=
+
+" Left-right ALTERNATING alignment around all occurrences of delimiters
+:EasyAlign **=
+
+" Right-left ALTERNATING alignment around all occurrences of delimiters
+:EasyAlign! **=
+```
+
+In addition to these, with `mode_sequence` option, you can perform alignments
+over multiple occurrences of the delimiters.
+
+```vim
+" Left alignment over the first two occurrences of delimiters
+:EasyAlign = { 'mode_sequence': 'll' }
+
+" Right, left, center alignment over the 1st to 3rd occurrences of delimiters
+:EasyAlign = { 'm': 'rlc' }
+
+" Right, left, center alignment over the 2nd to 4th occurrences of delimiters
+:EasyAlign 2={ 'm': 'rlc' }
+
+" (*) Repeating alignments (default: l, r, or c)
+"   Right, left, center, center, center, center, ...
+:EasyAlign *={ 'm': 'rlc' }
+
+" (**) Alternating alignments (default: lr or rl)
+"   Right, left, center, right, left, center, ...
+:EasyAlign **={ 'm': 'rlc' }
+```
 
 ### Extending alignment rules
 
