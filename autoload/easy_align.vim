@@ -42,10 +42,10 @@ let s:easy_align_delimiters_default = {
 let s:mode_labels = { 'l': '', 'r': '[R]', 'c': '[C]' }
 
 let s:known_options = {
-\ 'margin_left': [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
-\ 'left_margin': [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
-\ 'ignores':     [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
-\ 'align_modes': [1   ]
+\ 'margin_left':   [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
+\ 'left_margin':   [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
+\ 'ignores':       [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
+\ 'mode_sequence': [1   ]
 \ }
 
 if exists("*strwidth")
@@ -115,6 +115,10 @@ function! s:fuzzy_lu(key)
   elseif len(matches) == 1
     return matches[0]
   else
+    " Avoid ambiguity introduced by deprecated margin_left and margin_right
+    if index(matches, 'mode_sequence') != -1
+      return 'mode_sequence'
+    endif
     call s:exit("Ambiguous option key: ". a:key ." (" .join(matches, ', '). ")")
   endif
 endfunction
@@ -611,7 +615,7 @@ function! easy_align#align(bang, expr) range
     return
   endif
 
-  let aseq = get(dict, 'align_modes',
+  let aseq = get(dict, 'mode_sequence',
         \ recur == 2 ? (mode == 'r' ? ['r', 'l'] : ['l', 'r']) : [mode])
 
   try
