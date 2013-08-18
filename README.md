@@ -42,7 +42,7 @@ then execute `:BundleInstall` command.
 Usage
 -----
 
-_vim-easy-align_ defines `:EasyAlign` command (and the right-justification
+_vim-easy-align_ defines `:EasyAlign` command (and the right-align
 variant `:EasyAlign!`) in the visual mode.
 
 | Mode                      | Command                                          |
@@ -64,7 +64,7 @@ vnoremap <silent> <Enter> :EasyAlign<cr>
 With the mapping, you can align selected lines of text with only a few keystrokes.
 
 1. `<Enter>` key to start interactive EasyAlign command
-1. Optional Enter keys to toggle right-justification mode
+1. Optional Enter keys to select align mode (left, right, or center)
 1. Optional field number (default: 1)
     - `1`         Around the 1st occurrences of delimiters
     - `2`         Around the 2nd occurrences of delimiters
@@ -103,7 +103,7 @@ You can override these default rules or define your own rules with
 | `<Enter>3=`         | Alignment around 3rd equals signs (and the likes)        | `:'<,'>EasyAlign3=`   |
 | `<Enter>*=`         | Alignment around all equals signs (and the likes)        | `:'<,'>EasyAlign*=`   |
 | `<Enter>**=`        | Left-right alternating alignment around all equals signs | `:'<,'>EasyAlign**=`  |
-| `<Enter><Enter>=`   | Right-justified alignment around 1st equals signs        | `:'<,'>EasyAlign!=`   |
+| `<Enter><Enter>=`   | Right alignment around 1st equals signs                  | `:'<,'>EasyAlign!=`   |
 | `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlign!**=` |
 | ...                 | ...                                                      |                       |
 
@@ -278,7 +278,7 @@ Satisfied? :satisfied:
 ### Ignoring unmatched lines
 
 Lines without any matching delimiter are ignored as well (except in
-right-justification mode).
+right-align mode).
 
 For example, when aligning the following code block around the colons,
 

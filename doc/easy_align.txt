@@ -14,7 +14,7 @@ EasyAlign                                      *:EasyAlign* *:EasyAlign!*
 -------------------------------------------------------------------------
 
 vim-easy-align defines `:EasyAlign` command in the visual mode.
-(:EasyAlign! is the right-justification version.)
+(:EasyAlign! is the right-align version.)
 
 | Mode                      | Command                                        |
 | ------------------------- | ---------------------------------------------- |
@@ -35,7 +35,7 @@ your `.vimrc`.
 With this mapping, you can align selected lines of text with a few keystrokes.
 
 1. <Enter> key to start interactive EasyAlign command
-2. Optional Enter keys to switch justficiation mode (default: left)
+2. Optional Enter keys to select align mode (left, right, or center)
 3. Optional field number (default: 1)
     1        Around the 1st occurrences of delimiters
     2        Around the 2nd occurrences of delimiters
@@ -55,7 +55,7 @@ With this mapping, you can align selected lines of text with a few keystrokes.
     (You can override these default rules or define your own rules with
     `g:easy_align_delimiters`, which will be described in the later section.)
 
-During the key sequence, <Enter> key will toggle right-justification mode.
+During the key sequence, <Enter> key will toggle right-align mode.
 
 Examples:
 
@@ -68,7 +68,7 @@ Examples:
   <Enter>3=          Alignment around 3rd equals signs (and the likes)
   <Enter>*=          Alignment around all equals signs (and the likes)
   <Enter>**=         Left-right alternating alignment around all equals signs
-  <Enter><Enter>=    Right-justified alignment around 1st equals signs
+  <Enter><Enter>=    Right-alignment around 1st equals signs
   <Enter><Enter>**=  Right-left alternating alignment around all equals signs
 
 
@@ -196,7 +196,7 @@ Ignoring unmatched lines                  *g:easy_align_ignore_unmatched*
 -------------------------------------------------------------------------
 
 Lines without any matching delimiter are ignored as well (except in
-right-justification mode).
+right-align mode).
 
 For example, when aligning the following code block around the colons,
 
