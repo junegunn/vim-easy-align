@@ -857,3 +857,67 @@ dddd = "asdf"
 ccccc ccccc ccccc ccccc ccccc
     d ddd    dddd ddd       d
 
+aaaaa = 123456778901234567890 =
+bbbbbbbbbb =    12345         =
+
+aaaaa =     123456778901234567890 =
+cccccccccccccccccc = 123          =
+
+aaaaa =       123456778901234567890 =
+cccccccccccccccccc = 12345678       =
+
+aaaaa =              12345         =
+bbbbbbbbbb = 123456778901234567890 =
+
+  aaaaa    =         12345
+bbbbbbbbbb = 123456778901234567890
+
+123456    789
+1234567890 1
+
+1234    56
+123456 7890
+
+       aaaaa        = 123456778901234567890 =
+ cccccccccccccccccc =       12345678        =
+
+|   Option   |  Type   | Default |                  Description                   |
+|     --     |   --    |   --    |                       --                       |
+|  threads   | Fixnum  |    1    |      number of threads in the thread pool      |
+|   queues   | Fixnum  |    1    |          number of concurrent queues           |
+| queue_size | Fixnum  |  1000   |               size of each queue               |
+|  interval  | Numeric |    0    |    dispatcher interval for batch processing    |
+|   batch    | Boolean |  false  |         enables batch processing mode          |
+| batch_size | Fixnum  |   nil   | number of maximum items to be assigned at once |
+|   logger   | Logger  |   nil   |         logger instance for debug logs         |
+
+|   Option   |    Type | Default |                                    Description |
+|     --     |      -- |      -- |                                             -- |
+|  threads   |  Fixnum |       1 |           number of threads in the thread pool |
+|   queues   |  Fixnum |       1 |                    number of concurrent queues |
+| queue_size |  Fixnum |    1000 |                             size of each queue |
+|  interval  | Numeric |       0 |       dispatcher interval for batch processing |
+|   batch    | Boolean |   false |                  enables batch processing mode |
+| batch_size |  Fixnum |     nil | number of maximum items to be assigned at once |
+|   logger   |  Logger |     nil |                 logger instance for debug logs |
+
+| Option     |  Type   | Default | Description                                    |
+| --         |   --    | --      | --                                             |
+| threads    | Fixnum  | 1       | number of threads in the thread pool           |
+| queues     | Fixnum  | 1       | number of concurrent queues                    |
+| queue_size | Fixnum  | 1000    | size of each queue                             |
+| interval   | Numeric | 0       | dispatcher interval for batch processing       |
+| batch      | Boolean | false   | enables batch processing mode                  |
+| batch_size | Fixnum  | nil     | number of maximum items to be assigned at once |
+| logger     | Logger  | nil     | logger instance for debug logs                 |
+
+  Option   | Type    | Default | Description                                    |
+    --     | --      |   --    | --                                             |
+ threads   | Fixnum  |    1    | number of threads in the thread pool           |
+  queues   | Fixnum  |    1    | number of concurrent queues                    |
+queue_size | Fixnum  |  1000   | size of each queue                             |
+ interval  | Numeric |    0    | dispatcher interval for batch processing       |
+  batch    | Boolean |  false  | enables batch processing mode                  |
+batch_size | Fixnum  |   nil   | number of maximum items to be assigned at once |
+  logger   | Logger  |   nil   | logger instance for debug logs                 |
+

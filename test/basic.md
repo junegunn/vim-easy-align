@@ -193,3 +193,27 @@ bbb bbb bbb bbb bbb
 ccccc ccccc ccccc ccccc ccccc
   d ddd dddd ddd d
 
+aaaaa = 123456778901234567890 =
+bbbbbbbbbb = 12345 =
+
+aaaaa = 123456778901234567890 =
+cccccccccccccccccc = 123 =
+
+aaaaa = 123456778901234567890 =
+cccccccccccccccccc = 12345678 =
+
+aaaaa = 12345 =
+bbbbbbbbbb = 123456778901234567890       =
+
+aaaaa =             12345
+bbbbbbbbbb = 123456778901234567890
+
+123456 789
+1234567890 1
+
+1234 56
+123456 7890
+
+ aaaaa = 123456778901234567890 =
+     cccccccccccccccccc = 12345678 =
+
