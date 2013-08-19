@@ -146,7 +146,7 @@ Then we get:
     apple;: banana::   cake
     data;;  exchange:; format
 
-Options keys are fuzzy-matched, so you can write as follows:
+Option names are fuzzy-matched, so you can write as follows:
 
 - `:EasyAlign * /[:;]\+/ { 'stl': 1, 'l': 0 }`
 
