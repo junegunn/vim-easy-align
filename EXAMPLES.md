@@ -41,6 +41,7 @@ Try these commands:
 - `<Enter>-2<space>`
 - `<Enter><Enter><space>`
 - `<Enter><Enter>*<space>`
+- `<Enter><Enter><Enter>*<space>`
 
 ### Example
 
@@ -61,6 +62,7 @@ Try these commands:
 - `<Enter>**|`
 - `<Enter><Enter>*|`
 - `<Enter><Enter>**|`
+- `<Enter><Enter><Enter>*|`
 
 ### Example
 
@@ -90,6 +92,7 @@ Try these commands:
 - `<Enter>*=`
 - `<Enter>**=`
 - `<Enter><Enter>**=`
+- `<Enter><Enter><Enter>*=`
 
 ### Example
 
@@ -237,7 +240,7 @@ So, let's define a custom mapping for `#`.
 if !exists('g:easy_align_delimiters')
   let g:easy_align_delimiters = {}
 endif
-let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'] } }
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'] }
 ```
 
 Notice that the rule overrides `ignores` attribute in order *not to ignore*
@@ -282,7 +285,7 @@ let g:easy_align_ignore_unmatched = 0
 
 " 3. Update the alignment rule with ignore_unmatched option
 let g:easy_align_delimiters['#'] = {
-  \ 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 } }
+  \ 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 }
 ```
 
 Then we get,
