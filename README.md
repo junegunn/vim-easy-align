@@ -66,7 +66,7 @@ vnoremap <silent> <Enter> :EasyAlign<cr>
 With the mapping, you can align selected lines of text with only a few keystrokes.
 
 1. `<Enter>` key to start interactive EasyAlign command
-1. Optional Enter keys to select align mode (left, right, or center)
+1. Optional Enter keys to select alignment mode (left, right, or center)
 1. Optional field number (default: 1)
     - `1`         Around the 1st occurrences of delimiters
     - `2`         Around the 2nd occurrences of delimiters
@@ -410,17 +410,19 @@ eggplant = 5
 
 Notice that `idt` is fuzzy-matched to `indentation`.
 
-### Left/right/center mode transition in interactive mode
+### Left/right/center mode switch in interactive mode
 
 In interactive mode, you can choose the alignment mode you want by pressing
-enter keys. When started with the non-bang command (`:EasyAlign`), it will
-start in left-align mode, and as you press enter keys, it will change to
-right-align mode, then to center-align mode, and then to left mode again.
-(`['l', 'r', 'c']`)
-With the bang-command (`:EasyAlign!`), it will start in right-align mode,
-then goes to left and center mode. (`['r', 'l', 'c']`)
+enter keys. The non-bang command, `:EasyAlign` starts in left-alignment mode
+and changes to right and center mode as you press enter keys, while the bang
+version first starts in right-alignment mode.
 
-If you don't prefer this default mode transition, you can define your own
+- `:EasyAlign`
+  - Left, Right, Center
+- `:EasyAlign!`
+  - Right, Left, Center
+
+If you do not prefer this default mode transition, you can define your own
 settings as follows.
 
 ```vim
@@ -430,8 +432,8 @@ let g:easy_align_bang_interactive_modes = ['c', 'r']
 
 ### Alignments over multiple occurrences of delimiters
 
-As we have seen before, you can use 'field number' to target specific
-occurrences of delimiters when the lines contain multiple delimiters.
+As stated above, "field number" is used to target specific occurrences of
+the delimiter when it appears multiple times in each line.
 
 To recap:
 
@@ -455,8 +457,8 @@ To recap:
 :EasyAlign! **=
 ```
 
-In addition to these, with `mode_sequence` option, you can perform alignments
-over multiple occurrences of the delimiters.
+In addition to these, you can fine-tune alignments over multiple occurrences of
+the delimiters with 'mode_sequence' option.
 
 ```vim
 " Left alignment over the first two occurrences of delimiters

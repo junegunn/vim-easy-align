@@ -35,7 +35,7 @@ your `.vimrc`.
 With this mapping, you can align selected lines of text with a few keystrokes.
 
 1. <Enter> key to start interactive EasyAlign command
-2. Optional Enter keys to select align mode (left, right, or center)
+2. Optional Enter keys to select alignment mode (left, right, or center)
 3. Optional field number (default: 1)
     1        Around the 1st occurrences of delimiters
     2        Around the 2nd occurrences of delimiters
@@ -129,6 +129,8 @@ Available options are as follows.
 |                  |                  |   (right, left, center)       |
 | indentation      | string           | 'k'                           |
 |                  |                  |   (keep, shallow, deep, none) |
+| mode_sequence    | string           | (Depends on field number and  |
+|                  |                  |  selected alignment mode)     |
 
 
 Partial alignment in blockwise-visual mode
@@ -316,20 +318,22 @@ But then again we have 'indentation' option. See the following example.
 Notice that 'idt' is fuzzy-matched to 'indentation'.
 
 
-Left/right/center mode transition in interactive mode
+Left/right/center mode switch in interactive mode
 -------------------------------------------------------------------------
                                          *g:easy_align_interactive_modes*
                                     *g:easy_align_bang_interactive_modes*
 
 In interactive mode, you can choose the alignment mode you want by pressing
-enter keys. When started with the non-bang command (`:EasyAlign`), it will
-start in left-align mode, and as you press enter keys, it will change to
-right-align mode, then to center-align mode, and then to left mode again.
-(['l', 'r', 'c'])
-With the bang-command (`:EasyAlign!`), it will start in right-align mode,
-then goes to left and center mode. (['r', 'l', 'c'])
+enter keys. The non-bang command, `:EasyAlign` starts in left-alignment mode
+and changes to right and center mode as you press enter keys, while the bang
+version first starts in right-alignment mode.
 
-If you don't prefer this default mode transition, you can define your own
+- `:EasyAlign`
+  - Left, Right, Center
+- `:EasyAlign!`
+  - Right, Left, Center
+
+If you do not prefer this default mode transition, you can define your own
 settings as follows.
 
     let g:easy_align_interactive_modes = ['l', 'r']
@@ -339,8 +343,8 @@ settings as follows.
 Alignments over multiple occurrences of delimiters
 -------------------------------------------------------------------------
 
-As we have seen before, you can use 'field number' to target specific
-occurrences of delimiters when the lines contain multiple delimiters.
+As stated above, "field number" is used to target specific occurrences of
+the delimiter when it appears multiple times in each line.
 
 To recap:
 
@@ -362,8 +366,8 @@ To recap:
     " Right-left ALTERNATING alignment around all occurrences of delimiters
     :EasyAlign! **=
 
-In addition to these, with 'mode_sequence' option, you can perform alignments
-over multiple occurrences of the delimiters.
+In addition to these, you can fine-tune alignments over multiple occurrences of
+the delimiters with 'mode_sequence' option.
 
     " Left alignment over the first two occurrences of delimiters
     :EasyAlign = { 'mode_sequence': 'll' }
