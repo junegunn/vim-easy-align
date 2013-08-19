@@ -240,10 +240,10 @@ So, let's define a custom mapping for `#`.
 if !exists('g:easy_align_delimiters')
   let g:easy_align_delimiters = {}
 endif
-let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignores': ['String'] }
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 ```
 
-Notice that the rule overrides `ignores` attribute in order *not to ignore*
+Notice that the rule overrides `ignore_groups` attribute in order *not to ignore*
 delimiters highlighted as comments.
 
 Then on `<Enter>#`, we get
@@ -285,7 +285,7 @@ let g:easy_align_ignore_unmatched = 0
 
 " 3. Update the alignment rule with ignore_unmatched option
 let g:easy_align_delimiters['#'] = {
-  \ 'pattern': '#', 'ignores': ['String'], 'ignore_unmatched': 0 }
+  \ 'pattern': '#', 'ignore_groups': ['String'], 'ignore_unmatched': 0 }
 ```
 
 Then we get,

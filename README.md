@@ -194,27 +194,39 @@ lowest precedence.
 
 ### List of options
 
-| Option             | Type              | Default               | Description                                             |
-| ------------------ | ----------------- | --------------------- | ------------------------------------------------------- |
-| `left_margin`      | number            | 0                     | Number of spaces to attach before delimiter             |
-| `left_margin`      | string            | `''`                  | String to attach before delimiter                       |
-| `right_margin`     | number            | 0                     | Number of spaces to attach after delimiter              |
-| `right_margin`     | string            | `''`                  | String to attach after delimiter                        |
-| `stick_to_left`    | boolean           | 0                     | Whether to position delimiter on the left-side          |
-| `ignore_unmatched` | boolean           | 1                     | Whether to ignore lines without matching delimiter      |
-| `ignores`          | list              | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
-| `indentation`      | string            | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
-| `delimiter_align`  | string            | `r`                   | Determines how to align delimiters of different lengths |
-| `mode_sequence`    | string            |                       | Alignment modes for multiple occurrences of delimiters  |
+| Option             | Type    | Default               | Description                                             |
+| ------------------ | ------- | --------------------- | ------------------------------------------------------- |
+| `left_margin`      | number  | 0                     | Number of spaces to attach before delimiter             |
+| `left_margin`      | string  | `''`                  | String to attach before delimiter                       |
+| `right_margin`     | number  | 0                     | Number of spaces to attach after delimiter              |
+| `right_margin`     | string  | `''`                  | String to attach after delimiter                        |
+| `stick_to_left`    | boolean | 0                     | Whether to position delimiter on the left-side          |
+| `ignore_groups`    | list    | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
+| `ignore_unmatched` | boolean | 1                     | Whether to ignore lines without matching delimiter      |
+| `indentation`      | string  | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
+| `delimiter_align`  | string  | `r`                   | Determines how to align delimiters of different lengths |
+| `mode_sequence`    | string  |                       | Alignment modes for multiple occurrences of delimiters  |
 
 Some of the options can be specified using corresponding global variables.
 
 | Option             | Global variable                 |
 | ------------------ | ------------------------------- |
+| `ignore_groups`    | `g:easy_align_ignore_groups`    |
 | `ignore_unmatched` | `g:easy_align_ignore_unmatched` |
-| `ignores`          | `g:easy_align_ignores`          |
 | `delimiter_align`  | `g:easy_align_delimiter_align`  |
 | `indentation`      | `g:easy_align_indentation`      |
+
+In interactive mode, you can switch some of the alignment options using special
+keys listed below.
+
+| Key      | Option             | Values                                             |
+| -------- | ------------------ | -------------------------------------------------- |
+| `CTRL-I` | `indentation`      | shallow, deep, none, keep                          |
+| `CTRL-L` | `left_margin`      | Input number or string                             |
+| `CTRL-R` | `right_margin`     | Input number or string                             |
+| `CTRL-D` | `delimiter_align`  | left, center, right                                |
+| `CTRL-U` | `ignore_unmatched` | 0, 1                                               |
+| `CTRL-G` | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
 
 ### Ignoring delimiters in comments or strings
 
@@ -226,7 +238,7 @@ highlighted as code comments or strings are ignored.
 " Default:
 "   If a delimiter is in a highlight group whose name matches
 "   any of the followings, it will be ignored.
-let g:easy_align_ignores = ['Comment', 'String']
+let g:easy_align_ignore_groups = ['Comment', 'String']
 ```
 
 For example, the following paragraph
@@ -257,13 +269,15 @@ becomes as follows on `<Enter>:` (or `:EasyAlign:`)
 
 Naturally, this feature only works when syntax highlighting is enabled.
 
-You can change the default rule by using one of these 3 methods.
+You can change the default rule by using one of these 4 methods.
 
-1. Define global `g:easy_align_ignores` list
-2. Define a custom alignment rule in `g:easy_align_delimiters` with `ignores` option
-3. Provide `ignores` option to `:EasyAlign` command. e.g. `:EasyAlign:{'is':[]}`
+1. Press `CTRL-G` in interactive mode to switch groups
+2. Define global `g:easy_align_ignore_groups` list
+3. Define a custom rule in `g:easy_align_delimiters` with `ignore_groups` option
+4. Provide `ignore_groups` option to `:EasyAlign` command.
+   e.g. `:EasyAlign:{'ig':[]}`
 
-For example if you set `ignores` option to be an empty list, you get
+For example if you set `ignore_groups` option to be an empty list, you get
 
 ```ruby
 {
@@ -307,12 +321,13 @@ this is usually what we want.
 }
 ```
 
-However, this default behavior is also configurable by using one of these 3
+However, this default behavior is also configurable by using one of these 4
 methods.
 
-1. Set the global `g:easy_align_ignore_unmatched` variable to 0
-2. Define a custom alignment rule with `ignore_unmatched` option set to 0
-3. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g. `:EasyAlign:{'iu':0}`
+1. Press `CTRL-U` in interactive mode to toggle `ignore_unmatched` option
+2. Set the global `g:easy_align_ignore_unmatched` variable to 0
+3. Define a custom alignment rule with `ignore_unmatched` option set to 0
+4. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g. `:EasyAlign:{'iu':0}`
 
 Then we get,
 
@@ -362,6 +377,8 @@ banana +=  apple
 cake   ||= banana
 ```
 
+In interactive mode, you can change the option value with `CTRL-D` key.
+
 ### Adjusting indentation
 
 By default :EasyAlign command keeps the original indentation of the lines. But
@@ -409,6 +426,8 @@ eggplant = 5
 ```
 
 Notice that `idt` is fuzzy-matched to `indentation`.
+
+In interactive mode, you can change the option value with `CTRL-I` key.
 
 ### Left/right/center mode switch in interactive mode
 
@@ -489,8 +508,8 @@ you can extend the rules by setting a dictionary named `g:easy_align_delimiters`
 ```vim
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
-\ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignores': ['String'] },
-\ '#': { 'pattern': '#\+', 'ignores': ['String'], 'delimiter_align': 'l' },
+\ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignore_groups': ['String'] },
+\ '#': { 'pattern': '#\+', 'ignore_groups': ['String'], 'delimiter_align': 'l' },
 \ ']': {
 \     'pattern':       '[[\]]',
 \     'left_margin':   0,

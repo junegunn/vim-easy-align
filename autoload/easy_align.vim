@@ -44,8 +44,15 @@ let s:mode_labels = { 'l': '', 'r': '[R]', 'c': '[C]' }
 let s:known_options = {
 \ 'margin_left':   [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
 \ 'left_margin':   [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
-\ 'ignores':       [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
-\ 'mode_sequence': [1   ]
+\ 'ignore_groups': [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
+\ 'mode_sequence': [1   ], 'ignores': [3]
+\ }
+
+let s:option_values = {
+\ 'indentation':      ['shallow', 'deep', 'none', 'keep'],
+\ 'delimiter_align':  ['left', 'center', 'right'],
+\ 'ignore_unmatched': [0, 1],
+\ 'ignore_groups':    [[], ['String'], ['Comment'], ['String', 'Comment']]
 \ }
 
 if exists("*strwidth")
@@ -72,17 +79,19 @@ endfunction
 function! s:ignored_syntax()
   if has('syntax') && exists('g:syntax_on')
     " Backward-compatibility
-    return get(g:, 'easy_align_ignores',
-          \ (get(g:, 'easy_align_ignore_comment', 1) == 0) ?
-            \ ['String'] : ['String', 'Comment'])
+    return get(g:, 'easy_align_ignore_groups',
+          \ get(g:, 'easy_align_ignores',
+            \ (get(g:, 'easy_align_ignore_comment', 1) == 0) ?
+              \ ['String'] : ['String', 'Comment']))
   else
     return []
   endif
 endfunction
 
-function! s:echon(l, n, d)
+function! s:echon(l, n, d, o)
   echon "\r"
   echon "\rEasyAlign". s:mode_labels[a:l] ." (" .a:n.a:d. ")"
+        \ . (empty(a:o) ? '' : ' '.string(a:o))
 endfunction
 
 function! s:exit(msg)
@@ -106,9 +115,18 @@ function! s:fuzzy_lu(key)
   if has_key(s:known_options, a:key)
     return a:key
   endif
+  let key = tolower(a:key)
 
-  let regexp  = '^' . substitute(substitute(a:key, '-', '_', 'g'), '\(.\)', '\1.*', 'g')
-  let matches = filter(keys(s:known_options), 'v:val =~ regexp')
+  " stl -> ^s.*_t.*_l.*
+  let regexp1 = '^' .key[0]. '.*' .substitute(key[1 : -1], '\(.\)', '_\1.*', 'g')
+  let matches = filter(keys(s:known_options), 'v:val =~ regexp1')
+  if len(matches) == 1
+    return matches[0]
+  endif
+
+  " stl -> ^s.*t.*l.*
+  let regexp2 = '^' . substitute(substitute(key, '-', '_', 'g'), '\(.\)', '\1.*', 'g')
+  let matches = filter(keys(s:known_options), 'v:val =~ regexp2')
 
   if empty(matches)
     call s:exit("Unknown option key: ". a:key)
@@ -116,8 +134,11 @@ function! s:fuzzy_lu(key)
     return matches[0]
   else
     " Avoid ambiguity introduced by deprecated margin_left and margin_right
-    if index(matches, 'mode_sequence') != -1
+    if sort(matches) == ['margin_left', 'margin_right', 'mode_sequence']
       return 'mode_sequence'
+    endif
+    if sort(matches) == ['ignore_groups', 'ignores']
+      return 'ignore_groups'
     endif
     call s:exit("Ambiguous option key: ". a:key ." (" .join(matches, ', '). ")")
   endif
@@ -156,7 +177,7 @@ function! s:validate_options(opts)
   return a:opts
 endfunction
 
-function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, ignore_unmatched, ignores)
+function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, ignore_unmatched, ignore_groups)
   let mode = ''
 
   let string = a:lc ?
@@ -189,7 +210,7 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
       let [match, part, delim] = matches[1 : 3]
     endif
 
-    let ignorable = s:highlighted_as(a:line, idx + len(part) + a:fc, a:ignores)
+    let ignorable = s:highlighted_as(a:line, idx + len(part) + a:fc, a:ignore_groups)
     if ignorable
       let token .= match
     else
@@ -212,7 +233,7 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
 
   let leftover = token . strpart(string, idx)
   if !empty(leftover)
-    let ignorable = s:highlighted_as(a:line, len(string) + a:fc - 1, a:ignores)
+    let ignorable = s:highlighted_as(a:line, len(string) + a:fc - 1, a:ignore_groups)
     call add(tokens, leftover)
     call add(delims, '')
   endif
@@ -249,7 +270,7 @@ function! s:max(old, new)
 endfunction
 
 function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
-      \ ml, mr, da, indentation, stick_to_left, ignore_unmatched, ignores, recur)
+      \ ml, mr, da, indentation, stick_to_left, ignore_unmatched, ignore_groups, recur)
   let mode       = a:modes[0]
   let lines      = {}
   let min_indent = -1
@@ -263,7 +284,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
       let [tokens, delims] = s:split_line(
             \ line, a:nth, copy(a:modes), a:recur == 2,
             \ a:fc, a:lc, a:pattern,
-            \ a:stick_to_left, a:ignore_unmatched, a:ignores)
+            \ a:stick_to_left, a:ignore_unmatched, a:ignore_groups)
 
       " Remember tokens for subsequent recursive calls
       let a:all_tokens[line] = tokens
@@ -434,17 +455,31 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
           \ a:modes, a:all_tokens, a:all_delims,
           \ a:fl, a:ll, a:fc, a:lc, a:pattern,
           \ a:nth + 1, a:ml, a:mr, a:da, a:indentation, a:stick_to_left,
-          \ a:ignore_unmatched, a:ignores, a:recur)
+          \ a:ignore_unmatched, a:ignore_groups, a:recur)
   endif
+endfunction
+
+function! s:input(str)
+  redraw
+  call inputsave()
+  let got = input(a:str)
+  call inputrestore()
+  try
+    return eval(got)
+  catch
+    return got
+  endtry
 endfunction
 
 function! s:interactive(modes)
   let mode = s:shift(a:modes, 1)
   let n    = ''
   let ch   = ''
+  let opts = {}
+  let vals = deepcopy(s:option_values)
 
   while 1
-    call s:echon(mode, n, '')
+    call s:echon(mode, n, '', opts)
 
     let c  = getchar()
     let ch = nr2char(c)
@@ -471,11 +506,23 @@ function! s:interactive(modes)
       if n[0] == '*'   | break
       else             | let n = n . ch
       end
+    elseif ch == "\<C-D>"
+      let opts['da'] = s:shift(vals['delimiter_align'], 1)
+    elseif ch == "\<C-I>"
+      let opts['idt'] = s:shift(vals['indentation'], 1)
+    elseif ch == "\<C-L>"
+      let opts['lm'] = s:input("Left margin: ")
+    elseif ch == "\<C-R>"
+      let opts['rm'] = s:input("Right margin: ")
+    elseif ch == "\<C-U>"
+      let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
+    elseif ch == "\<C-G>"
+      let opts['ig'] = s:shift(vals['ignore_groups'], 1)
     else
       break
     endif
   endwhile
-  return [mode, n, ch]
+  return [mode, n, ch, s:normalize_options(opts)]
 endfunction
 
 function! s:parse_args(args)
@@ -483,7 +530,7 @@ function! s:parse_args(args)
   let ch     = ''
   let args   = a:args
   let cand   = ''
-  let option = {}
+  let opts = {}
 
   " Poor man's option parser
   let idx = 0
@@ -497,7 +544,7 @@ function! s:parse_args(args)
       let [L, R, C, K, S, D, N] = ['l', 'r', 'c', 'k', 's', 'd', 'n']
       let o = eval(cand)
       if type(o) == 4
-        let option = o
+        let opts = o
         if args[midx - 1 : midx] == '\ '
           let midx += 1
         endif
@@ -511,8 +558,10 @@ function! s:parse_args(args)
   endwhile
 
   " Invalid option dictionary
-  if len(substitute(cand, '\s', '', 'g')) > 2 && empty(option)
+  if len(substitute(cand, '\s', '', 'g')) > 2 && empty(opts)
     call s:exit("Invalid option: ". cand)
+  else
+    let opts = s:normalize_options(opts)
   endif
 
   " Has /Regexp/?
@@ -525,10 +574,10 @@ function! s:parse_args(args)
     try   | call matchlist('', regexp)
     catch | call s:exit("Invalid regular expression: ". regexp)
     endtry
-    return [matches[1], regexp, option, 1]
+    return [matches[1], regexp, opts, 1]
   else
     let tokens = matchlist(args, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\s*\(.\{-}\)\?$')
-    return [tokens[1], tokens[2], option, 0]
+    return [tokens[1], tokens[2], opts, 0]
   endif
 endfunction
 
@@ -540,16 +589,17 @@ function! easy_align#align(bang, expr) range
   let recur  = 0
   let n      = ''
   let ch     = ''
-  let option = {}
+  let opts   = {}
+  let iopts  = {}
   let regexp = 0
 
   try
     if empty(a:expr)
-      let [mode, n, ch] = s:interactive(copy(modes))
+      let [mode, n, ch, iopts] = s:interactive(copy(modes))
     else
-      let [n, ch, option, regexp] = s:parse_args(a:expr)
+      let [n, ch, opts, regexp] = s:parse_args(a:expr)
       if empty(n) && empty(ch)
-        let [mode, n, ch] = s:interactive(copy(modes))
+        let [mode, n, ch, iopts] = s:interactive(copy(modes))
       elseif empty(ch)
         " Try swapping n and ch
         let [n, ch] = ['', n]
@@ -595,13 +645,11 @@ function! easy_align#align(bang, expr) range
     let dict = delimiters[ch]
   endif
 
-  try
-    if !empty(option)
-      let dict = extend(copy(dict), s:normalize_options(option))
+  for opt in [opts, iopts]
+    if !empty(opt)
+      let dict = extend(copy(dict), opt)
     endif
-  catch 'exit'
-    return
-  endtry
+  endfor
 
   let ml = get(dict, 'left_margin', ' ')
   let mr = get(dict, 'right_margin', ' ')
@@ -628,13 +676,13 @@ function! easy_align#align(bang, expr) range
     \ nth,
     \ ml,
     \ mr,
-    \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r')),
-    \ get(dict, 'indentation', get(g:, 'easy_align_indentation', 'k')),
+    \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r'))[0],
+    \ get(dict, 'indentation', get(g:, 'easy_align_indentation', 'k'))[0],
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
-    \ get(dict, 'ignores', s:ignored_syntax()),
+    \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax())),
     \ recur)
-    call s:echon(mode, n, regexp ? '/'.ch.'/' : ch)
+    call s:echon(mode, n, regexp ? '/'.ch.'/' : ch, iopts)
   catch 'exit'
   endtry
 endfunction
