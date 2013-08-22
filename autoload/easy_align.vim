@@ -471,10 +471,10 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
   endif
 endfunction
 
-function! s:input(str)
+function! s:input(str, default)
   redraw
   call inputsave()
-  let got = input(a:str)
+  let got = input(a:str, a:default)
   call inputrestore()
   try
     return eval(got)
@@ -523,9 +523,9 @@ function! s:interactive(modes)
     elseif ch == "\<C-I>"
       let opts['idt'] = s:shift(vals['indentation'], 1)
     elseif ch == "\<C-L>"
-      let opts['lm'] = s:input("Left margin: ")
+      let opts['lm'] = s:input("Left margin: ", get(opts, 'lm', ''))
     elseif ch == "\<C-R>"
-      let opts['rm'] = s:input("Right margin: ")
+      let opts['rm'] = s:input("Right margin: ", get(opts, 'rm', ''))
     elseif ch == "\<C-U>"
       let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
     elseif ch == "\<C-G>"
