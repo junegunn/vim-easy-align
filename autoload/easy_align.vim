@@ -503,6 +503,9 @@ function! s:interactive(modes)
       endif
     elseif c == 13 " Enter key
       let mode = s:shift(a:modes, 1)
+      if has_key(opts, 'm')
+        let opts.m = mode . strpart(opts.m, 1)
+      endif
     elseif ch == '-'
       if empty(n)      | let n = '-'
       elseif n == '-'  | let n = ''
@@ -530,11 +533,21 @@ function! s:interactive(modes)
       let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
     elseif ch == "\<C-G>"
       let opts['ig'] = s:shift(vals['ignore_groups'], 1)
+    elseif ch == "\<C-O>"
+      let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode)))
+      if match(modes, '^[lrc]\+$') != -1
+        let opts['m'] = modes
+        let mode      = modes[0]
+        while mode != s:shift(a:modes, 1)
+        endwhile
+      else
+        silent! call remove(opts, 'm')
+      endif
     else
       break
     endif
   endwhile
-  return [mode, n, ch, s:normalize_options(opts)]
+  return [mode, n, ch, opts, s:normalize_options(opts)]
 endfunction
 
 function! s:parse_args(args)
@@ -602,16 +615,17 @@ function! easy_align#align(bang, expr) range
   let n      = ''
   let ch     = ''
   let opts   = {}
+  let ioptsr = {}
   let iopts  = {}
   let regexp = 0
 
   try
     if empty(a:expr)
-      let [mode, n, ch, iopts] = s:interactive(copy(modes))
+      let [mode, n, ch, ioptsr, iopts] = s:interactive(copy(modes))
     else
       let [n, ch, opts, regexp] = s:parse_args(a:expr)
       if empty(n) && empty(ch)
-        let [mode, n, ch, iopts] = s:interactive(copy(modes))
+        let [mode, n, ch, ioptsr, iopts] = s:interactive(copy(modes))
       elseif empty(ch)
         " Try swapping n and ch
         let [n, ch] = ['', n]
@@ -694,7 +708,7 @@ function! easy_align#align(bang, expr) range
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax())),
     \ recur)
-    call s:echon(mode, n, regexp ? '/'.ch.'/' : ch, iopts)
+    call s:echon(mode, n, regexp ? '/'.ch.'/' : ch, ioptsr)
   catch 'exit'
   endtry
 endfunction

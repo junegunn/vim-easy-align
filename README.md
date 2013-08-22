@@ -227,6 +227,7 @@ keys listed below.
 | `CTRL-D` | `delimiter_align`  | left, center, right                                |
 | `CTRL-U` | `ignore_unmatched` | 0, 1                                               |
 | `CTRL-G` | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
+| `CTRL-O` | `mode_sequence`    | Input string of l, r, and c characters             |
 
 ### Ignoring delimiters in comments or strings
 
@@ -477,7 +478,8 @@ To recap:
 ```
 
 In addition to these, you can fine-tune alignments over multiple occurrences of
-the delimiters with 'mode_sequence' option.
+the delimiters with 'mode_sequence' option. (The option can also be given
+in interactive mode with the special key `CTRL-O`.)
 
 ```vim
 " Left alignment over the first two occurrences of delimiters
