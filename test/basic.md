@@ -215,5 +215,46 @@ bbbbbbbbbb = 123456778901234567890
 123456 7890
 
  aaaaa = 123456778901234567890 =
+     cccccccccccccccccc =       12345678 =
+
+```
+ aaaaa =   123456778901234567890 =
+cccccccccccccccccc =12345678 =
+
+            aaaa             = 123456778901234567890 =
+     cccccccccccccccccc      = 12345678 =
+
+            aaaaaaaaaaaaa = 123456778901234567890 =
+cc = 12345678 =
+
+           aaaaaaaaaaa= 123
+                       a = 123
+
+           aaaaaaaaaaaa= 123
+                       a = 123
+
+         aaaaaaaaaaaa = 123
+       aaaaaaaaaaa = 123
+      aaaaaaaaaa  = 123
+     aaa     = 123
+    aa      = 123
+   a      = 123
+
+            aaaa = 123456778901234567890 =
+cccccccccccccc = 12345678 =
+
+              aaaa = 123456778901234567890 =
+               bbbbbb = 4
+cccccccccccccccccc = 12345678 =
+
+                    aaaa = 123456778901234567890 =
      cccccccccccccccccc = 12345678 =
+
+                    aaaaa                     = 123456778901234567890 =
+                     cc                       = 12345678 =
+
+=aaaaa = 123456778901234567890 =
+=    cccccccccccccccccc = 12345678 =
+
+```
 

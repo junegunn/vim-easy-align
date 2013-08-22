@@ -253,7 +253,7 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
     let delims = []
   " Append an empty item to enable right/center alignment of the last token
   " - if the last token is not ignorable or ignorable but not the only token
-  elseif (mode == 'r' || mode == 'c') && (!ignorable || len(tokens) > 1) && a:nth >= 0 " includes -0
+  elseif (mode ==? 'r' || mode ==? 'c') && (!ignorable || len(tokens) > 1) && a:nth >= 0 " includes -0
     call add(tokens, '')
     call add(delims, '')
   endif
@@ -275,7 +275,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
   let lines      = {}
   let min_indent = -1
   let max = { 'pivot_len': 0.0, 'token_len': 0, 'just_len': 0, 'delim_len': 0,
-        \ 'indent': 0, 'tokens': 0 }
+        \ 'indent': 0, 'tokens': 0, 'strip_len': 0 }
 
   " Phase 1
   for line in range(a:fl, a:ll)
@@ -308,7 +308,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
       endif
       let nth = a:nth - 1 " make it 0-based
     else " -0 or Negative field number
-      if a:nth == 0 && mode != 'l'
+      if a:nth == 0 && mode !=? 'l'
         let nth = len(tokens) - 1
       else
         let nth = len(tokens) + a:nth
@@ -334,9 +334,14 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     if min_indent < 0 || indent < min_indent
       let min_indent  = indent
     endif
+    if mode ==? 'c' | let token .= matchstr(token, '^\s*') | endif
     let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
     call s:max(max, { 'indent': indent, 'token_len': tw, 'just_len': pw + tw,
-          \ 'delim_len': s:strwidth(delim), 'pivot_len': pw + tw / 2.0 })
+                     \ 'delim_len': s:strwidth(delim) })
+    if mode ==? 'c'
+      call s:max(max, { 'pivot_len': pw + tw / 2.0,
+                       \ 'strip_len': s:strwidth(s:trim(token)) })
+    endif
     let lines[line]   = [nth, prefix, token, delim]
   endfor
 
@@ -361,9 +366,14 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
         let [nth, prefix, token, delim] = elems
 
         let token = substitute(token, '^\s*', indent, '')
+        if mode ==? 'c'
+          let token = substitute(token, '\s*$', indent, '')
+        endif
         let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
-        call s:max(max,
-          \ { 'token_len': tw, 'just_len': pw + tw, 'pivot_len': pw + tw / 2.0 })
+        call s:max(max, { 'token_len': tw, 'just_len': pw + tw })
+        if mode ==? 'c'
+          call s:max(max, { 'pivot_len': pw + tw / 2.0 })
+        endif
 
         let lines[line][2] = token
       endfor
@@ -384,24 +394,26 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     " Pad the token with spaces
     let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
     let rpad = ''
-    if mode == 'l'
+    if mode ==? 'l'
       let pad = repeat(' ', max.just_len - pw - tw)
       if a:stick_to_left
         let rpad = pad
       else
         let token = token . pad
       endif
-    elseif mode == 'r'
+    elseif mode ==? 'r'
       let pad = repeat(' ', max.just_len - pw - tw)
       let token = pad . token
-    elseif mode == 'c'
+    elseif mode ==? 'c'
       let p1  = max.pivot_len - (pw + tw / 2.0)
       let p2  = (max.token_len - tw) / 2.0
       let pf1 = floor(p1)
       if pf1 < p1 | let p2 = ceil(p2)
       else        | let p2 = floor(p2)
       endif
+      let strip = float2nr(ceil((max.token_len - max.strip_len) / 2.0))
       let token = repeat(' ', float2nr(pf1)) .token. repeat(' ', float2nr(p2))
+      let token = substitute(token, repeat(' ', strip) . '$', '', '')
     endif
     let tokens[nth] = token
 
@@ -433,7 +445,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     let lpad = ''
     if nth == 0
       let ipad = repeat(' ', min_indent - len(token.ml))
-      if mode == 'l'
+      if mode ==? 'l'
         let token = ipad . token
       else
         let lpad = ipad
@@ -664,7 +676,7 @@ function! easy_align#align(bang, expr) range
   endif
 
   let aseq = get(dict, 'mode_sequence',
-        \ recur == 2 ? (mode == 'r' ? ['r', 'l'] : ['l', 'r']) : [mode])
+        \ recur == 2 ? (mode ==? 'r' ? ['r', 'l'] : ['l', 'r']) : [mode])
 
   try
     call s:do_align(
