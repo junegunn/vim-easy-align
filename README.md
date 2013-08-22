@@ -478,8 +478,8 @@ To recap:
 ```
 
 In addition to these, you can fine-tune alignments over multiple occurrences of
-the delimiters with 'mode_sequence' option. (The option can also be given
-in interactive mode with the special key `CTRL-O`.)
+the delimiters with 'mode_sequence' option. (The option can also be set
+in interactive mode with the special key `CTRL-O`)
 
 ```vim
 " Left alignment over the first two occurrences of delimiters
