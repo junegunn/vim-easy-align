@@ -106,7 +106,7 @@ j,     ,           k
 
               a        =
               a        =  1
-              bbbb     =  2
+              bbbb    .=  2
               ccccccc  =  3
 ccccccccccccccc
               ddd      =  #
@@ -131,7 +131,7 @@ ccccccccccccccc
 
 a               =
 a               =   1
-bbbb            =   2
+bbbb            .=  2
 ccccccc         =   3
 ccccccccccccccc
 ddd             =   #
@@ -156,7 +156,7 @@ gg              <=> ee
 
               a   =
               a   =        1
-           bbbb   =        2
+           bbbb  .=        2
         ccccccc   =        3
 ccccccccccccccc
             ddd   =        #
@@ -181,7 +181,7 @@ ccccccccccccccc
 
 a         =
 a         =        1
-bbbb      =        2
+bbbb     .=        2
 ccccccc   =        3
 ccccccccccccccc
 ddd       =        #
@@ -206,7 +206,7 @@ gg      <=>       ee
 
 a         =
 a         = 1
-bbbb      = 2
+bbbb     .= 2
 ccccccc   = 3
 ccccccccccccccc
 ddd       = #
@@ -231,7 +231,7 @@ gg      <=> ee
 
 a         =
 a         = 1
-bbbb      = 2
+bbbb     .= 2
 ccccccc   = 3
 ccccccccccccccc
 ddd       = #
@@ -705,7 +705,7 @@ string i                      = "asdf";
 
 a         =
 a         =                       1
-bbbb      =                       2
+bbbb     .=                       2
 ccccccc   =                       3
                     ccccccccccccccc
 # eeeeeeeeeeeeeeee
@@ -732,7 +732,7 @@ gg      <=>                      ee
 
 a                    =
 a                    =        1
-bbbb                 =        2
+bbbb                .=        2
 ccccccc              =        3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee
@@ -759,7 +759,7 @@ gg                 <=>       ee
 
               a   =
               a   = 1
-           bbbb   = 2
+           bbbb  .= 2
         ccccccc   = 3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee
@@ -786,7 +786,7 @@ e # asdf
 
 a         =
 a         =        1
-bbbb      =        2
+bbbb     .=        2
 ccccccc   =        3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee
@@ -813,7 +813,7 @@ gg      <=>       ee
 
               a   =
               a   =        1
-           bbbb   =        2
+           bbbb  .=        2
         ccccccc   =        3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee
@@ -840,7 +840,7 @@ e # asdf
 
               a   =
               a   = 1
-           bbbb   = 2
+           bbbb  .= 2
         ccccccc   = 3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee

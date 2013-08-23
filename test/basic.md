@@ -26,7 +26,7 @@ j,,k
 
 a =
 a = 1
-bbbb = 2
+bbbb .= 2
 ccccccc = 3
 ccccccccccccccc
 ddd = #
@@ -156,7 +156,7 @@ string i = "asdf";
 
 a =
 a = 1
-bbbb = 2
+bbbb .= 2
 ccccccc = 3
 ccccccccccccccc
 # eeeeeeeeeeeeeeee
