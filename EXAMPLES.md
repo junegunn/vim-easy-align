@@ -369,14 +369,14 @@ So what do we do? Let's try to improve our alignment rule.
 
 ```vim
 let g:easy_align_delimiters['d'] = {
-\ 'pattern': ' \(\S\+\s*[;=,]\)\@=',
+\ 'pattern': ' \(\S\+\s*[;=]\)\@=',
 \ 'left_margin': 0, 'right_margin': 0
 \ }
 ```
 
 Now the new rule has changed to align text around spaces that are followed
-by some non-whitespace characters and then an equals sign, a comma, or a
-semi-colon. Try `<Enter>d`
+by some non-whitespace characters and then an equals sign or a semi-colon.
+Try `<Enter>d`
 
 ```c
 const char*                          str = "Hello";
