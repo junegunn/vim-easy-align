@@ -109,6 +109,14 @@ You can override these default rules or define your own rules with
 | `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlign!**=` |
 | ...                 | ...                                                      |                       |
 
+### *Intermission*
+
+You can stop reading here. Trust me. All the fancy features described in the
+following sections are really powerful but you won't be needing them in most
+of the cases.
+
+Go try out vim-easy-align right now, and come back later when you feel like it.
+
 ### Non-interactive mode
 
 Instead of going into the interactive mode, you can type in arguments to
@@ -537,6 +545,69 @@ Advanced examples and use cases
 
 See [EXAMPLES.md](https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md)
 for more examples.
+
+
+Related work
+------------
+
+There are two well-known plugins with the same goal as that of vim-easy-align.
+
+- [DrChip's Alignment Tool for Vim](http://www.drchip.org/astronaut/vim/align.html) (herein will be referred to as "Align")
+- [Tabular](https://github.com/godlygeek/tabular)
+
+Both are great plugins with very large user bases. I actually had been a Tabular
+user for a couple of years before I finally made up my mind to roll out my own.
+
+So why would someone choose vim-easy-align over those two?
+
+Feature-by-feature comparison I believe is not quite useful, since a typical
+user will end up using only a small subset of the features.
+So I will mention just a few core benefits of vim-easy-align.
+
+### Ease of use
+
+As the name implies, vim-easy-align is *easier* to use. Its interactive mode
+allows you to achieve what you want with just a few keystrokes.
+The key sequence is mnemonic, so it's easy to remember and execute.
+It even feels like a native Vim command!
+
+- *Right-align*: `<Enter><Enter>`
+- around the *second* occurrences: `2`
+- of *whitespaces*: `<space>`
+
+For the simplest cases, Tabular and Align are also easy to use. But sooner or
+later, you will find yourself scratching your head, trying to come up with some
+complex regular expressions.
+
+### Clean
+
+vim-easy-align doesn't clutter your workspace with mappings and global
+variables. All you would need is a single mapping to the interactive EasyAlign
+command, and even that is totally up to you.
+
+### Optimized for code editing
+
+vim-easy-align by default performs syntax-aware alignment, which is invaluable
+when editing codes.
+
+Try to come up with a regular expression to correctly format the following code
+snippet. With vim-easy-align under default configuration, it can be done with
+just two keystrokes: `<Enter>:`
+
+```javascript
+var jdbc = {
+  // JDBC driver for MySQL database:
+  driver: "com.mysql.jdbc.Driver",
+  /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+  url: 'jdbc:mysql://localhost/test',
+  database: "test",
+  "user:pass":"r00t:pa55"
+};
+```
+
+(To be fair, Align also can be configured to consider syntax highlighting with
+`g:AlignSkip` function reference which should point to a custom function that
+looks up the syntax group of a character on a certain position)
 
 Author
 ------
