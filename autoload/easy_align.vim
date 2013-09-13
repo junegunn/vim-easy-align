@@ -544,7 +544,7 @@ function! s:interactive(modes)
       let opts['ig'] = s:shift(vals['ignore_groups'], 1)
     elseif ch == "\<C-O>"
       let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode)))
-      if match(modes, '^[lrc]\+$') != -1
+      if match(modes, '^[lrc]\+\*\{0,2}$') != -1
         let opts['m'] = modes
         let mode      = modes[0]
         while mode != s:shift(a:modes, 1)
@@ -700,10 +700,19 @@ function! easy_align#align(bang, expr) range
 
   let aseq = get(dict, 'mode_sequence',
         \ recur == 2 ? (mode ==? 'r' ? ['r', 'l'] : ['l', 'r']) : [mode])
+  let mode_expansion = matchstr(aseq, '\*\+$')
+  if mode_expansion == '*'
+    let aseq = aseq[0 : -2]
+    let recur = 1
+  elseif mode_expansion == '**'
+    let aseq = aseq[0 : -3]
+    let recur = 2
+  endif
+  let aseq_list = type(aseq) == 1 ? split(tolower(aseq), '\s*') : map(copy(aseq), 'tolower(v:val)')
 
   try
     call s:do_align(
-    \ type(aseq) == 1 ? split(tolower(aseq), '\s*') : map(copy(aseq), 'tolower(v:val)'),
+    \ aseq_list,
     \ {}, {}, a:firstline, a:lastline,
     \ bvisual ? min([col("'<"), col("'>")]) : 1,
     \ bvisual ? max([col("'<"), col("'>")]) : 0,

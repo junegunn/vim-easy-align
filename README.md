@@ -518,6 +518,14 @@ in interactive mode with the special key `CTRL-O`)
 " (**) Alternating alignments (default: lr or rl)
 "   Right, left, center, right, left, center, ...
 :EasyAlign **={ 'm': 'rlc' }
+
+" Right, left, center, center, center, ... repeating alignment
+" over the 3rd to the last occurrences of delimiters
+:EasyAlign 3={ 'm': 'rlc*' }
+
+" Right, left, center, right, left, center, ... alternating alignment
+" over the 3rd to the last occurrences of delimiters
+:EasyAlign 3={ 'm': 'rlc**' }
 ```
 
 ### Extending alignment rules
