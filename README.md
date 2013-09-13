@@ -13,7 +13,7 @@ Demo
 Features
 --------
 
-- Easier to use
+- Easy to use
   - Comes with a predefined set of alignment rules
   - Provides a fast and intuitive interface
 - Extensible
@@ -591,6 +591,9 @@ For the simplest cases, Tabular and Align are also easy to use. But sooner or
 later, you will find yourself scratching your head, trying to come up with some
 complex regular expressions.
 
+_"How am I going to align the third to the last word in each line to the right
+without affecting the ones before it?"_
+
 ### Clean
 
 vim-easy-align doesn't clutter your workspace with mappings and global
@@ -603,8 +606,8 @@ vim-easy-align by default performs syntax-aware alignment, which is invaluable
 when editing codes.
 
 Try to come up with a regular expression to correctly format the following code
-snippet. With vim-easy-align under default configuration, it can be done with
-just two keystrokes: `<Enter>:`
+snippet. With vim-easy-align under default configuration and a mapping, it can
+be done with just two keystrokes: `<Enter>:`
 
 ```javascript
 var jdbc = {
