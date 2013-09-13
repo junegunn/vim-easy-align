@@ -13,7 +13,7 @@ Demo
 Features
 --------
 
-- Makes the common case easy
+- Easier to use
   - Comes with a predefined set of alignment rules
   - Provides a fast and intuitive interface
 - Extensible
@@ -22,12 +22,20 @@ Features
 - Optimized for code editing
   - Takes advantage of syntax highlighting feature to avoid unwanted alignments
 
+### _"I already have a similar one. Should I switch?"_
+
+Maybe. See [related work](https://github.com/junegunn/vim-easy-align#related-work) section.
+
 Installation
 ------------
 
 Either [download zip file](http://www.vim.org/scripts/script.php?script_id=4520)
-and extract in ~/.vim or use [Vundle](https://github.com/gmarik/vundle) (recommended)
-or [Pathogen](https://github.com/tpope/vim-pathogen).
+and extract in ~/.vim or
+[use](https://github.com/tpope/vim-pathogen)
+[your](https://github.com/gmarik/vundle)
+[favorite](https://github.com/junegunn/vim-plug)
+[plugin](https://github.com/Shougo/neobundle.vim)
+[manager](https://github.com/MarcWeber/vim-addon-manager).
 
 ### With Vundle
 
@@ -109,6 +117,8 @@ You can override these default rules or define your own rules with
 | `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlign!**=` |
 | ...                 | ...                                                      |                       |
 
+---
+
 ### *Intermission*
 
 You can stop reading here. Trust me. All the fancy features described in the
@@ -116,6 +126,8 @@ following sections are really powerful but you won't be needing them in most
 of the cases.
 
 Go try out vim-easy-align right now, and come back later when you feel like it.
+
+---
 
 ### Non-interactive mode
 
