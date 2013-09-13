@@ -498,6 +498,7 @@ function! s:interactive(modes)
   let ch   = ''
   let opts = {}
   let vals = deepcopy(s:option_values)
+  let regx = 0
 
   while 1
     call s:echon(mode, n, '', opts)
@@ -552,11 +553,17 @@ function! s:interactive(modes)
       else
         silent! call remove(opts, 'm')
       endif
+    elseif ch == "\<C-_>"
+      let ch = s:input('Regular expression: ', '')
+      if !empty(ch)
+        let regx = 1
+        break
+      endif
     else
       break
     endif
   endwhile
-  return [mode, n, ch, opts, s:normalize_options(opts)]
+  return [mode, n, ch, opts, s:normalize_options(opts), regx]
 endfunction
 
 function! s:parse_args(args)
@@ -630,11 +637,11 @@ function! easy_align#align(bang, expr) range
 
   try
     if empty(a:expr)
-      let [mode, n, ch, ioptsr, iopts] = s:interactive(copy(modes))
+      let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes))
     else
       let [n, ch, opts, regexp] = s:parse_args(a:expr)
       if empty(n) && empty(ch)
-        let [mode, n, ch, ioptsr, iopts] = s:interactive(copy(modes))
+        let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes))
       elseif empty(ch)
         " Try swapping n and ch
         let [n, ch] = ['', n]

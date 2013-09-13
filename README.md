@@ -117,6 +117,17 @@ You can override these default rules or define your own rules with
 | `<Enter><Enter>**=` | Right-left alternating alignment around all equals signs | `:'<,'>EasyAlign!**=` |
 | ...                 | ...                                                      |                       |
 
+#### Using regular expressions
+
+Instead of finishing the command with a predefined delimiter key, you can type
+in a regular expression after `<CTRL-/>` key. For example, if you want to align
+text around all occurrences of numbers:
+
+- `<Enter>`
+- `*`
+- `<CTRL-/>`
+  - `[0-9]\+`
+
 ---
 
 ### *Intermission*
@@ -132,8 +143,7 @@ Go try out vim-easy-align right now, and come back later when you feel like it.
 ### Non-interactive mode
 
 Instead of going into the interactive mode, you can type in arguments to
-`:EasyAlign` command. In non-interactive mode, you can even use arbitrary
-regular expressions.
+`:EasyAlign` command.
 
 ```vim
 " Using predefined alignment rules
