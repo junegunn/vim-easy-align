@@ -480,8 +480,8 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
   endif
 endfunction
 
-function! s:input(str, default, sl)
-  if !a:sl
+function! s:input(str, default, vis)
+  if a:vis
     normal! gv
     redraw
     execute "normal! \<esc>"
@@ -499,7 +499,7 @@ function! s:input(str, default, sl)
   endtry
 endfunction
 
-function! s:interactive(modes, sl)
+function! s:interactive(modes, vis)
   let mode = s:shift(a:modes, 1)
   let n    = ''
   let ch   = ''
@@ -543,9 +543,9 @@ function! s:interactive(modes, sl)
     elseif ch == "\<C-I>"
       let opts['idt'] = s:shift(vals['indentation'], 1)
     elseif ch == "\<C-L>"
-      let opts['lm'] = s:input("Left margin: ", get(opts, 'lm', ''), a:sl)
+      let opts['lm'] = s:input("Left margin: ", get(opts, 'lm', ''), a:vis)
     elseif ch == "\<C-R>"
-      let opts['rm'] = s:input("Right margin: ", get(opts, 'rm', ''), a:sl)
+      let opts['rm'] = s:input("Right margin: ", get(opts, 'rm', ''), a:vis)
     elseif ch == "\<C-U>"
       let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
     elseif ch == "\<C-G>"
@@ -560,7 +560,7 @@ function! s:interactive(modes, sl)
       silent! call remove(opts, 'stl')
       silent! call remove(opts, 'lm')
     elseif ch == "\<C-O>"
-      let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode), a:sl))
+      let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode), a:vis))
       if match(modes, '^[lrc]\+\*\{0,2}$') != -1
         let opts['m'] = modes
         let mode      = modes[0]
@@ -570,7 +570,7 @@ function! s:interactive(modes, sl)
         silent! call remove(opts, 'm')
       endif
     elseif ch == "\<C-_>" || ch == "\<C-X>"
-      let ch = s:input('Regular expression: ', '', a:sl)
+      let ch = s:input('Regular expression: ', '', a:vis)
       if !empty(ch)
         let regx = 1
         break
@@ -583,10 +583,10 @@ function! s:interactive(modes, sl)
 endfunction
 
 function! s:parse_args(args)
-  let n      = ''
-  let ch     = ''
-  let args   = a:args
-  let cand   = ''
+  let n    = ''
+  let ch   = ''
+  let args = a:args
+  let cand = ''
   let opts = {}
 
   " Poor man's option parser
@@ -650,15 +650,16 @@ function! easy_align#align(bang, expr) range
   let ioptsr = {}
   let iopts  = {}
   let regexp = 0
-  let sl     = a:firstline == a:lastline  " Possibley w/o selection
+  " Heuristically determine if the user was in visual mode
+  let vis    = a:firstline == line("'<") && a:lastline == line("'>")
 
   try
     if empty(a:expr)
-      let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), sl)
+      let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), vis)
     else
       let [n, ch, opts, regexp] = s:parse_args(a:expr)
       if empty(n) && empty(ch)
-        let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), sl)
+        let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), vis)
       elseif empty(ch)
         " Try swapping n and ch
         let [n, ch] = ['', n]
@@ -715,7 +716,7 @@ function! easy_align#align(bang, expr) range
   if type(ml) == 0 | let ml = repeat(' ', ml) | endif
   if type(mr) == 0 | let mr = repeat(' ', mr) | endif
 
-  let bvisual = char2nr(visualmode()) == 22 " ^V
+  let bvisual = vis && char2nr(visualmode()) == 22 " ^V
 
   if recur && bvisual
     echon "\rRecursive alignment is currently not supported in blockwise-visual mode"
