@@ -120,13 +120,33 @@ You can override these default rules or define your own rules with
 #### Using regular expressions
 
 Instead of finishing the command with a predefined delimiter key, you can type
-in a regular expression after `<CTRL-/>` key. For example, if you want to align
-text around all occurrences of numbers:
+in a regular expression after `<CTRL-/>` or `<CTRL-X>` key.
+For example, if you want to align text around all occurrences of numbers:
 
 - `<Enter>`
 - `*`
-- `<CTRL-/>`
+- `<CTRL-/>` or `<CTRL-X>`
   - `[0-9]\+`
+
+(`<CTRL-/>` key will not work in GVim, then you have to use `<CTRL-X>` instead)
+
+#### Alignment options in interactive mode
+
+While in interactive mode, you can switch some of the alignment options using
+special shortcut keys listed below. The meanings of the options will be
+described in the following sections.
+
+| Key       | Option             | Values                                             |
+| --------  | ------------------ | -------------------------------------------------- |
+| `CTRL-I`  | `indentation`      | shallow, deep, none, keep                          |
+| `CTRL-L`  | `left_margin`      | Input number or string                             |
+| `CTRL-R`  | `right_margin`     | Input number or string                             |
+| `CTRL-D`  | `delimiter_align`  | left, center, right                                |
+| `CTRL-U`  | `ignore_unmatched` | 0, 1                                               |
+| `CTRL-G`  | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
+| `CTRL-O`  | `mode_sequence`    | Input string of `/[lrc]+\*{0,2}/`                  |
+| `<Left>`  | `stick_to_left`    | Set stick_to_left option                           |
+| `<Right>` | `stick_to_left`    | Unset stick_to_left option                         |
 
 ---
 
@@ -245,19 +265,6 @@ Some of the options can be specified using corresponding global variables.
 | `ignore_unmatched` | `g:easy_align_ignore_unmatched` |
 | `delimiter_align`  | `g:easy_align_delimiter_align`  |
 | `indentation`      | `g:easy_align_indentation`      |
-
-In interactive mode, you can switch some of the alignment options using special
-keys listed below.
-
-| Key      | Option             | Values                                             |
-| -------- | ------------------ | -------------------------------------------------- |
-| `CTRL-I` | `indentation`      | shallow, deep, none, keep                          |
-| `CTRL-L` | `left_margin`      | Input number or string                             |
-| `CTRL-R` | `right_margin`     | Input number or string                             |
-| `CTRL-D` | `delimiter_align`  | left, center, right                                |
-| `CTRL-U` | `ignore_unmatched` | 0, 1                                               |
-| `CTRL-G` | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
-| `CTRL-O` | `mode_sequence`    | Input string of l, r, and c characters             |
 
 ### Ignoring delimiters in comments or strings
 

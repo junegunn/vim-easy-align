@@ -72,12 +72,38 @@ Examples:
   <Enter><Enter>**=  Right-left alternating alignment around all equals signs
 
 
+Instead of finishing the command with a predefined delimiter key, you can type
+in a regular expression after `<CTRL-/>` or `<CTRL-X>` key.
+For example, if you want to align text around all occurrences of numbers:
+
+- <Enter>
+- *
+- <CTRL-/> or <CTRL-X>
+  - [0-9]\+
+
+
+While in interactive mode, you can adjust some of the alignment options using
+special shortcut keys listed below. The meanings of the options will be
+described in the following sections.
+
+| Key     | Option           | Values                                     |
+| ------- | ---------------- | ------------------------------------------ |
+| CTRL-I  | indentation      | shallow, deep, none, keep                  |
+| CTRL-L  | left_margin      | Input number or string                     |
+| CTRL-R  | right_margin     | Input number or string                     |
+| CTRL-D  | delimiter_align  | left, center, right                        |
+| CTRL-U  | ignore_unmatched | 0, 1                                       |
+| CTRL-G  | ignore_groups    | [], [String], [Comment], [String, Comment] |
+| CTRL-O  | mode_sequence    | Input string of /[lrc]+\*{0,2}/            |
+| <Left>  | stick_to_left    | Set stick_to_left option                   |
+| <Right> | stick_to_left    | Unset stick_to_left option                 |
+
+
 Non-interactive mode
 -------------------------------------------------------------------------
 
 Instead of going into the interactive mode, you can type in arguments to
-`:EasyAlign` command. In non-interactive mode, you can even use arbitrary
-regular expressions.
+`:EasyAlign` command.
 
     " Using predefined alignment rules
     :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]
@@ -423,6 +449,14 @@ in interactive mode with the special key CTRL-O)
     " (**) Alternating alignments (default: lr or rl)
     "   Right, left, center, right, left, center, ...
     :EasyAlign **={ 'm': 'rlc' }
+
+    " Right, left, center, center, center, ... repeating alignment
+    " over the 3rd to the last occurrences of delimiters
+    :EasyAlign 3={ 'm': 'rlc*' }
+
+    " Right, left, center, right, left, center, ... alternating alignment
+    " over the 3rd to the last occurrences of delimiters
+    :EasyAlign 3={ 'm': 'rlc**' }
 
 
 Extending alignment rules                       *g:easy_align_delimiters*
