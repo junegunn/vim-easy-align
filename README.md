@@ -63,7 +63,7 @@ variant `:EasyAlign!`) in the visual mode.
 
 > Simple things should be simple,
 > complex things should be possible.
-> - Alan Kay
+> \- Alan Kay
 
 Forget about writing regular expressions every time you do an alignment.
 You can do so (we'll see), but I don't believe that it should be the default
