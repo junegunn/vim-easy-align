@@ -140,10 +140,8 @@ For example, if you want to align text around all occurrences of numbers:
 
 - `<Enter>`
 - `*`
-- `<CTRL-/>` or `<CTRL-X>`
+- `<CTRL-/>` (or `<CTRL-X>` on GVim)
   - `[0-9]\+`
-
-(`<CTRL-/>` key will not work in GVim, then you have to use `<CTRL-X>` instead)
 
 #### Alignment options in interactive mode
 
@@ -204,7 +202,7 @@ Notice that you can't append `\zs` to your regular expression to put delimiters
 on the left. It can be done by providing additional options in Vim dictionary
 format.
 
-- `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': '' }`
+- `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': 0 }`
 
 Then we get:
 
@@ -219,7 +217,14 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 - `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
 
-Available options will be shown later in the document.
+The same thing can be done in the interactive mode as well with the following
+key combination.
+
+- `<Enter>`
+- `*`
+- `<Left>`
+- `<CTRL-/>` (or `<CTRL-X>` on GVim)
+  - `[:;]\+`
 
 ### Partial alignment in blockwise-visual mode
 
