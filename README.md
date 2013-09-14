@@ -59,6 +59,21 @@ variant `:EasyAlign!`) in the visual mode.
 | Using predefined rules    | `:EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]` |
 | Using regular expressions | `:EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]`      |
 
+### Concept of _alignment rule_
+
+> Simple things should be simple,
+> complex things should be possible.
+> - Alan Kay
+
+Forget about writing regular expressions every time you do an alignment.
+You can do so (we'll see), but I don't believe that it should be the default
+way of doing things with this plugin.
+
+An *alignment rule* is a predefined set of options for common alignment tasks,
+which is indexed by a single character, *DELIMITER_KEY*. By default, you have
+rules indexed by `<space>`, `=`, `:`, `.`, `|`, and `,`, which should cover the
+most of the use cases. You can override these rules, and add your own rules.
+
 ### Interactive mode
 
 The command will go into the interactive mode when no argument is given.
