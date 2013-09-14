@@ -552,8 +552,13 @@ function! s:interactive(modes, sl)
       let opts['ig'] = s:shift(vals['ignore_groups'], 1)
     elseif c == "\<Left>"
       let opts['stl'] = 1
+      let opts['lm']  = 0
     elseif c == "\<Right>"
       let opts['stl'] = 0
+      let opts['lm']  = 1
+    elseif c == "\<Up>" || c == "\<Down>"
+      silent! call remove(opts, 'stl')
+      silent! call remove(opts, 'lm')
     elseif ch == "\<C-O>"
       let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode), a:sl))
       if match(modes, '^[lrc]\+\*\{0,2}$') != -1

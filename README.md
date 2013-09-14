@@ -160,8 +160,8 @@ described in the following sections.
 | `CTRL-U`  | `ignore_unmatched` | 0, 1                                               |
 | `CTRL-G`  | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
 | `CTRL-O`  | `mode_sequence`    | Input string of `/[lrc]+\*{0,2}/`                  |
-| `<Left>`  | `stick_to_left`    | Set stick_to_left option                           |
-| `<Right>` | `stick_to_left`    | Unset stick_to_left option                         |
+| `<Left>`  | `stick_to_left`    | Set stick_to_left and set left_margin to zero      |
+| `<Right>` | `stick_to_left`    | Unset stick_to_left and set left_margin to one     |
 
 ---
 

@@ -86,17 +86,17 @@ While in interactive mode, you can adjust some of the alignment options using
 special shortcut keys listed below. The meanings of the options will be
 described in the following sections.
 
-| Key     | Option           | Values                                     |
-| ------- | ---------------- | ------------------------------------------ |
-| CTRL-I  | indentation      | shallow, deep, none, keep                  |
-| CTRL-L  | left_margin      | Input number or string                     |
-| CTRL-R  | right_margin     | Input number or string                     |
-| CTRL-D  | delimiter_align  | left, center, right                        |
-| CTRL-U  | ignore_unmatched | 0, 1                                       |
-| CTRL-G  | ignore_groups    | [], [String], [Comment], [String, Comment] |
-| CTRL-O  | mode_sequence    | Input string of /[lrc]+\*{0,2}/            |
-| <Left>  | stick_to_left    | Set stick_to_left option                   |
-| <Right> | stick_to_left    | Unset stick_to_left option                 |
+| Key     | Option           | Values                                       |
+| ------- | ---------------- | -------------------------------------------- |
+| CTRL-I  | indentation      | shallow, deep, none, keep                    |
+| CTRL-L  | left_margin      | Input number or string                       |
+| CTRL-R  | right_margin     | Input number or string                       |
+| CTRL-D  | delimiter_align  | left, center, right                          |
+| CTRL-U  | ignore_unmatched | 0, 1                                         |
+| CTRL-G  | ignore_groups    | [], [String], [Comment], [String, Comment]   |
+| CTRL-O  | mode_sequence    | Input string of /[lrc]+\*{0,2}/              |
+| <Left>  | stick_to_left    | Set stick_to_left and set left_margin to 0   |
+| <Right> | stick_to_left    | Unset stick_to_left and set left_margin to 1 |
 
 
 Non-interactive mode
