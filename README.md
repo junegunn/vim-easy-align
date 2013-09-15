@@ -24,7 +24,7 @@ Features
 
 ### _"I already have a similar one. Should I switch?"_
 
-Maybe. See [related work](https://github.com/junegunn/vim-easy-align#related-work) section.
+Maybe or maybe not. See [related work](https://github.com/junegunn/vim-easy-align#related-work) section.
 
 Installation
 ------------
@@ -668,6 +668,13 @@ var jdbc = {
 (To be fair, Align also can be configured to consider syntax highlighting with
 `g:AlignSkip` function reference which should point to a custom function that
 looks up the syntax group of a character on a certain position)
+
+### "Okay. So should I switch?"
+
+Maybe, but I can't really say. I have no ambition to make vim-easy-align
+superior at every use case. For some cases, vim-easy-align works better than the
+others, but for some other cases, Tabular or Align.vim might be a better choice.
+So try it yourself and see if it works for you!
 
 Author
 ------
