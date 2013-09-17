@@ -95,8 +95,8 @@ described in the following sections.
 | CTRL-U  | ignore_unmatched | 0, 1                                         |
 | CTRL-G  | ignore_groups    | [], [String], [Comment], [String, Comment]   |
 | CTRL-O  | mode_sequence    | Input string of /[lrc]+\*{0,2}/              |
-| <Left>  | stick_to_left    | Set stick_to_left and set left_margin to 0   |
-| <Right> | stick_to_left    | Unset stick_to_left and set left_margin to 1 |
+| <Left>  | stick_to_left    | { 'stick_to_left': 1, 'left_margin': 0 }     |
+| <Right> | stick_to_left    | { 'stick_to_left': 0, 'left_margin': 1 }     |
 
 
 Non-interactive mode
@@ -190,10 +190,10 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 | left_margin      | CTRL-L              |                                 |
 | right_margin     | CTRL-R              |                                 |
 | stick_to_left    | <Left>, <Right>     |                                 |
-| ignore_groups    | CTRL-G              | `g:easy_align_ignore_groups`    |
-| ignore_unmatched | CTRL-U              | `g:easy_align_ignore_unmatched` |
-| indentation      | CTRL-I              | `g:easy_align_indentation`      |
-| delimiter_align  | CTRL-D              | `g:easy_align_delimiter_align`  |
+| ignore_groups    | CTRL-G              | `g:easy_align_ignore_groups`      |
+| ignore_unmatched | CTRL-U              | `g:easy_align_ignore_unmatched`   |
+| indentation      | CTRL-I              | `g:easy_align_indentation`        |
+| delimiter_align  | CTRL-D              | `g:easy_align_delimiter_align`    |
 | mode_sequence    | CTRL-O              |                                 |
 
 
