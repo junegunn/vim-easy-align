@@ -166,8 +166,8 @@ Available options are as follows.
 
 | Atrribute        | Type             | Default                       |
 | ---------------- | ---------------- | ----------------------------- |
-| left_margin      | number or string | 0                             |
-| right_margin     | number or string | 0                             |
+| left_margin      | number or string | 1                             |
+| right_margin     | number or string | 1                             |
 | stick_to_left    | boolean          | 0                             |
 | ignore_unmatched | boolean          | 1                             |
 | ignore_groups    | array            | ['String', 'Comment']         |
@@ -178,29 +178,23 @@ Available options are as follows.
 | mode_sequence    | string           | (Depends on field number and  |
 |                  |                  |  selected alignment mode)     |
 
+There are 4 ways to set alignment options (from lowest precedence to highest):
 
-Some of the options can be specified using corresponding global variables.
+1. Some option values can be set with corresponding global variables
+2. Option values can be specified in the definition of each alignment rule
+3. Option values can be given as a dictionary argument to :EasyAlign command
+4. Option values can be set in interactive mode using special shortcut keys
 
-| Option             | Global variable                 |
-| ------------------ | ------------------------------- |
-| ignore_groups      | `g:easy_align_ignore_groups`    |
-| ignore_unmatched   | `g:easy_align_ignore_unmatched` |
-| delimiter_align    | `g:easy_align_delimiter_align`  |
-| indentation        | `g:easy_align_indentation`      |
-
-
-In interactive mode, you can switch some of the alignment options using special
-keys listed below.
-
-| Key    | Option           | Values                                             |
-| ------ | ---------------- | -------------------------------------------------- |
-| CTRL-I | indentation      | shallow, deep, none, keep                          |
-| CTRL-L | left_margin      | Input number or string                             |
-| CTRL-R | right_margin     | Input number or string                             |
-| CTRL-D | delimiter_align  | left, center, right                                |
-| CTRL-U | ignore_unmatched | 0, 1                                               |
-| CTRL-G | ignore_groups    | [], ['String'], ['Comment'], ['String', 'Comment'] |
-| CTRL-O | mode_sequence    | Input string of l, r, and c characters             |
+| Option           | Shortcut key        | Global variable                 |
+| ---------------- | ------------------- | ------------------------------- |
+| left_margin      | CTRL-L              |                                 |
+| right_margin     | CTRL-R              |                                 |
+| stick_to_left    | <Left>, <Right>     |                                 |
+| ignore_groups    | CTRL-G              | `g:easy_align_ignore_groups`    |
+| ignore_unmatched | CTRL-U              | `g:easy_align_ignore_unmatched` |
+| indentation      | CTRL-I              | `g:easy_align_indentation`      |
+| delimiter_align  | CTRL-D              | `g:easy_align_delimiter_align`  |
+| mode_sequence    | CTRL-O              |                                 |
 
 
 Ignoring delimiters in comments or strings   *g:easy_align_ignore_groups*

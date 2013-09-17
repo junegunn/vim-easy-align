@@ -107,7 +107,8 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | &#124;        | Table markdown                                                       |
 
 You can override these default rules or define your own rules with
-`g:easy_align_delimiters`, which will be described in the later section.
+`g:easy_align_delimiters`, which will be described in
+[the later section](https://github.com/junegunn/vim-easy-align#extending-alignment-rules).
 
 #### Example command sequences
 
@@ -139,9 +140,9 @@ For example, if you want to align text around all occurrences of numbers:
 
 #### Alignment options in interactive mode
 
-While in interactive mode, you can switch some of the alignment options using
-special shortcut keys listed below. The meanings of the options will be
-described in the following sections.
+While in interactive mode, you can set alignment options using special shortcut
+keys listed below. The meaning of each option will be described in
+[the following sections](https://github.com/junegunn/vim-easy-align#alignment-options).
 
 | Key       | Option             | Values                                             |
 | --------  | ------------------ | -------------------------------------------------- |
@@ -152,8 +153,8 @@ described in the following sections.
 | `CTRL-U`  | `ignore_unmatched` | 0, 1                                               |
 | `CTRL-G`  | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
 | `CTRL-O`  | `mode_sequence`    | Input string of `/[lrc]+\*{0,2}/`                  |
-| `<Left>`  | `stick_to_left`    | Set stick_to_left and set left_margin to zero      |
-| `<Right>` | `stick_to_left`    | Unset stick_to_left and set left_margin to one     |
+| `<Left>`  | `stick_to_left`    | `{ 'stick_to_left': 1, 'left_margin': 0 }`         |
+| `<Right>` | `stick_to_left`    | `{ 'stick_to_left': 0, 'left_margin': 1 }`         |
 
 ---
 
@@ -250,20 +251,14 @@ since the same can be easily done using the negative field number: `<Enter>-=`
 Alignment options
 -----------------
 
-Option values can be 1) specified as global variables, 2) set on each alignment
-rule in `g:easy_align_delimiters`, 3) or given to every `:EasyAlign` command.
-
-Command-line options have the highest precedence, and global variables have the
-lowest precedence.
-
 ### List of options
 
 | Option             | Type    | Default               | Description                                             |
 | ------------------ | ------- | --------------------- | ------------------------------------------------------- |
-| `left_margin`      | number  | 0                     | Number of spaces to attach before delimiter             |
-| `left_margin`      | string  | `''`                  | String to attach before delimiter                       |
-| `right_margin`     | number  | 0                     | Number of spaces to attach after delimiter              |
-| `right_margin`     | string  | `''`                  | String to attach after delimiter                        |
+| `left_margin`      | number  | 1                     | Number of spaces to attach before delimiter             |
+| `left_margin`      | string  | `' '`                 | String to attach before delimiter                       |
+| `right_margin`     | number  | 1                     | Number of spaces to attach after delimiter              |
+| `right_margin`     | string  | `' '`                 | String to attach after delimiter                        |
 | `stick_to_left`    | boolean | 0                     | Whether to position delimiter on the left-side          |
 | `ignore_groups`    | list    | ['String', 'Comment'] | Delimiters in these syntax highlight groups are ignored |
 | `ignore_unmatched` | boolean | 1                     | Whether to ignore lines without matching delimiter      |
@@ -271,14 +266,23 @@ lowest precedence.
 | `delimiter_align`  | string  | `r`                   | Determines how to align delimiters of different lengths |
 | `mode_sequence`    | string  |                       | Alignment modes for multiple occurrences of delimiters  |
 
-Some of the options can be specified using corresponding global variables.
+There are 4 ways to set alignment options (from lowest precedence to highest):
 
-| Option             | Global variable                 |
-| ------------------ | ------------------------------- |
-| `ignore_groups`    | `g:easy_align_ignore_groups`    |
-| `ignore_unmatched` | `g:easy_align_ignore_unmatched` |
-| `delimiter_align`  | `g:easy_align_delimiter_align`  |
-| `indentation`      | `g:easy_align_indentation`      |
+1. Some option values can be set with corresponding global variables
+2. Option values can be specified in the definition of each alignment rule
+3. Option values can be given as a dictionary argument to `:EasyAlign` command
+4. Option values can be set in interactive mode using special shortcut keys
+
+| Option             | Shortcut key        | Global variable                 |
+| ------------------ | ------------------- | ------------------------------- |
+| `left_margin`      | `CTRL-L`            |                                 |
+| `right_margin`     | `CTRL-R`            |                                 |
+| `stick_to_left`    | `<Left>`, `<Right>` |                                 |
+| `ignore_groups`    | `CTRL-G`            | `g:easy_align_ignore_groups`    |
+| `ignore_unmatched` | `CTRL-U`            | `g:easy_align_ignore_unmatched` |
+| `indentation`      | `CTRL-I`            | `g:easy_align_indentation`      |
+| `delimiter_align`  | `CTRL-D`            | `g:easy_align_delimiter_align`  |
+| `mode_sequence`    | `CTRL-O`            |                                 |
 
 ### Ignoring delimiters in comments or strings
 
