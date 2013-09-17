@@ -62,7 +62,7 @@ variant `:EasyAlign!`) in the visual mode.
 ### Concept of _alignment rule_
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
-which is identified with a single character, *DELIMITER KEY*, such as `<space>`,
+which is identified by a single character, *DELIMITER KEY*, such as `<space>`,
 `=`, `:`, `.`, `|`, and `,`.
 
 Think of it as a shortcut. Instead of writing regular expression and setting
