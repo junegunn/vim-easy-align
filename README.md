@@ -51,7 +51,7 @@ Usage
 -----
 
 _vim-easy-align_ defines `:EasyAlign` command (and the right-align
-variant `:EasyAlign!`) in the visual mode.
+variant `:EasyAlign!`) for visual mode.
 
 | Mode                      | Command                                          |
 | ------------------------- | ------------------------------------------------ |
