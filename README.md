@@ -117,7 +117,8 @@ You can override these default rules or define your own rules with
 | `<Enter><space>`    | Alignment around 1st whitespaces                         | `:'<,'>EasyAlign\ `   |
 | `<Enter>2<space>`   | Alignment around 2nd whitespaces                         | `:'<,'>EasyAlign2\ `  |
 | `<Enter>-<space>`   | Alignment around the last whitespaces                    | `:'<,'>EasyAlign-\ `  |
-| `<Enter>:`          | Alignment around 1st colon                               | `:'<,'>EasyAlign:`    |
+| `<Enter>:`          | Alignment around 1st colon (`key:  value`)               | `:'<,'>EasyAlign:`    |
+| `<Enter><Right>:`   | Alignment around 1st colon (`key : value`)               | `:'<,'>EasyAlign:`    |
 | `<Enter>=`          | Alignment around 1st equals signs (and the likes)        | `:'<,'>EasyAlign=`    |
 | `<Enter>2=`         | Alignment around 2nd equals signs (and the likes)        | `:'<,'>EasyAlign2=`   |
 | `<Enter>3=`         | Alignment around 3rd equals signs (and the likes)        | `:'<,'>EasyAlign3=`   |
