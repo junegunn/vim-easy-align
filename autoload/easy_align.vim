@@ -92,16 +92,19 @@ let s:prev_echon_len = 0
 function! s:echon_(msg)
   " http://vim.wikia.com/wiki/How_to_print_full_screen_width_messages
   let xy = [&ruler, &showcmd]
-  set noruler noshowcmd
-  let winlen = winwidth(winnr()) - 2
-  let msg = len(a:msg) > winlen ? (a:msg[0 : winlen - 3] . '..') : a:msg
-  let len = len(msg)
-  if len < s:prev_echon_len
-    echon "\r". repeat(' ', min([winlen, s:prev_echon_len]))
-  endif
-  echon "\r". msg
-  let s:prev_echon_len = len
-  let [&ruler, &showcmd] = xy
+  try
+    set noruler noshowcmd
+    let winlen = winwidth(winnr()) - 2
+    let msg = len(a:msg) > winlen ? (a:msg[0 : winlen - 3] . '..') : a:msg
+    let len = len(msg)
+    if len < s:prev_echon_len
+      echon "\r". repeat(' ', min([winlen, s:prev_echon_len]))
+    endif
+    echon "\r". msg
+    let s:prev_echon_len = len
+  finally
+    let [&ruler, &showcmd] = xy
+  endtry
 endfunction
 
 function! s:echon(l, n, d, o)
