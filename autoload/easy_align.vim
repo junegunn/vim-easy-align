@@ -88,14 +88,33 @@ function! s:ignored_syntax()
   endif
 endfunction
 
+let s:prev_echon_len = 0
+function! s:echon_(msg)
+  " http://vim.wikia.com/wiki/How_to_print_full_screen_width_messages
+  let xy = [&ruler, &showcmd]
+  set noruler noshowcmd
+  let winlen = winwidth(winnr()) - 2
+  let msg = len(a:msg) > winlen ? (a:msg[0 : winlen - 3] . '..') : a:msg
+  let len = len(msg)
+  if len < s:prev_echon_len
+    echon "\r". repeat(' ', min([winlen, s:prev_echon_len]))
+  endif
+  echon "\r". msg
+  let s:prev_echon_len = len
+  let [&ruler, &showcmd] = xy
+endfunction
+
 function! s:echon(l, n, d, o)
-  echon "\r"
-  echon "\rEasyAlign". s:mode_labels[a:l] ." (" .a:n.a:d. ")"
-        \ . (empty(a:o) ? '' : ' '.string(a:o))
+  let msg = "EasyAlign". s:mode_labels[a:l] ." (" .a:n.a:d. ")"
+              \ . (empty(a:o) ? '' : ' '.string(a:o))
+  call s:echon_(msg)
 endfunction
 
 function! s:exit(msg)
-  echon "\r". a:msg
+  call s:echon_('')
+  echohl ErrorMsg
+  call s:echon_(a:msg)
+  echohl None
   throw 'exit'
 endfunction
 
@@ -570,9 +589,11 @@ function! s:interactive(modes, vis)
         silent! call remove(opts, 'm')
       endif
     elseif ch == "\<C-_>" || ch == "\<C-X>"
-      let ch = s:input('Regular expression: ', '', a:vis)
+      let prompt = 'Regular expression: '
+      let ch = s:input(prompt, '', a:vis)
       if !empty(ch)
         let regx = 1
+        let s:prev_echon_len = len(prompt . ch)
         break
       endif
     else
@@ -580,6 +601,12 @@ function! s:interactive(modes, vis)
     endif
   endwhile
   return [mode, n, ch, opts, s:normalize_options(opts), regx]
+endfunction
+
+function! s:test_regexp(regexp)
+  try   | call matchlist('', a:regexp)
+  catch | call s:exit("Invalid regular expression: ". a:regexp)
+  endtry
 endfunction
 
 function! s:parse_args(args)
@@ -626,12 +653,7 @@ function! s:parse_args(args)
 
   " Found regexp
   if !empty(matches)
-    let regexp = matches[2]
-    " Test regexp
-    try   | call matchlist('', regexp)
-    catch | call s:exit("Invalid regular expression: ". regexp)
-    endtry
-    return [matches[1], regexp, opts, 1]
+    return [matches[1], matches[2], opts, 1]
   else
     let tokens = matchlist(args, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\s*\(.\{-}\)\?$')
     return [tokens[1], tokens[2], opts, 0]
@@ -639,10 +661,17 @@ function! s:parse_args(args)
 endfunction
 
 function! easy_align#align(bang, expr) range
-  let modes  = get(g:,
-        \ (a:bang ? 'easy_align_bang_interactive_modes' : 'easy_align_interactive_modes'),
-        \ (a:bang ? ['r', 'l', 'c'] : ['l', 'r', 'c']))
-  let mode   = modes[0]
+  try
+    let modes  = get(g:,
+          \ (a:bang ? 'easy_align_bang_interactive_modes' : 'easy_align_interactive_modes'),
+          \ (a:bang ? ['r', 'l', 'c'] : ['l', 'r', 'c']))
+    call s:align(modes, a:firstline, a:lastline, a:expr)
+  catch 'exit'
+  endtry
+endfunction
+
+function! s:align(modes, first_line, last_line, expr)
+  let mode   = a:modes[0]
   let recur  = 0
   let n      = ''
   let ch     = ''
@@ -651,31 +680,26 @@ function! easy_align#align(bang, expr) range
   let iopts  = {}
   let regexp = 0
   " Heuristically determine if the user was in visual mode
-  let vis    = a:firstline == line("'<") && a:lastline == line("'>")
+  let vis    = a:first_line == line("'<") && a:last_line == line("'>")
 
-  try
-    if empty(a:expr)
-      let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), vis)
-    else
-      let [n, ch, opts, regexp] = s:parse_args(a:expr)
-      if empty(n) && empty(ch)
-        let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(modes), vis)
-      elseif empty(ch)
-        " Try swapping n and ch
-        let [n, ch] = ['', n]
-      endif
+  if empty(a:expr)
+    let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(a:modes), vis)
+  else
+    let [n, ch, opts, regexp] = s:parse_args(a:expr)
+    if empty(n) && empty(ch)
+      let [mode, n, ch, ioptsr, iopts, regexp] = s:interactive(copy(a:modes), vis)
+    elseif empty(ch)
+      " Try swapping n and ch
+      let [n, ch] = ['', n]
     endif
-  catch 'exit'
-    return
-  endtry
+  endif
 
   if n == '*'      | let [nth, recur] = [1, 1]
   elseif n == '**' | let [nth, recur] = [1, 2]
   elseif n == '-'  | let nth = -1
   elseif empty(n)  | let nth = 1
   elseif n == '0' || ( n != '-0' && n != string(str2nr(n)) )
-    echon "\rInvalid field number: ". n
-    return
+    call s:exit('Invalid field number: '. n)
   else
     let nth = n
   endif
@@ -686,6 +710,7 @@ function! easy_align#align(bang, expr) range
   endif
 
   if regexp
+    call s:test_regexp(ch)
     let dict = { 'pattern': ch }
   else
     " Resolving command-line ambiguity
@@ -699,8 +724,7 @@ function! easy_align#align(bang, expr) range
       endif
     endif
     if !has_key(delimiters, ch)
-      echon "\rUnknown delimiter key: ". ch
-      return
+      call s:exit('Unknown delimiter key: '. ch)
     endif
     let dict = delimiters[ch]
   endif
@@ -719,8 +743,7 @@ function! easy_align#align(bang, expr) range
   let bvisual = vis && char2nr(visualmode()) == 22 " ^V
 
   if recur && bvisual
-    echon "\rRecursive alignment is currently not supported in blockwise-visual mode"
-    return
+    call s:exit('Recursive alignment is not supported in blockwise-visual mode')
   endif
 
   let aseq = get(dict, 'mode_sequence',
@@ -735,10 +758,9 @@ function! easy_align#align(bang, expr) range
   endif
   let aseq_list = type(aseq) == 1 ? split(tolower(aseq), '\s*') : map(copy(aseq), 'tolower(v:val)')
 
-  try
-    call s:do_align(
+  call s:do_align(
     \ aseq_list,
-    \ {}, {}, a:firstline, a:lastline,
+    \ {}, {}, a:first_line, a:last_line,
     \ bvisual ? min([col("'<"), col("'>")]) : 1,
     \ bvisual ? max([col("'<"), col("'>")]) : 0,
     \ get(dict, 'pattern', ch),
@@ -751,8 +773,6 @@ function! easy_align#align(bang, expr) range
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
     \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax())),
     \ recur)
-    call s:echon(mode, n, regexp ? '/'.ch.'/' : ch, ioptsr)
-  catch 'exit'
-  endtry
+  call s:echon(mode, n, regexp ? '/'.ch.'/' : ch, ioptsr)
 endfunction
 
