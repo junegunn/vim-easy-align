@@ -514,11 +514,11 @@ function! s:input(str, default, vis)
   call inputsave()
   let got = input(a:str, a:default)
   call inputrestore()
-  try
-    return eval(got)
-  catch
-    return got
-  endtry
+  return got
+endfunction
+
+function! s:atoi(str)
+  return (a:str =~ '^[0-9]\+$') ? str2nr(a:str) : a:str
 endfunction
 
 function! s:interactive(modes, vis)
@@ -565,9 +565,9 @@ function! s:interactive(modes, vis)
     elseif ch == "\<C-I>"
       let opts['idt'] = s:shift(vals['indentation'], 1)
     elseif ch == "\<C-L>"
-      let opts['lm'] = s:input("Left margin: ", get(opts, 'lm', ''), a:vis)
+      let opts['lm'] = s:atoi(s:input("Left margin: ", get(opts, 'lm', ''), a:vis))
     elseif ch == "\<C-R>"
-      let opts['rm'] = s:input("Right margin: ", get(opts, 'rm', ''), a:vis)
+      let opts['rm'] = s:atoi(s:input("Right margin: ", get(opts, 'rm', ''), a:vis))
     elseif ch == "\<C-U>"
       let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
     elseif ch == "\<C-G>"
