@@ -161,7 +161,7 @@ function! s:rtrim(str)
 endfunction
 
 function! s:trim(str)
-  return substitute(a:str, '^\s*\(\S*\)\s*$', '\1', '')
+  return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 endfunction
 
 function! s:fuzzy_lu(key)
