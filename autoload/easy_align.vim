@@ -130,7 +130,7 @@ function! s:echon_(tokens)
   endtry
 endfunction
 
-function! s:echon(l, n, r, d, o)
+function! s:echon(l, n, r, d, o, warn)
   let tokens = [
   \ ['Function', ':EasyAlign'],
   \ ['ModeMsg', get(s:mode_labels, a:l, a:l)],
@@ -143,6 +143,7 @@ function! s:echon(l, n, r, d, o)
   \ [['Identifier', a:d == ' ' ? '\ ' : (a:d == '\' ? '\\' : a:d)]])
   if a:r == -1 | call add(tokens, ['Comment', ')']) | endif
   call add(tokens, ['Statement', empty(a:o) ? '' : ' '.string(a:o)])
+  call add(tokens, ['WarningMsg', a:warn])
 
   call s:echon_(tokens)
 endfunction
@@ -567,9 +568,11 @@ function! s:interactive(modes, vis, opts)
   let opts = s:compact_options(a:opts)
   let vals = deepcopy(s:option_values)
   let regx = 0
+  let warn = ''
 
   while 1
-    call s:echon(mode, n, -1, '', opts)
+    call s:echon(mode, n, -1, '', opts, warn)
+    let warn = ''
 
     let c  = getchar()
     let ch = nr2char(c)
@@ -638,8 +641,10 @@ function! s:interactive(modes, vis, opts)
         let s:prev_echon_len = len(prompt . ch)
         break
       endif
-    else
+    elseif ch =~ '[[:print:]]'
       break
+    else
+      let warn = ' - Invalid character'
     endif
   endwhile
   return [mode, n, ch, s:normalize_options(opts), regx]
@@ -828,6 +833,6 @@ function! s:align(bang, first_line, last_line, expr)
     \ )
     call extend(copts, { 'm': aseq_str })
   endif
-  call s:echon('', n, regexp, ch, copts)
+  call s:echon('', n, regexp, ch, copts, '')
 endfunction
 
