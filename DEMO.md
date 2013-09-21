@@ -21,9 +21,9 @@ Formatting table
 | threads | Fixnum | 1 | number of threads in the thread pool |
 |queues |Fixnum | 1 | number of concurrent queues |
 |queue_size | Fixnum | 1000 | size of each queue |
-|   interval | Numeric | 0 | dispatcher interval for batch processing |
+|   interval | Numeric | 0 | dispatcher interval for processing |
 |batch | Boolean | false | enables batch processing mode |
- |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+ |batch_size | Fixnum | nil | maximum number of items in batch|
  |logger | Logger | nil | logger instance for debug logs |
 
 ```
