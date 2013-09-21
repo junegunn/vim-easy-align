@@ -84,7 +84,7 @@ With the mapping, you can align selected lines of text with only a few keystroke
 
 1. `<Enter>` key to start interactive EasyAlign command
 1. Optional Enter keys to select alignment mode (left, right, or center)
-1. Optional field number (default: 1)
+1. Optional field index (default: 1)
     - `1`         Around the 1st occurrences of delimiters
     - `2`         Around the 2nd occurrences of delimiters
     - ...
@@ -247,7 +247,7 @@ my_hash = { :a   => 1,
 ```
 
 However, in this case, we don't really need blockwise visual mode
-since the same can be easily done using the negative field number: `<Enter>-=`
+since the same can be easily done using the negative field index: `<Enter>-=`
 
 Alignment options
 -----------------
@@ -508,7 +508,7 @@ let g:easy_align_bang_interactive_modes = ['c', 'r']
 
 ### Alignments over multiple occurrences of delimiters
 
-As stated above, "field number" is used to target specific occurrences of
+As stated above, "field index" is used to target specific occurrences of
 the delimiter when it appears multiple times in each line.
 
 To recap:

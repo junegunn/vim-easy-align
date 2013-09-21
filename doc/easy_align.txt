@@ -36,7 +36,7 @@ With this mapping, you can align selected lines of text with a few keystrokes.
 
 1. <Enter> key to start interactive EasyAlign command
 2. Optional Enter keys to select alignment mode (left, right, or center)
-3. Optional field number (default: 1)
+3. Optional field index (default: 1)
     1        Around the 1st occurrences of delimiters
     2        Around the 2nd occurrences of delimiters
     *        Around all occurrences of delimiters
@@ -175,7 +175,7 @@ Available options are as follows.
 |                  |                  |   (right, left, center)       |
 | indentation      | string           | 'k'                           |
 |                  |                  |   (keep, shallow, deep, none) |
-| mode_sequence    | string           | (Depends on field number and  |
+| mode_sequence    | string           | (Depends on field index and   |
 |                  |                  |  selected alignment mode)     |
 
 There are 4 ways to set alignment options (from lowest precedence to highest):
@@ -407,7 +407,7 @@ settings as follows.
 Alignments over multiple occurrences of delimiters
 -------------------------------------------------------------------------
 
-As stated above, "field number" is used to target specific occurrences of
+As stated above, "field index" is used to target specific occurrences of
 the delimiter when it appears multiple times in each line.
 
 To recap:
