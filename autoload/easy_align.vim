@@ -364,12 +364,12 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     " Calculate the maximum number of tokens for a line within the range
     call s:max(max, { 'tokens': len(tokens) })
 
-    if a:nth > 0 " Positive field number
+    if a:nth > 0 " Positive N-th
       if len(tokens) < a:nth
         continue
       endif
       let nth = a:nth - 1 " make it 0-based
-    else " -0 or Negative field number
+    else " -0 or Negative N-th
       if a:nth == 0 && mode !=? 'l'
         let nth = len(tokens) - 1
       else
@@ -752,7 +752,7 @@ function! s:align(bang, first_line, last_line, expr)
   elseif n == '-'  | let nth = -1
   elseif empty(n)  | let nth = 1
   elseif n == '0' || ( n != '-0' && n != string(str2nr(n)) )
-    call s:exit('Invalid field number: '. n)
+    call s:exit('Invalid N-th parameter: '. n)
   else
     let nth = n
   endif

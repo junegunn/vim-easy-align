@@ -166,8 +166,8 @@ my_object
 ```
 
 
-Using blockwise-visual mode or negative field index
----------------------------------------------------
+Using blockwise-visual mode or negative N-th parameter
+------------------------------------------------------
 
 You can try either:
 - select text around `=>` in blockwise-visual mode (`CTRL-V`) and `<Enter>=`

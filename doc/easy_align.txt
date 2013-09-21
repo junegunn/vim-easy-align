@@ -16,11 +16,11 @@ EasyAlign                                      *:EasyAlign* *:EasyAlign!*
 vim-easy-align defines `:EasyAlign` command in the visual mode.
 (:EasyAlign! is the right-align version.)
 
-| Mode                      | Command                                        |
-| ------------------------- | ---------------------------------------------- |
-| Interactive mode          | :EasyAlign[!] [OPTIONS]                        |
-| Using predefined rules    | :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS] |
-| Using regular expressions | :EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]      |
+| Mode                      | Command                                      |
+| ------------------------- | -------------------------------------------- |
+| Interactive mode          | :EasyAlign[!] [OPTIONS]                      |
+| Using predefined rules    | :EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS] |
+| Using regular expressions | :EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]      |
 
 
 Interactive mode
@@ -35,8 +35,8 @@ your `.vimrc`.
 With this mapping, you can align selected lines of text with a few keystrokes.
 
 1. <Enter> key to start interactive EasyAlign command
-2. Optional Enter keys to select alignment mode (left, right, or center)
-3. Optional field index (default: 1)
+2. Optional: Enter keys to select alignment mode (left, right, or center)
+3. Optional: N-th delimiter (default: 1)
     1        Around the 1st occurrences of delimiters
     2        Around the 2nd occurrences of delimiters
     *        Around all occurrences of delimiters
@@ -106,10 +106,10 @@ Instead of going into the interactive mode, you can type in arguments to
 `:EasyAlign` command.
 
     " Using predefined alignment rules
-    :EasyAlign[!] [FIELD#] DELIMITER_KEY [OPTIONS]
+    :EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]
 
     " Using arbitrary regular expressions
-    :EasyAlign[!] [FIELD#] /REGEXP/ [OPTIONS]
+    :EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]
 
 For example, when aligning the following lines around colons and semi-colons,
 
@@ -175,7 +175,7 @@ Available options are as follows.
 |                  |                  |   (right, left, center)       |
 | indentation      | string           | 'k'                           |
 |                  |                  |   (keep, shallow, deep, none) |
-| mode_sequence    | string           | (Depends on field index and   |
+| mode_sequence    | string           | (Depends on N-th param and    |
 |                  |                  |  selected alignment mode)     |
 
 There are 4 ways to set alignment options (from lowest precedence to highest):
@@ -407,7 +407,7 @@ settings as follows.
 Alignments over multiple occurrences of delimiters
 -------------------------------------------------------------------------
 
-As stated above, "field index" is used to target specific occurrences of
+As stated above, "N-th" parameter is used to target specific occurrences of
 the delimiter when it appears multiple times in each line.
 
 To recap:

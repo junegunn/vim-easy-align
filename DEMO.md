@@ -70,8 +70,8 @@ mysql:
   "user:pass":r00t:pa55
 
 ```
-Using blockwise-visual mode or negative field index
----------------------------------------------------
+Using blockwise-visual mode or negative N-th parameter
+------------------------------------------------------
 ```ruby
 
 options = { :caching => nil,
