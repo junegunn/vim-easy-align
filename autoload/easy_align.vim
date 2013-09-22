@@ -595,7 +595,7 @@ function! s:interactive(modes, vis, opts, delims)
       elseif n == '**' | let n = ''
       else             | let check = 1
       endif
-    elseif c >= 48 && c <= 57 " Numbers
+    elseif (c == 48 && len(n) > 0) || c > 48 && c <= 57 " Numbers
       if n[0] == '*'   | let check = 1
       else             | let n = n . ch
       end
