@@ -37,15 +37,17 @@ and extract in ~/.vim or
 [plugin](https://github.com/Shougo/neobundle.vim)
 [manager](https://github.com/MarcWeber/vim-addon-manager).
 
-### With Vundle
-
-Add the following line to your .vimrc,
-
-```vim
-Bundle 'junegunn/vim-easy-align'
-```
-
-then execute `:BundleInstall` command.
+- [Pathogen](https://github.com/tpope/vim-pathogen)
+  - `git clone https://github.com/junegunn/vim-easy-align.git ~/.vim/bundle/vim-easy-align`
+- [Vundle](https://github.com/gmarik/vundle)
+  1. Add `Bundle 'junegunn/vim-easy-align'` to .vimrc
+  2. Run `:BundleInstall`
+- [NeoBundle](https://github.com/Shougo/neobundle.vim)
+  1. Add `NeoBundle 'junegunn/vim-easy-align'` to .vimrc
+  2. Run `:NeoBundleInstall`
+- [vim-plug](https://github.com/junegunn/vim-plug)
+  1. Add `Plug 'junegunn/vim-easy-align'` to .vimrc
+  2. Run `:PlugInstall`
 
 Usage
 -----
