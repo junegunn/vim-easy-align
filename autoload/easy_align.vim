@@ -95,7 +95,6 @@ function! s:ignored_syntax()
   endif
 endfunction
 
-let s:prev_echon_len = 0
 function! s:echon_(tokens)
   " http://vim.wikia.com/wiki/How_to_print_full_screen_width_messages
   let xy = [&ruler, &showcmd]
@@ -104,11 +103,6 @@ function! s:echon_(tokens)
 
     let winlen = winwidth(winnr()) - 2
     let len = len(join(map(copy(a:tokens), 'v:val[1]'), ''))
-    if len < s:prev_echon_len
-      echohl None
-      echon "\r". repeat(' ', min([winlen, s:prev_echon_len]))
-    endif
-    let s:prev_echon_len = len
     let ellipsis = len > winlen ? '..' : ''
 
     echon "\r"
@@ -574,6 +568,7 @@ function! s:interactive(modes, vis, opts, delims)
 
   while 1
     call s:echon(mode, n, -1, '', opts, warn)
+    let check = 0
     let warn = ''
 
     let c  = getchar()
@@ -592,16 +587,16 @@ function! s:interactive(modes, vis, opts, delims)
     elseif ch == '-'
       if empty(n)      | let n = '-'
       elseif n == '-'  | let n = ''
-      else             | break
+      else             | let check = 1
       endif
     elseif ch == '*'
       if empty(n)      | let n = '*'
       elseif n == '*'  | let n = '**'
       elseif n == '**' | let n = ''
-      else             | break
+      else             | let check = 1
       endif
     elseif c >= 48 && c <= 57 " Numbers
-      if n[0] == '*'   | break
+      if n[0] == '*'   | let check = 1
       else             | let n = n . ch
       end
     elseif ch == "\<C-D>"
@@ -650,7 +645,6 @@ function! s:interactive(modes, vis, opts, delims)
     elseif ch == "\<C-_>" || ch == "\<C-X>"
       let prompt = 'Regular expression: '
       let ch = s:input(prompt, '', a:vis)
-      let s:prev_echon_len = len(prompt . ch)
       if !empty(ch) && s:valid_regexp(ch)
         let regx = 1
         break
@@ -658,13 +652,17 @@ function! s:interactive(modes, vis, opts, delims)
         let warn = 'Invalid regular expression: '.ch
       endif
     elseif ch =~ '[[:print:]]'
+      let check = 1
+    else
+      let warn = 'Invalid character'
+    endif
+
+    if check
       if has_key(a:delims, ch)
         break
       else
         let warn = 'Unknown delimiter key: '.ch
       endif
-    else
-      let warn = 'Invalid character'
     endif
   endwhile
   return [mode, n, ch, s:normalize_options(opts), regx]
