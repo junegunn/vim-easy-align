@@ -135,7 +135,7 @@ function! s:echon(l, n, r, d, o, warn)
   call extend(tokens, a:r == 1 ?
   \ [['Delimiter', '/'], ['String', a:d], ['Delimiter', '/']] :
   \ [['Identifier', a:d == ' ' ? '\ ' : (a:d == '\' ? '\\' : a:d)]])
-  if a:r == -1 | call add(tokens, ['Comment', ')']) | endif
+  if a:r == -1 | call extend(tokens, [['Normal', '_'], ['Comment', ')']]) | endif
   call add(tokens, ['Statement', empty(a:o) ? '' : ' '.string(a:o)])
   if !empty(a:warn)
     call add(tokens, ['WarningMsg', ' ('.a:warn.')'])
