@@ -225,10 +225,10 @@ key combination.
 - `<CTRL-/>` (or `<CTRL-X>` on GVim)
   - `[:;]\+`
 
-#### Options in shortcut expression
+#### Options in shorthand notation
 
 When you use regular expression in command line, options dictionary can be
-written concisely using shortcut expression.
+written concisely using shorthand notation.
 
 For example, the command we saw in the previous section,
 
@@ -238,7 +238,7 @@ can also be written as
 
 - `:EasyAlign*/[:;]\+/s1l0`
 
-Supported shortcut expressions are listed below.
+Supported shorthand notations are listed below.
 
 | Expression | Option           |
 | ---------- | ---------------- |
@@ -249,6 +249,10 @@ Supported shortcut expressions are listed below.
 | `d[lrc]`   | delimiter_align  |
 | `m[lrc*]*` | mode_sequence    |
 | `i[ksdn]`  | indentation      |
+
+Notice that some option values cannot be expressed in shorthand notation.
+
+- `:EasyAlign*/[:;]\+/s1l0 {'ig': []}`
 
 ### Partial alignment in blockwise-visual mode
 
