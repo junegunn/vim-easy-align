@@ -765,8 +765,8 @@ function! s:parse_args(args)
 
   " Found regexp
   if !empty(matches)
-    if empty(opts) && !empty(matches[3])
-      let opts = s:parse_shortcut_opts(matches[3])
+    if !empty(matches[3])
+      let opts = extend(s:parse_shortcut_opts(matches[3]), opts)
     endif
     return [matches[1], s:test_regexp(matches[2]), opts, 1]
   else
