@@ -142,6 +142,7 @@ function! s:echon(l, n, r, d, o, warn)
   endif
 
   call s:echon_(tokens)
+  return join(map(tokens, 'v:val[1]'), '')
 endfunction
 
 function! s:exit(msg)
@@ -900,6 +901,6 @@ function! s:align(bang, first_line, last_line, expr)
     \ )
     call extend(copts, { 'm': aseq_str })
   endif
-  call s:echon('', n, regexp, ch, copts, '')
+  let g:easy_align_last_command = s:echon('', n, regexp, ch, copts, '')
 endfunction
 
