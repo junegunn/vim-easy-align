@@ -629,9 +629,13 @@ function! s:interactive(modes, vis, opts, delims)
     elseif c == "\<Right>"
       let opts['stl'] = 0
       let opts['lm']  = 1
-    elseif c == "\<Up>" || c == "\<Down>"
+    elseif c == "\<Down>"
+      let opts['lm']  = 0
+      let opts['rm']  = 0
+    elseif c == "\<Up>"
       silent! call remove(opts, 'stl')
       silent! call remove(opts, 'lm')
+      silent! call remove(opts, 'rm')
     elseif ch == "\<C-O>"
       let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode), a:vis))
       if match(modes, '^[lrc]\+\*\{0,2}$') != -1

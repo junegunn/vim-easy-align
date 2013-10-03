@@ -97,6 +97,7 @@ described in the following sections.
 | CTRL-O  | mode_sequence    | Input string of /[lrc]+\*{0,2}/              |
 | <Left>  | stick_to_left    | { 'stick_to_left': 1, 'left_margin': 0 }     |
 | <Right> | stick_to_left    | { 'stick_to_left': 0, 'left_margin': 1 }     |
+| <Down>  | *_margin         | { 'left_margin': 0, 'right_margin': 0 }      |
 
 
 Non-interactive mode
