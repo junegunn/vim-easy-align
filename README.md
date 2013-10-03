@@ -172,7 +172,7 @@ Go try out vim-easy-align right now, and come back later when you feel like it.
 
 ---
 
-### Non-interactive mode
+### Non-interactive mode (command line)
 
 Instead of going into the interactive mode, you can type in arguments to
 `:EasyAlign` command.
@@ -224,6 +224,31 @@ key combination.
 - `<Left>`
 - `<CTRL-/>` (or `<CTRL-X>` on GVim)
   - `[:;]\+`
+
+#### Options in shortcut expression
+
+When you use regular expression in command line, options dictionary can be
+written concisely using shortcut expression.
+
+For example, the command we saw in the previous section,
+
+- `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
+
+can also be written as
+
+- `:EasyAlign*/[:;]\+/s1l0`
+
+Supported shortcut expressions are listed below.
+
+| Expression | Option           |
+| ---------- | ---------------- |
+| `l[0-9]`   | left_margin      |
+| `r[0-9]`   | right_margin     |
+| `s[01]`    | stick_to_left    |
+| `u[01]`    | ignore_unmatched |
+| `d[lrc]`   | delimiter_align  |
+| `m[lrc*]*` | mode_sequence    |
+| `i[ksdn]`  | indentation      |
 
 ### Partial alignment in blockwise-visual mode
 

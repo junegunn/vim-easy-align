@@ -688,6 +688,39 @@ function! s:test_regexp(regexp)
   return a:regexp
 endfunction
 
+function! s:parse_shortcut_opts(expr)
+  let opts = {}
+  let expr = tolower(substitute(a:expr, '\s', '', 'g'))
+  let regex =
+    \ '^\('
+    \   .'\(l[0-9]\+\)\|\(r[0-9]\+\)\|\(u[01]\)\|\(s[01]\)\|'
+    \   .'\(d[clr]\)\|\(m[lrc*]\+\)\|\(i[kdsn]\)'
+    \ .'\)\+$'
+
+  if empty(expr)
+    return opts
+  elseif expr !~ regex
+    call s:exit("Invalid expression: ". a:expr)
+  else
+    let match = matchlist(expr, regex)
+    if empty(match) | break | endif
+    for m in filter(match[ 2 : -1 ], '!empty(v:val)')
+      let k = m[0]
+      let rest = m[1 : -1]
+      if index(['l', 'r', 's'], k) >= 0
+        let opts[k] = str2nr(rest)
+      elseif k == 'u'
+        let opts['iu'] = str2nr(rest)
+      elseif k == 'i'
+        let opts['idt'] = rest
+      else
+        let opts[k] = rest
+      endif
+    endfor
+  endif
+  return s:normalize_options(opts)
+endfunction
+
 function! s:parse_args(args)
   let n    = ''
   let ch   = ''
@@ -728,10 +761,13 @@ function! s:parse_args(args)
   endif
 
   " Has /Regexp/?
-  let matches = matchlist(args, '^\(.\{-}\)\s*/\(.*\)/\s*$')
+  let matches = matchlist(args, '^\(.\{-}\)\s*/\(.*\)/\(.\{-}\)$')
 
   " Found regexp
   if !empty(matches)
+    if empty(opts) && !empty(matches[3])
+      let opts = s:parse_shortcut_opts(matches[3])
+    endif
     return [matches[1], s:test_regexp(matches[2]), opts, 1]
   else
     let tokens = matchlist(args, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\s*\(.\{-}\)\?$')
