@@ -691,11 +691,11 @@ endfunction
 
 function! s:parse_shortcut_opts(expr)
   let opts = {}
-  let expr = tolower(substitute(a:expr, '\s', '', 'g'))
+  let expr = substitute(a:expr, '\s', '', 'g')
   let regex =
     \ '^\('
-    \   .'\(l[0-9]\+\)\|\(r[0-9]\+\)\|\(u[01]\)\|\(s[01]\)\|'
-    \   .'\(d[clr]\)\|\(m[lrc*]\+\)\|\(i[kdsn]\)'
+    \   .'\(l[0-9]\+\)\|\(r[0-9]\+\)\|\(iu[01]\)\|\(s[01]\)\|'
+    \   .'\(d[clr]\)\|\(m[lrc*]\+\)\|\(i[kdsn]\)\|\(ig\[.*\]\)'
     \ .'\)\+$'
 
   if empty(expr)
@@ -706,12 +706,24 @@ function! s:parse_shortcut_opts(expr)
     let match = matchlist(expr, regex)
     if empty(match) | break | endif
     for m in filter(match[ 2 : -1 ], '!empty(v:val)')
-      let k = m[0]
+      let k  = tolower(m[0])
+      let kk = tolower(m[0 : 1])
       let rest = m[1 : -1]
       if index(['l', 'r', 's'], k) >= 0
         let opts[k] = str2nr(rest)
-      elseif k == 'u'
-        let opts['iu'] = str2nr(rest)
+      elseif kk == 'iu'
+        let opts['iu'] = str2nr(m[2 : -1])
+      elseif kk == 'ig'
+        try
+          let arr = eval(m[2 : -1])
+          if type(arr) == 3
+            let opts['ig'] = arr
+          else
+            throw 'Not an array'
+          endif
+        catch
+          call s:exit("Invalid ignore_groups: ". a:expr)
+        endtry
       elseif k == 'i'
         let opts['idt'] = rest
       else

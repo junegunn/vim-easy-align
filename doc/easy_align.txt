@@ -167,17 +167,14 @@ Supported shorthand notations are listed below.
 
 | Expression | Option           |
 | ---------- | --------------   |
-| l[0-9]     | left_margin      |
-| r[0-9]     | right_margin     |
+| l[0-9]+    | left_margin      |
+| r[0-9]+    | right_margin     |
 | s[01]      | stick_to_left    |
-| u[01]      | ignore_unmatched |
+| iu[01]     | ignore_unmatched |
+| ig\[.*\]   | ignore_groups    |
 | d[lrc]     | delimiter_align  |
 | m[lrc*]+   | mode_sequence    |
 | i[ksdn]    | indentation      |
-
-Notice that some option values cannot be expressed in shorthand notation.
-
-    :EasyAlign*/[:;]\+/s1l0 {'ig': []}
 
 
 Partial alignment in blockwise-visual mode
