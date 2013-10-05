@@ -312,7 +312,10 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
     let delims = []
   " Append an empty item to enable right/center alignment of the last token
   " - if the last token is not ignorable or ignorable but not the only token
-  elseif (mode ==? 'r' || mode ==? 'c') && (!ignorable || len(tokens) > 1) && a:nth >= 0 " includes -0
+  elseif a:ignore_unmatched != 1          &&
+        \ (mode ==? 'r' || mode ==? 'c')  &&
+        \ (!ignorable || len(tokens) > 1) &&
+        \ a:nth >= 0 " includes -0
     call add(tokens, '')
     call add(delims, '')
   endif
@@ -901,7 +904,7 @@ function! s:align(bang, first_line, last_line, expr)
     \ get(dict, 'delimiter_align', get(g:, 'easy_align_delimiter_align', 'r'))[0],
     \ get(dict, 'indentation', get(g:, 'easy_align_indentation', 'k'))[0],
     \ get(dict, 'stick_to_left', 0),
-    \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 1)),
+    \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 2)),
     \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax())),
     \ recur)
 
