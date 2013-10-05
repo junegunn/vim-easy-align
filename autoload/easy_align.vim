@@ -49,10 +49,10 @@ let s:known_options = {
 \ }
 
 let s:option_values = {
-\ 'indentation':      ['shallow', 'deep', 'none', 'keep'],
-\ 'delimiter_align':  ['left', 'center', 'right'],
-\ 'ignore_unmatched': [0, 1],
-\ 'ignore_groups':    [[], ['String'], ['Comment'], ['String', 'Comment']]
+\ 'indentation':      ['shallow', 'deep', 'none', 'keep', -1],
+\ 'delimiter_align':  ['left', 'center', 'right', -1],
+\ 'ignore_unmatched': [0, 1, -1],
+\ 'ignore_groups':    [[], ['String'], ['Comment'], ['String', 'Comment'], -1]
 \ }
 
 let s:shorthand = {
@@ -561,6 +561,15 @@ function! s:atoi(str)
   return (a:str =~ '^[0-9]\+$') ? str2nr(a:str) : a:str
 endfunction
 
+function! s:shift_opts(opts, key, vals)
+  let val = s:shift(a:vals, 1)
+  if type(val) == 0 && val == -1
+    call remove(a:opts, a:key)
+  else
+    let a:opts[a:key] = val
+  endif
+endfunction
+
 function! s:interactive(modes, vis, opts, delims)
   let mode = s:shift(a:modes, 1)
   let n    = ''
@@ -604,9 +613,9 @@ function! s:interactive(modes, vis, opts, delims)
       else             | let n = n . ch
       end
     elseif ch == "\<C-D>"
-      let opts['da'] = s:shift(vals['delimiter_align'], 1)
+      call s:shift_opts(opts, 'da', vals['delimiter_align'])
     elseif ch == "\<C-I>"
-      let opts['idt'] = s:shift(vals['indentation'], 1)
+      call s:shift_opts(opts, 'idt', vals['indentation'])
     elseif ch == "\<C-L>"
       let lm = s:input("Left margin: ", get(opts, 'lm', ''), a:vis)
       if empty(lm)
@@ -624,9 +633,9 @@ function! s:interactive(modes, vis, opts, delims)
         let opts['rm'] = s:atoi(rm)
       endif
     elseif ch == "\<C-U>"
-      let opts['iu'] = s:shift(vals['ignore_unmatched'], 1)
+      call s:shift_opts(opts, 'iu', vals['ignore_unmatched'])
     elseif ch == "\<C-G>"
-      let opts['ig'] = s:shift(vals['ignore_groups'], 1)
+      call s:shift_opts(opts, 'ig', vals['ignore_groups'])
     elseif c == "\<Left>"
       let opts['stl'] = 1
       let opts['lm']  = 0
