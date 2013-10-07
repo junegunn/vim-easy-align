@@ -114,21 +114,21 @@ You can override these default rules or define your own rules with
 
 #### Example command sequences
 
-| With visual map     | Description                                             | Equivalent command              |
-| ------------------- | ------------------------------------------------------- | ------------------------------- |
-| `<Enter><space>`    | Alignment around 1st whitespaces                        | `:'<,'>EasyAlign\ `             |
-| `<Enter>2<space>`   | Alignment around 2nd whitespaces                        | `:'<,'>EasyAlign2\ `            |
-| `<Enter>-<space>`   | Alignment around the last whitespaces                   | `:'<,'>EasyAlign-\ `            |
-| `<Enter>-2<space>`  | Alignment around the 2nd to last whitespaces            | `:'<,'>EasyAlign-2\ `           |
-| `<Enter>:`          | Alignment around 1st colon (`key:  value`)              | `:'<,'>EasyAlign:`              |
-| `<Enter><Right>:`   | Alignment around 1st colon (`key : value`)              | `:'<,'>EasyAlign:{'s':0,'l':1}` |
-| `<Enter>=`          | Alignment around 1st operators with =                   | `:'<,'>EasyAlign=`              |
-| `<Enter>2=`         | Alignment around 2nd operators with =                   | `:'<,'>EasyAlign2=`             |
-| `<Enter>3=`         | Alignment around 3rd operators with =                   | `:'<,'>EasyAlign3=`             |
-| `<Enter>*=`         | Alignment around all operators with =                   | `:'<,'>EasyAlign*=`             |
-| `<Enter>**=`        | Left-right alternating alignment around all = operators | `:'<,'>EasyAlign**=`            |
-| `<Enter><Enter>=`   | Right alignment around 1st equals signs                 | `:'<,'>EasyAlign!=`             |
-| `<Enter><Enter>**=` | Right-left alternating alignment around all = operators | `:'<,'>EasyAlign!**=`           |
+| With visual map     | Description                                             | Equivalent command     |
+| ------------------- | ------------------------------------------------------- | ---------------------- |
+| `<Enter><space>`    | Alignment around 1st whitespaces                        | `:'<,'>EasyAlign\ `    |
+| `<Enter>2<space>`   | Alignment around 2nd whitespaces                        | `:'<,'>EasyAlign2\ `   |
+| `<Enter>-<space>`   | Alignment around the last whitespaces                   | `:'<,'>EasyAlign-\ `   |
+| `<Enter>-2<space>`  | Alignment around the 2nd to last whitespaces            | `:'<,'>EasyAlign-2\ `  |
+| `<Enter>:`          | Alignment around 1st colon (`key:  value`)              | `:'<,'>EasyAlign:`     |
+| `<Enter><Right>:`   | Alignment around 1st colon (`key : value`)              | `:'<,'>EasyAlign:s0l1` |
+| `<Enter>=`          | Alignment around 1st operators with =                   | `:'<,'>EasyAlign=`     |
+| `<Enter>2=`         | Alignment around 2nd operators with =                   | `:'<,'>EasyAlign2=`    |
+| `<Enter>3=`         | Alignment around 3rd operators with =                   | `:'<,'>EasyAlign3=`    |
+| `<Enter>*=`         | Alignment around all operators with =                   | `:'<,'>EasyAlign*=`    |
+| `<Enter>**=`        | Left-right alternating alignment around all = operators | `:'<,'>EasyAlign**=`   |
+| `<Enter><Enter>=`   | Right alignment around 1st equals signs                 | `:'<,'>EasyAlign!=`    |
+| `<Enter><Enter>**=` | Right-left alternating alignment around all = operators | `:'<,'>EasyAlign!**=`  |
 
 #### Using regular expressions
 
@@ -179,9 +179,9 @@ Go try out vim-easy-align right now, and come back later when you feel like it.
 
 ---
 
-### Non-interactive mode (command line)
+### Using `EasyAlign` in command line
 
-Instead of going into the interactive mode, you can type in arguments to
+Instead of going into the interactive mode, you can just type in arguments to
 `:EasyAlign` command.
 
 ```vim
@@ -223,8 +223,8 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 
 - `:EasyAlign*/[:;]\+/{'s':1,'l':0}`
 
-Nice. But let's make it even shorter. When you use write regular expression in
-command line, option values can be written in shorthand notation.
+Nice. But let's make it even shorter. Option values can be written in shorthand
+notation.
 
 - `:EasyAlign*/[:;]\+/s1l0`
 
@@ -360,7 +360,7 @@ You can change the default rule by using one of these 4 methods.
 2. Define global `g:easy_align_ignore_groups` list
 3. Define a custom rule in `g:easy_align_delimiters` with `ignore_groups` option
 4. Provide `ignore_groups` option to `:EasyAlign` command.
-   e.g. `:EasyAlign:{'ig':[]}`
+   e.g. `:EasyAlign:ig[]`
 
 For example if you set `ignore_groups` option to be an empty list, you get
 
@@ -379,10 +379,18 @@ Satisfied? :satisfied:
 
 ### Ignoring unmatched lines
 
-Lines without any matching delimiter are ignored as well (except in
-right-align mode).
+`ignore_unmatched` option determines how EasyAlign command processes lines that
+do not have N-th delimiter.
 
-For example, when aligning the following code block around the colons,
+1. In left-alignment mode, they are ignored
+2. In right or center-alignment mode, they are *not* ignored, and the last
+   tokens from those lines are aligned as well as if there is an invisible
+   trailing delimiter at the end of each line
+3. If `ignore_unmatched` is 1, they are ignored regardless of the alignment mode
+4. If `ignore_unmatched` is 0, they are *not* ignored regardless of the mode
+
+Let's take an example.
+When we align the following code block around the (1st) colons,
 
 ```ruby
 {
@@ -406,13 +414,13 @@ this is usually what we want.
 }
 ```
 
-However, this default behavior is also configurable by using one of these 4
-methods.
+However, we can override this default behavior by setting `ignore_unmatched`
+option to zero using one of the following methods.
 
 1. Press `CTRL-U` in interactive mode to toggle `ignore_unmatched` option
 2. Set the global `g:easy_align_ignore_unmatched` variable to 0
 3. Define a custom alignment rule with `ignore_unmatched` option set to 0
-4. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g. `:EasyAlign:{'iu':0}`
+4. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g. `:EasyAlign:iu0`
 
 Then we get,
 
@@ -446,7 +454,7 @@ banana  += apple
 cake   ||= banana
 ```
 
-However, with `:EasyAlign={'da':l}`, delimiters are left-aligned.
+However, with `:EasyAlign=dl`, delimiters are left-aligned.
 
 ```ruby
 apple  =   1
@@ -454,7 +462,7 @@ banana +=  apple
 cake   ||= banana
 ```
 
-And on `:EasyAlign={'da':c}`, center-aligned.
+And on `:EasyAlign=dc`, center-aligned.
 
 ```ruby
 apple   =  1
@@ -486,7 +494,7 @@ then again we have `indentation` option. See the following example.
      eggplant = 5
 
 # Use the _s_hallowest indentation among the lines
-#   :EasyAlign={'idt':s}
+#   :EasyAlign=is
   apple    = 1
   banana   = 2
   cake     = 3
@@ -494,7 +502,7 @@ then again we have `indentation` option. See the following example.
   eggplant = 5
 
 # Use the _d_eepest indentation among the lines
-#   :EasyAlign={'idt':d}
+#   :EasyAlign=id
         apple    = 1
         banana   = 2
         cake     = 3
@@ -502,7 +510,7 @@ then again we have `indentation` option. See the following example.
         eggplant = 5
 
 # Indentation: _n_one
-#   :EasyAlign={'idt':n}
+#   :EasyAlign=in
 apple    = 1
 banana   = 2
 cake     = 3
@@ -513,26 +521,6 @@ eggplant = 5
 Notice that `idt` is fuzzy-matched to `indentation`.
 
 In interactive mode, you can change the option value with `CTRL-I` key.
-
-### Left/right/center mode switch in interactive mode
-
-In interactive mode, you can choose the alignment mode you want by pressing
-enter keys. The non-bang command, `:EasyAlign` starts in left-alignment mode
-and changes to right and center mode as you press enter keys, while the bang
-version first starts in right-alignment mode.
-
-- `:EasyAlign`
-  - Left, Right, Center
-- `:EasyAlign!`
-  - Right, Left, Center
-
-If you do not prefer this default mode transition, you can define your own
-settings as follows.
-
-```vim
-let g:easy_align_interactive_modes = ['l', 'r']
-let g:easy_align_bang_interactive_modes = ['c', 'r']
-```
 
 ### Alignments over multiple occurrences of delimiters
 
@@ -572,24 +560,27 @@ in interactive mode with the special key `CTRL-O`)
 " Right, left, center alignment over the 1st to 3rd occurrences of delimiters
 :EasyAlign = { 'm': 'rlc' }
 
+" Using shorthand notation
+:EasyAlign = mrlc
+
 " Right, left, center alignment over the 2nd to 4th occurrences of delimiters
-:EasyAlign 2={ 'm': 'rlc' }
+:EasyAlign 2=mrlc
 
 " (*) Repeating alignments (default: l, r, or c)
 "   Right, left, center, center, center, center, ...
-:EasyAlign *={ 'm': 'rlc' }
+:EasyAlign *=mrlc
 
 " (**) Alternating alignments (default: lr or rl)
 "   Right, left, center, right, left, center, ...
-:EasyAlign **={ 'm': 'rlc' }
+:EasyAlign **=mrlc
 
 " Right, left, center, center, center, ... repeating alignment
 " over the 3rd to the last occurrences of delimiters
-:EasyAlign 3={ 'm': 'rlc*' }
+:EasyAlign 3=mrlc*
 
 " Right, left, center, right, left, center, ... alternating alignment
 " over the 3rd to the last occurrences of delimiters
-:EasyAlign 3={ 'm': 'rlc**' }
+:EasyAlign 3=mrlc**
 ```
 
 ### Extending alignment rules
