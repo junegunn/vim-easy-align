@@ -701,14 +701,16 @@ function! s:test_regexp(regexp)
   return a:regexp
 endfunction
 
-function! s:parse_shortcut_opts(expr)
+let s:shorthand_regex =
+  \ '\s*\('
+  \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(s\%(tl\)\?[01]\)\|'
+  \   .'\(da\?[clr]\)\|\(ms\?[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\(ig\[.*\]\)'
+  \ .'\)\+\s*$'
+
+function! s:parse_shorthand_opts(expr)
   let opts = {}
   let expr = substitute(a:expr, '\s', '', 'g')
-  let regex =
-    \ '^\('
-    \   .'\(l[0-9]\+\)\|\(r[0-9]\+\)\|\(iu[01]\)\|\(s[01]\)\|'
-    \   .'\(d[clr]\)\|\(m[lrc*]\+\)\|\(i[kdsn]\)\|\(ig\[.*\]\)'
-    \ .'\)\+$'
+  let regex = '^'. s:shorthand_regex
 
   if empty(expr)
     return opts
@@ -718,29 +720,30 @@ function! s:parse_shortcut_opts(expr)
     let match = matchlist(expr, regex)
     if empty(match) | break | endif
     for m in filter(match[ 2 : -1 ], '!empty(v:val)')
-      let k  = tolower(m[0])
-      let kk = tolower(m[0 : 1])
-      let rest = m[1 : -1]
-      if index(['l', 'r', 's'], k) >= 0
-        let opts[k] = str2nr(rest)
-      elseif kk == 'iu'
-        let opts['iu'] = str2nr(m[2 : -1])
-      elseif kk == 'ig'
-        try
-          let arr = eval(m[2 : -1])
-          if type(arr) == 3
-            let opts['ig'] = arr
+      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i']
+        if stridx(tolower(m), key) == 0
+          let rest = strpart(m, len(key))
+          if key == 'i' | let key = 'idt' | endif
+
+          if key == 'idt' || index(['d', 'm'], key[0]) >= 0
+            let opts[key] = rest
+          elseif key == 'ig'
+            try
+              let arr = eval(rest)
+              if type(arr) == 3
+                let opts[key] = arr
+              else
+                throw 'Not an array'
+              endif
+            catch
+              call s:exit("Invalid ignore_groups: ". a:expr)
+            endtry
           else
-            throw 'Not an array'
+            let opts[key] = str2nr(rest)
           endif
-        catch
-          call s:exit("Invalid ignore_groups: ". a:expr)
-        endtry
-      elseif k == 'i'
-        let opts['idt'] = rest
-      else
-        let opts[k] = rest
-      endif
+          break
+        endif
+      endfor
     endfor
   endif
   return s:normalize_options(opts)
@@ -785,14 +788,18 @@ function! s:parse_args(args)
     let opts = s:normalize_options(opts)
   endif
 
+  " Shorthand option notation
+  let sopts = matchstr(args, s:shorthand_regex)
+  if !empty(sopts)
+    let args = strpart(args, 0, len(args) - len(sopts))
+    let opts = extend(s:parse_shorthand_opts(sopts), opts)
+  endif
+
   " Has /Regexp/?
-  let matches = matchlist(args, '^\(.\{-}\)\s*/\(.*\)/\(.\{-}\)$')
+  let matches = matchlist(args, '^\(.\{-}\)\s*/\(.*\)/\s*$')
 
   " Found regexp
   if !empty(matches)
-    if !empty(matches[3])
-      let opts = extend(s:parse_shortcut_opts(matches[3]), opts)
-    endif
     return [matches[1], s:test_regexp(matches[2]), opts, 1]
   else
     let tokens = matchlist(args, '^\([1-9][0-9]*\|-[0-9]*\|\*\*\?\)\?\s*\(.\{-}\)\?$')
