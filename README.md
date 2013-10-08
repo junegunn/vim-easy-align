@@ -204,13 +204,14 @@ try these commands:
 - `:EasyAlign */[:;]\+/`
 - `:EasyAlign **/[:;]\+/`
 
-Notice that you can't append `\zs` to your regular expression to put delimiters
-on the left. It can be done by providing additional options in Vim dictionary
-format.
+You can also provide a number of alignment options, [which will be discussed in
+detail later](https://github.com/junegunn/vim-easy-align#alignment-options),
+to EasyAlign command in Vim dictionary format.
 
 - `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': 0 }`
 
-Then we get:
+Which means that the matched delimiter should be positioned right next to the
+preceding token, without margin on the left. So we get:
 
     apple;: banana::   cake
     data;;  exchange:; format
@@ -587,6 +588,9 @@ in interactive mode with the special key `CTRL-O`)
 
 Although the default rules should cover the most of the use cases,
 you can extend the rules by setting a dictionary named `g:easy_align_delimiters`.
+
+You may refer to the definitions of the default alignment rules
+[here](https://github.com/junegunn/vim-easy-align/blob/2.6.1/autoload/easy_align.vim#L29).
 
 #### Example
 
