@@ -5,9 +5,11 @@ Execute (Clean up test environment):
   silent! unlet g:easy_align_indentation
   silent! unlet g:easy_align_delimiter_align
   silent! unlet g:easy_align_interactive_modes
+  silent! unlet g:easy_align_bang_interactive_modes
 
   let g:easy_align_delimiters = {}
   vnoremap <silent> <Enter> :EasyAlign<Enter>
+  vnoremap <silent> <Space><Enter> :EasyAlign!<Enter>
 
 ###########################################################
 
@@ -330,15 +332,26 @@ Expect javascript:
     "user:                                pass":                    "r00t:                   pa55"
   };
 
+Execute (set g:easy_align_ignore_groups and g:easy_align_ignore_unmatched):
+  let g:easy_align_ignore_unmatched = 0
+  let g:easy_align_ignore_groups = []
+
+Do (do not ignore comments and strings, do not ignore unmatched using global vars):
+  vip\<Enter>*:
+
 Expect javascript:
   var jdbc = {
     // JDBC driver for MySQL database:
-    driver: "com.mysql.jdbc.Driver",
-    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
-    url: 'jdbc:mysql://localhost/test',
-    database: "test",
-    "user:pass":"r00t:pa55"
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql:                    //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:                    mysql:                   //localhost/test',
+    database:                             "test",
+    "user:                                pass":                    "r00t:                   pa55"
   };
+
+Execute (unset g:easy_align_ignore_groups and g:easy_align_ignore_unmatched):
+  unlet g:easy_align_ignore_unmatched
+  unlet g:easy_align_ignore_groups
 
 ###########################################################
 
@@ -884,6 +897,22 @@ Expect:
         .third        .call
         .method_4     .execute
 
+Execute (set g:easy_align_indentation):
+  let g:easy_align_indentation = 'd'
+
+Do (around all . with deep indentation):
+  vip\<Enter>*.
+
+Expect:
+  my_object
+        .method1      .chain
+        .second_method.call
+        .third        .call
+        .method_4     .execute
+
+Execute (unset g:easy_align_indentation):
+  unlet g:easy_align_indentation
+
 Do (right-align around all .):
   vip\<Enter>\<Enter>*.
 
@@ -1085,4 +1114,124 @@ Expect:
 
   aaaaa =              12345
   bbbbbbbbbb = 123456778901234567890
+
+###########################################################
+
+Given (long delimiter):
+  ...-.-----
+  ..--..----
+  .---...---
+  ----....--
+  .---.....-
+  ..--......
+  ...-.....-
+
+Do:
+  vip\<Enter>*\<C-X>-\+\<Enter>
+
+Expect:
+  ...    - .     -----
+  ..    -- ..     ----
+  .    --- ...     ---
+      ---- ....     --
+  .    --- .....     -
+  ..    -- ......
+  ...    - .....     -
+
+Do:
+  vip\<Enter>*\<C-D>\<C-X>-\+\<Enter>
+
+Expect:
+  ... -    .     -----
+  ..  --   ..    ----
+  .   ---  ...   ---
+      ---- ....  --
+  .   ---  ..... -
+  ..  --   ......
+  ... -    ..... -
+
+Do:
+  vip\<Enter>*\<C-D>\<C-D>\<C-X>-\+\<Enter>
+
+Expect:
+  ...  -   .     -----
+  ..   --  ..    ----
+  .   ---  ...    ---
+      ---- ....   --
+  .   ---  .....   -
+  ..   --  ......
+  ...  -   .....   -
+
+Execute (set g:easy_align_delimiter_align):
+  let g:easy_align_delimiter_align = 'c'
+
+Do:
+  vip\<Enter>*\<C-X>-\+\<Enter>
+
+Expect:
+  ...  -   .     -----
+  ..   --  ..    ----
+  .   ---  ...    ---
+      ---- ....   --
+  .   ---  .....   -
+  ..   --  ......
+  ...  -   .....   -
+
+Execute (unset g:easy_align_delimiter_align):
+  unlet g:easy_align_delimiter_align
+
+###########################################################
+
+Execute (set g:easy_align_interactive_modes):
+  let g:easy_align_interactive_modes = ['r', 'c']
+  let g:easy_align_bang_interactive_modes = ['c', 'l']
+
+Given (Test g:easy_align_interactive_modes):
+  a = 1
+  bb = 2
+  ccc = 3
+
+Do:
+  vip\<Enter>=
+
+Expect:
+    a = 1
+   bb = 2
+  ccc = 3
+
+Do:
+  vip\<Enter>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>\<Enter>=
+
+Expect:
+  a   = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>\<Enter>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Execute (unset g:easy_align_interactive_modes):
+  unlet g:easy_align_interactive_modes
+  unlet g:easy_align_bang_interactive_modes
 
