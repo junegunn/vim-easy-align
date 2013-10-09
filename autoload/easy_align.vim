@@ -551,9 +551,7 @@ function! s:input(str, default, vis)
     " EasyAlign command can be called without visual selection
     redraw
   endif
-  call inputsave()
   let got = input(a:str, a:default)
-  call inputrestore()
   return got
 endfunction
 

@@ -1,0 +1,157 @@
+Execute (Clean up test environment):
+  let g:easy_align_delimiters = {}
+  silent! unlet g:easy_align_ignore_groups
+  silent! unlet g:easy_align_ignore_unmatched
+  silent! unlet g:easy_align_indentation
+  silent! unlet g:easy_align_delimiter_align
+
+Given (fruits):
+  apple;:;;banana::cake
+  data;;exchange:;::format
+
+Execute (regular expression):
+  %EasyAlign/[:;]\+/
+
+Expect:
+  apple ;:;; banana::cake
+  data    ;; exchange:;::format
+
+Execute (options dictionary):
+  %EasyAlign/[:;]\+/{ 'left_margin': '<', 'right_margin': 3 }
+
+Expect:
+  apple<;:;;   banana::cake
+  data <  ;;   exchange:;::format
+
+Execute (fuzzy matching):
+  %EasyAlign/[:;]\+/{ 'l':'<', 'r': '>'}
+
+Expect:
+  apple<;:;;>banana::cake
+  data <  ;;>exchange:;::format
+
+Execute (shorthand notation of margin):
+  %EasyAlign/[:;]\+/l0r0
+
+Expect:
+  apple;:;;banana::cake
+  data   ;;exchange:;::format
+
+Execute (delimiter align):
+  %EasyAlign*/[:;]\+/l0r0dc
+
+Expect:
+  apple;:;;banana   :: cake
+  data  ;; exchange:;::format
+
+Execute (shorthand notation of mode_sequence and margin):
+  %EasyAlign/[:;]\+/mrc*l2r2
+
+Expect:
+  apple  ;:;;   banana     ::   cake
+   data    ;;  exchange  :;::  format
+
+Execute (deep indentation):
+  %EasyAlign/[:;]\+/mrc*l2r2
+  %EasyAlign*/[:;]\+/idmrl*
+
+Expect:
+   apple ;:;; banana     :: cake
+    data   ;; exchange :;:: format
+
+Execute (stick_to_left):
+  %EasyAlign*/[:;]\+/stl1l0dlrm3
+
+Expect:
+  apple;:;;   banana::       cake
+  data;;      exchange:;::   format
+
+Execute (different regular expression):
+  %EasyAlign*/../{'lm':'<','rm':'>'}
+
+Expect:
+  ap><pl><e;><:;><;b><an><an><a:><:c><ak>e
+  da><ta><;;><ex><ch><an><ge><:;><::><fo><rm><at
+
+Execute (merge different option notations):
+  %EasyAlign*/../iu0 { 'l': '<', 'r': '>' }
+
+Expect:
+  ap><pl><e;><:;><;b><an><an><a:><:c><ak>e<
+  da><ta><;;><ex><ch><an><ge><:;><::><fo> <rm><at<
+
+Given javascript (json):
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver: "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url: 'jdbc:mysql://localhost/test',
+    database: "test",
+    "user:pass":"r00t:pa55"
+  };
+
+Execute (default syntax-aware alignment):
+  %EasyAlign*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:      "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url:         'jdbc:mysql://localhost/test',
+    database:    "test",
+    "user:pass": "r00t:pa55"
+  };
+
+Execute (do not ignore unmatched):
+  %EasyAlign*:iu0
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                                                             "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url:                                                                'jdbc:mysql://localhost/test',
+    database:                                                           "test",
+    "user:pass":                                                        "r00t:pa55"
+  };
+
+Execute (do not ignore any group):
+  %EasyAlign*:ig[]iu0
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql:                    //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:                    mysql:                   //localhost/test',
+    database:                             "test",
+    "user:                                pass":                    "r00t:                   pa55"
+  };
+
+Execute (ignore only strings):
+  %EasyAlign*:ig['String']
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql: //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:mysql://localhost/test',
+    database:                             "test",
+    "user:pass":                          "r00t:pa55"
+  };
+
+Execute (ignore only comments):
+  %EasyAlign*:ig['Comment']
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:   "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url:      'jdbc: mysql: //localhost/test',
+    database: "test",
+    "user:    pass": "r00t: pa55"
+  };
+
