@@ -181,7 +181,7 @@ Given javascript (json):
     "user:pass":"r00t:pa55"
   };
 
-Do (around first colon):
+Do (around colons):
   vip\<Enter>*:
 
 Expect javascript:
@@ -192,6 +192,19 @@ Expect javascript:
     url:         'jdbc:mysql://localhost/test',
     database:    "test",
     "user:pass": "r00t:pa55"
+  };
+
+Do (around colons, do not stick to left):
+  vip\<Enter>*\<Right>:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver      : "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url         : 'jdbc:mysql://localhost/test',
+    database    : "test",
+    "user:pass" : "r00t:pa55"
   };
 
 Do (around first colon, do not ignore comments and strings):
@@ -366,4 +379,51 @@ Expect:
   fffff, gggggggggg,
   h,     ,           ii
   j,     ,           k
+
+Do (around all commas, do not stick to left):
+  vip\<Enter>\<Right>*,
+
+Expect:
+  aaa   , bb         , c
+  d     , eeeeeee
+  fffff , gggggggggg ,
+  h     ,            , ii
+  j     ,            , k
+
+Do (center-align around all commas):
+  vip\<Enter>\<Enter>\<Enter>*,
+
+Expect:
+   aaa,      bb,     c
+    d,    eeeeeee
+  fffff, gggggggggg,
+    h,        ,      ii
+    j,        ,      k
+
+###########################################################
+
+Given ruby (multi-line ruby Hash):
+  options = { :caching => nil,
+              :versions => 3,
+              "cache=blocks" => false }.merge(options)
+
+Do (around the last =):
+  vip\<Enter>-=
+
+Expect ruby:
+  options = { :caching       => nil,
+              :versions      => 3,
+              "cache=blocks" => false }.merge(options)
+
+Do (partial alignment):
+  f:
+  \<C-V>jj3E
+  \<Enter>\<Enter>=
+
+Expect ruby:
+  options = {       :caching => nil,
+                   :versions => 3,
+              "cache=blocks" => false }.merge(options)
+
+###########################################################
 
