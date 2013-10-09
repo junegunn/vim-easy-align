@@ -1,0 +1,1237 @@
+Execute (Clean up test environment):
+  " TODO: revert after test
+  silent! unlet g:easy_align_ignore_groups
+  silent! unlet g:easy_align_ignore_unmatched
+  silent! unlet g:easy_align_indentation
+  silent! unlet g:easy_align_delimiter_align
+  silent! unlet g:easy_align_interactive_modes
+  silent! unlet g:easy_align_bang_interactive_modes
+
+  let g:easy_align_delimiters = {}
+  vnoremap <silent> <Enter> :EasyAlign<Enter>
+  vnoremap <silent> <Space><Enter> :EasyAlign!<Enter>
+
+###########################################################
+
+Given (space-separated columns):
+  1 22222 33 444 555 6666 7 888
+  11 222 3333 4 55 6666 77 888
+  111 22 333 444 55555 6666 7 88888
+  1111 2 33 444 555 66 777 8
+
+Do (left-align):
+  vip
+  \<Enter>
+  *\<Space>
+
+Expect:
+  1    22222 33   444 555   6666 7   888
+  11   222   3333 4   55    6666 77  888
+  111  22    333  444 55555 6666 7   88888
+  1111 2     33   444 555   66   777 8
+
+Do (right-align):
+  vip
+  \<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+     1 22222   33 444   555 6666   7   888
+    11   222 3333   4    55 6666  77   888
+   111    22  333 444 55555 6666   7 88888
+  1111     2   33 444   555   66 777     8
+
+Do (center-align):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+   1   22222  33  444  555  6666  7   888
+   11   222  3333  4   55   6666 77   888
+  111   22   333  444 55555 6666  7  88888
+  1111   2    33  444  555   66  777   8
+
+Given (comma-separated columns):
+  a,,bbb
+  aa,,bb
+  aaa,,b
+  aaaa,,
+  aaa,b,
+  aa,bb,
+  a,bbb,
+
+Do (left-align):
+  vip
+  \<Enter>
+  *,
+
+Expect:
+  a,    ,    bbb
+  aa,   ,    bb
+  aaa,  ,    b
+  aaaa, ,
+  aaa,  b,
+  aa,   bb,
+  a,    bbb,
+
+Do (right-align):
+  vip
+  \<Enter>\<Enter>
+  *,
+
+Expect:
+     a,    , bbb
+    aa,    ,  bb
+   aaa,    ,   b
+  aaaa,    ,
+   aaa,   b,
+    aa,  bb,
+     a, bbb,
+
+Do (center-align):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  *,
+
+Expect:
+   a,    ,   bbb
+   aa,   ,   bb
+  aaa,   ,    b
+  aaaa,  ,
+  aaa,   b,
+   aa,  bb,
+   a,   bbb,
+
+###########################################################
+
+Given (the beatles):
+  Paul McCartney 1942
+  George Harrison 1943mmdd
+  Ringo Starr 1940mm
+  Pete Best 1941
+
+Do (around first space):
+  vip
+  \<Enter>
+  \<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George Harrison 1943mmdd
+  Ringo  Starr 1940mm
+  Pete   Best 1941
+
+Do (around second space):
+  vip
+  \<Enter>
+  2\<Space>
+
+Expect:
+  Paul McCartney  1942
+  George Harrison 1943mmdd
+  Ringo Starr     1940mm
+  Pete Best       1941
+
+Do (around all spaces):
+  vip
+  \<Enter>
+  *\<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George Harrison  1943mmdd
+  Ringo  Starr     1940mm
+  Pete   Best      1941
+
+Do (right-align around all spaces):
+  vip
+  \<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+    Paul McCartney     1942
+  George  Harrison 1943mmdd
+   Ringo     Starr   1940mm
+    Pete      Best     1941
+
+Do (center-align around all spaces):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+   Paul  McCartney   1942
+  George Harrison  1943mmdd
+  Ringo    Starr    1940mm
+   Pete    Best      1941
+
+Do (center-align around the last space):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  -\<Space>
+
+Expect:
+  Paul  McCartney 1942
+  George Harrison 1943mmdd
+  Ringo   Starr   1940mm
+  Pete     Best   1941
+
+Do (right-align around second space):
+  vip
+  \<Enter>\<Enter>
+  2\<Space>
+
+Expect:
+  Paul  McCartney 1942
+  George Harrison 1943mmdd
+  Ringo     Starr 1940mm
+  Pete       Best 1941
+
+Do (left-right alternating alignment):
+  vip
+  \<Enter>
+  **\<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George  Harrison 1943mmdd
+  Ringo      Starr 1940mm
+  Pete        Best 1941
+
+Do (right-left alternating alignment):
+  vip
+  \<Enter>\<Enter>
+  **\<Space>
+
+Expect:
+    Paul McCartney     1942
+  George Harrison  1943mmdd
+   Ringo Starr       1940mm
+    Pete Best          1941
+
+Do (with numeric left/right margin):
+  vip
+  \<Enter>
+  *
+  \<C-L>2\<Enter>
+  \<Enter>
+  \<C-R>5\<Enter>
+  *
+  \<Space>
+
+Expect:
+    Paul        McCartney            1942
+  George        Harrison         1943mmdd
+   Ringo        Starr              1940mm
+    Pete        Best                 1941
+
+Do (with string left/right margin):
+  vip
+  \<Enter>
+  \<C-L>lft\<Enter>
+  \<C-R>rgt\<Enter>
+  *\<Space>
+
+Expect:
+  Paul  lft rgtMcCartneylft rgt1942
+  Georgelft rgtHarrison lft rgt1943mmdd
+  Ringo lft rgtStarr    lft rgt1940mm
+  Pete  lft rgtBest     lft rgt1941
+
+Execute (with regular expression):
+  1,4EasyAlign*/../
+
+Expect:
+  Pa  ul  Mc  Ca  rt  ne  y   19  42
+  Ge  or  ge  Ha  rr  is  on  19  43  mm  dd
+  Ri  ng  o   St  ar  r   19  40  mm
+  Pe  te  Be  st  19  41
+
+Expect:
+  Paul McCartney 1942
+  George Harrison 1943mmdd
+  Ringo Starr 1940mm
+  Pete Best 1941
+
+###########################################################
+
+Given ruby (delimiters in comments and strings):
+  xyz="abc=def"
+  a=b#=c
+
+Do (align around all =):
+  vip
+  \<Enter>*=
+
+Expect ruby (are not aligned):
+  xyz = "abc=def"
+  a   = b#=c
+
+###########################################################
+
+Given javascript (json):
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver: "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url: 'jdbc:mysql://localhost/test',
+    database: "test",
+    "user:pass":"r00t:pa55"
+  };
+
+Do (around colons):
+  vip\<Enter>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:      "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url:         'jdbc:mysql://localhost/test',
+    database:    "test",
+    "user:pass": "r00t:pa55"
+  };
+
+Do (around colons, do not stick to left):
+  vip\<Enter>*\<Right>:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver      : "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url         : 'jdbc:mysql://localhost/test',
+    database    : "test",
+    "user:pass" : "r00t:pa55"
+  };
+
+Do (around first colon, do not ignore comments and strings):
+  vip\<Enter>\<C-G>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql: //HOSTNAME/DATABASE) */
+    url:                                  'jdbc: mysql: //localhost/test',
+    database:                             "test",
+    "user:                                pass": "r00t: pa55"
+  };
+
+Do (do not ignore comments and strings, do not ignore unmatched):
+  vip\<Enter>\<C-G>\<C-U>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql:                    //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:                    mysql:                   //localhost/test',
+    database:                             "test",
+    "user:                                pass":                    "r00t:                   pa55"
+  };
+
+Execute (set g:easy_align_ignore_groups and g:easy_align_ignore_unmatched):
+  let g:easy_align_ignore_unmatched = 0
+  let g:easy_align_ignore_groups = []
+
+Do (do not ignore comments and strings, do not ignore unmatched using global vars):
+  vip\<Enter>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql:                    //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:                    mysql:                   //localhost/test',
+    database:                             "test",
+    "user:                                pass":                    "r00t:                   pa55"
+  };
+
+Execute (unset g:easy_align_ignore_groups and g:easy_align_ignore_unmatched):
+  unlet g:easy_align_ignore_unmatched
+  unlet g:easy_align_ignore_groups
+
+###########################################################
+
+Given (table):
+  | Option| Type | Default | Description |
+  |--|--|--|--|
+  | threads | Fixnum | 1 | number of threads in the thread pool |
+  |queues |Fixnum | 1 | number of concurrent queues |
+  |queue_size | Fixnum | 1000 | size of each queue |
+  |   interval | Numeric | 0 | dispatcher interval for batch processing |
+  |batch | Boolean | false | enables batch processing mode |
+   |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+   |logger | Logger | nil | logger instance for debug logs |
+
+Do (around all |):
+  vip\<Enter>*|
+
+Expect:
+  | Option     | Type    | Default | Description                                    |
+  | --         | --      | --      | --                                             |
+  | threads    | Fixnum  | 1       | number of threads in the thread pool           |
+  | queues     | Fixnum  | 1       | number of concurrent queues                    |
+  | queue_size | Fixnum  | 1000    | size of each queue                             |
+  | interval   | Numeric | 0       | dispatcher interval for batch processing       |
+  | batch      | Boolean | false   | enables batch processing mode                  |
+  | batch_size | Fixnum  | nil     | number of maximum items to be assigned at once |
+  | logger     | Logger  | nil     | logger instance for debug logs                 |
+
+Do (around all |, and right-align 3rd and center-align the last):
+  vip\<Enter>*|
+  gv\<Enter>\<Enter>3|
+  gv\<Enter>\<Enter>\<Enter>-|
+
+Expect:
+  | Option     |    Type | Default |                  Description                   |
+  | --         |      -- | --      |                       --                       |
+  | threads    |  Fixnum | 1       |      number of threads in the thread pool      |
+  | queues     |  Fixnum | 1       |          number of concurrent queues           |
+  | queue_size |  Fixnum | 1000    |               size of each queue               |
+  | interval   | Numeric | 0       |    dispatcher interval for batch processing    |
+  | batch      | Boolean | false   |         enables batch processing mode          |
+  | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+  | logger     |  Logger | nil     |         logger instance for debug logs         |
+
+Do (Left-right alternating alignment):
+  vip\<Enter>**|
+
+Expect:
+  |     Option | Type    | Default | Description                                    |
+  |         -- | --      |      -- | --                                             |
+  |    threads | Fixnum  |       1 | number of threads in the thread pool           |
+  |     queues | Fixnum  |       1 | number of concurrent queues                    |
+  | queue_size | Fixnum  |    1000 | size of each queue                             |
+  |   interval | Numeric |       0 | dispatcher interval for batch processing       |
+  |      batch | Boolean |   false | enables batch processing mode                  |
+  | batch_size | Fixnum  |     nil | number of maximum items to be assigned at once |
+  |     logger | Logger  |     nil | logger instance for debug logs                 |
+
+Do (Right-left alternating alignment):
+  vip\<Enter>\<Enter>**|
+
+Expect:
+  | Option     |    Type | Default |                                    Description |
+  | --         |      -- | --      |                                             -- |
+  | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+  | queues     |  Fixnum | 1       |                    number of concurrent queues |
+  | queue_size |  Fixnum | 1000    |                             size of each queue |
+  | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+  | batch      | Boolean | false   |                  enables batch processing mode |
+  | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+  | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+Do (Right-left alternating alignment, indent: deep):
+  vip\<Enter>\<Enter>**\<C-I>\<C-I>|
+
+Expect:
+    | Option     |    Type | Default |                                    Description |
+    | --         |      -- | --      |                                             -- |
+    | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+    | queues     |  Fixnum | 1       |                    number of concurrent queues |
+    | queue_size |  Fixnum | 1000    |                             size of each queue |
+    | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+    | batch      | Boolean | false   |                  enables batch processing mode |
+    | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+    | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+# Doesn't work. Why?
+# Do (Repeat the last command):
+#   :%\<C-R>=g:easy_align_last_command\<Enter>\<Enter>
+
+Execute (Repeat the last command):
+  execute '%'.g:easy_align_last_command
+
+Expect:
+    | Option     |    Type | Default |                                    Description |
+    | --         |      -- | --      |                                             -- |
+    | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+    | queues     |  Fixnum | 1       |                    number of concurrent queues |
+    | queue_size |  Fixnum | 1000    |                             size of each queue |
+    | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+    | batch      | Boolean | false   |                  enables batch processing mode |
+    | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+    | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+Do (around all | with no margin, right-align 2nd to last):
+  vip\<Enter>\<C-L>0\<Enter>\<C-R>0\<Enter>*|
+  vip\<Enter>\<Enter>\<C-L>0\<Enter>\<C-R>0\<Enter>-2|
+
+Expect:
+  |Option    |Type   |Default|Description                                   |
+  |--        |--     |     --|--                                            |
+  |threads   |Fixnum |      1|number of threads in the thread pool          |
+  |queues    |Fixnum |      1|number of concurrent queues                   |
+  |queue_size|Fixnum |   1000|size of each queue                            |
+  |interval  |Numeric|      0|dispatcher interval for batch processing      |
+  |batch     |Boolean|  false|enables batch processing mode                 |
+  |batch_size|Fixnum |    nil|number of maximum items to be assigned at once|
+  |logger    |Logger |    nil|logger instance for debug logs                |
+
+###########################################################
+
+Given (comma-separated items):
+  aaa,   bb,c
+  d,eeeeeee
+  fffff, gggggggggg,
+  h, ,           ii
+  j,,k
+
+Do (around all commas):
+  vip\<Enter>*,
+
+Expect:
+  aaa,   bb,         c
+  d,     eeeeeee
+  fffff, gggggggggg,
+  h,     ,           ii
+  j,     ,           k
+
+Do (around all commas, do not stick to left):
+  vip\<Enter>\<Right>*,
+
+Expect:
+  aaa   , bb         , c
+  d     , eeeeeee
+  fffff , gggggggggg ,
+  h     ,            , ii
+  j     ,            , k
+
+Do (center-align around all commas):
+  vip\<Enter>\<Enter>\<Enter>*,
+
+Expect:
+   aaa,      bb,     c
+    d,    eeeeeee
+  fffff, gggggggggg,
+    h,        ,      ii
+    j,        ,      k
+
+###########################################################
+
+Given ruby (multi-line ruby Hash):
+  options = { :caching => nil,
+              :versions => 3,
+              "cache=blocks" => false }.merge(options)
+
+Do (around the last =):
+  vip\<Enter>-=
+
+Expect ruby:
+  options = { :caching       => nil,
+              :versions      => 3,
+              "cache=blocks" => false }.merge(options)
+
+Do (partial alignment):
+  f:
+  \<C-V>jj3E
+  \<Enter>\<Enter>=
+
+Expect ruby:
+  options = {       :caching => nil,
+                   :versions => 3,
+              "cache=blocks" => false }.merge(options)
+
+###########################################################
+
+Given c (C code with comments 1):
+  /* a */ b = c
+  aa >= bb
+  // aaa = bbb = cccc
+  /* aaaa = */ bbbb   === cccc   " = dddd = " = eeee
+  aaaaa /* bbbbb */      == ccccc /* != eeeee = */ === fffff
+
+Do:
+  vip\<Enter>*=
+
+Expect c:
+  /* a */ b           = c
+  aa                 >= bb
+  // aaa = bbb = cccc
+  /* aaaa = */ bbbb === cccc   " = dddd = "      = eeee
+  aaaaa /* bbbbb */  == ccccc /* != eeeee = */ === fffff
+
+Do:
+  vip\<Enter>\<C-G>\<C-U>*=
+
+Expect c:
+  /* a */ b          = c
+  aa                >= bb
+  // aaa             = bbb        = cccc
+  /* aaaa            = */ bbbb  === cccc   " = dddd   = "     = eeee
+  aaaaa /* bbbbb */ == ccccc /*  != eeeee    = */   === fffff
+
+###########################################################
+
+Given c (C code with comments 2):
+  int a = 1;
+  long b = 2;
+  float c = 3;
+  string d = 4;
+  // this line should not get aligned
+  long int e = 5;
+  std::map f;
+  std::map g; /* this? */
+  short h /* how about this? */ = 6;
+  string i = "asdf";
+
+Do (around =):
+  vip\<Enter>=
+
+Expect c:
+  int a                         = 1;
+  long b                        = 2;
+  float c                       = 3;
+  string d                      = 4;
+  // this line should not get aligned
+  long int e                    = 5;
+  std::map f;
+  std::map g; /* this? */
+  short h /* how about this? */ = 6;
+  string i                      = "asdf";
+
+Do (right-align around =, comment lines are ignored):
+  vip\<Enter>\<Enter>=
+
+Expect c:
+                          int a = 1;
+                         long b = 2;
+                        float c = 3;
+                       string d = 4;
+  // this line should not get aligned
+                     long int e = 5;
+                    std::map f;
+  std::map g; /* this? */
+  short h /* how about this? */ = 6;
+                       string i = "asdf";
+
+Do (right-align around =, do not ignore comment lines):
+  vip\<Enter>\<Enter>\<C-U>=
+
+Expect c:
+                                int a = 1;
+                               long b = 2;
+                              float c = 3;
+                             string d = 4;
+  // this line should not get aligned
+                           long int e = 5;
+                          std::map f;
+              std::map g; /* this? */
+        short h /* how about this? */ = 6;
+                             string i = "asdf";
+
+###########################################################
+
+Given ruby (= operators):
+  a =
+  a = 1
+  bbbb .= 2
+  ccccccc = 3
+  ccccccccccccccc
+  ddd = #
+  eeee === eee = eee = eee=f
+  fff = ggg += gg &&= gg
+  g != hhhhhhhh == # 8
+  i   := 5
+  i     %= 5
+  i       *= 5
+  j     =~ 5
+  j   >= 5
+  aa      =>         123
+  aa <<= 123
+  aa        >>= 123
+  bbb               => 123
+  c     => 1233123
+  d   =>      123
+  dddddd &&= 123
+  dddddd ||= 123
+  dddddd /= 123
+  gg <=> ee
+
+Do (1st =):
+  vip\<Enter>=
+
+Expect ruby:
+  a         =
+  a         = 1
+  bbbb     .= 2
+  ccccccc   = 3
+  ccccccccccccccc
+  ddd       = #
+  eeee    === eee = eee = eee=f
+  fff       = ggg += gg &&= gg
+  g        != hhhhhhhh == # 8
+  i        := 5
+  i        %= 5
+  i        *= 5
+  j        =~ 5
+  j        >= 5
+  aa       => 123
+  aa      <<= 123
+  aa      >>= 123
+  bbb      => 123
+  c        => 1233123
+  d        => 123
+  dddddd  &&= 123
+  dddddd  ||= 123
+  dddddd   /= 123
+  gg      <=> ee
+
+Do (LR =):
+  vip\<Enter>**=
+
+Expect ruby:
+  a         =
+  a         =        1
+  bbbb     .=        2
+  ccccccc   =        3
+  ccccccccccccccc
+  ddd       =        #
+  eeee    ===      eee  = eee   = eee = f
+  fff       =      ggg += gg  &&=  gg
+  g        != hhhhhhhh == # 8
+  i        :=        5
+  i        %=        5
+  i        *=        5
+  j        =~        5
+  j        >=        5
+  aa       =>      123
+  aa      <<=      123
+  aa      >>=      123
+  bbb      =>      123
+  c        =>  1233123
+  d        =>      123
+  dddddd  &&=      123
+  dddddd  ||=      123
+  dddddd   /=      123
+  gg      <=>       ee
+
+Do (Alignment using mode_sequence, delimiter_align):
+  vip\<Enter>\<C-O>\<Backspace>cr*\<Enter>\<C-D>=
+
+Expect ruby:
+         a        =
+         a        =          1
+       bbbb       .=         2
+      ccccccc     =          3
+  ccccccccccccccc
+        ddd       =          #
+       eeee       ===      eee =  eee =   eee = f
+        fff       =        ggg +=  gg &&=  gg
+         g        !=  hhhhhhhh == # 8
+         i        :=         5
+         i        %=         5
+         i        *=         5
+         j        =~         5
+         j        >=         5
+        aa        =>       123
+        aa        <<=      123
+        aa        >>=      123
+        bbb       =>       123
+         c        =>   1233123
+         d        =>       123
+      dddddd      &&=      123
+      dddddd      ||=      123
+      dddddd      /=       123
+        gg        <=>       ee
+
+Do (mode_sequence starting from 2nd, delimiter_align = center):
+  vip\<Enter>\<C-O>\<Backspace>rc**\<Enter>\<C-D>\<C-D>2=
+
+Expect ruby:
+  a =
+  a =                    1
+  bbbb .=                2
+  ccccccc =              3
+  ccccccccccccccc
+  ddd =                  #
+  eeee ===             eee =  eee  =  eee = f
+  fff =                ggg += gg  &&=  gg
+  g !=            hhhhhhhh == # 8
+  i   :=                 5
+  i     %=               5
+  i       *=             5
+  j     =~               5
+  j   >=                 5
+  aa      =>           123
+  aa <<=               123
+  aa        >>=        123
+  bbb               => 123
+  c     =>         1233123
+  d   =>               123
+  dddddd &&=           123
+  dddddd ||=           123
+  dddddd /=            123
+  gg <=>                ee
+
+Do (around all =s, do not ignore unmatched):
+  vip\<Enter>\<C-U>
+  \<C-L>0\<Enter>
+  \<C-R>0\<Enter>
+  \<C-D>\<C-D>
+  *=
+
+Expect ruby:
+  a               =
+  a               = 1
+  bbbb           .= 2
+  ccccccc         = 3
+  ccccccccccccccc
+  ddd             = #
+  eeee           ===eee     = eee = eee=f
+  fff             = ggg     +=gg &&=gg
+  g              != hhhhhhhh==# 8
+  i              := 5
+  i              %= 5
+  i              *= 5
+  j              =~ 5
+  j              >= 5
+  aa             => 123
+  aa             <<=123
+  aa             >>=123
+  bbb            => 123
+  c              => 1233123
+  d              => 123
+  dddddd         &&=123
+  dddddd         ||=123
+  dddddd         /= 123
+  gg             <=>ee
+
+Do (1st =):
+  vip\<Enter>\<Enter>\<Enter>2=
+
+Expect ruby:
+  a =
+  a =                   1
+  bbbb .=               2
+  ccccccc =             3
+  ccccccccccccccc
+  ddd =                 #
+  eeee ===             eee    = eee = eee=f
+  fff =                ggg   += gg &&= gg
+  g !=              hhhhhhhh == # 8
+  i   :=                5
+  i     %=              5
+  i       *=            5
+  j     =~              5
+  j   >=                5
+  aa      =>           123
+  aa <<=               123
+  aa        >>=        123
+  bbb               => 123
+  c     =>           1233123
+  d   =>               123
+  dddddd &&=           123
+  dddddd ||=           123
+  dddddd /=            123
+  gg <=>               ee
+
+###########################################################
+
+Given ruby (Trailing ruby line comment):
+  apple = 1 # comment not aligned
+  apricot = 'DAD' + 'F#AD'
+  banana = 'Gros Michel' ## comment 2
+
+Do (around the last spaces):
+  vip\<Enter>-\<Space>
+
+Expect ruby:
+  apple = 1              # comment not aligned
+  apricot = 'DAD' +      'F#AD'
+  banana = 'Gros Michel' ## comment 2
+
+Execute (define # rule):
+  let g:easy_align_delimiters =
+  \ { '#': { 'pattern': '#\+', 'ignores': ['String'], 'delimiter_align': 'l' } }
+
+Do (using # rule):
+  vip\<Enter>\<C-U>#
+
+Expect ruby:
+  apple = 1                #  comment not aligned
+  apricot = 'DAD' + 'F#AD'
+  banana = 'Gros Michel'   ## comment 2
+
+Do (using regular expression):
+  vip\<Enter>=
+  gv\<Enter>
+  \<C-U>\<C-G>\<C-G>
+  \<C-D>
+  \<C-X>#\+\<Enter>
+
+Expect ruby:
+  apple   = 1              #  comment not aligned
+  apricot = 'DAD' + 'F#AD'
+  banana  = 'Gros Michel'  ## comment 2
+
+###########################################################
+
+Given (method chain):
+  my_object
+        .method1.chain
+      .second_method.call
+        .third.call
+       .method_4.execute
+
+Do (around all .):
+  vip\<Enter>*.
+
+Expect:
+  my_object
+      .method1      .chain
+      .second_method.call
+      .third        .call
+      .method_4     .execute
+
+Do (around all . with deep indentation):
+  vip\<Enter>\<C-I>\<C-I>*.
+
+Expect:
+  my_object
+        .method1      .chain
+        .second_method.call
+        .third        .call
+        .method_4     .execute
+
+Execute (set g:easy_align_indentation):
+  let g:easy_align_indentation = 'd'
+
+Do (around all . with deep indentation):
+  vip\<Enter>*.
+
+Expect:
+  my_object
+        .method1      .chain
+        .second_method.call
+        .third        .call
+        .method_4     .execute
+
+Execute (unset g:easy_align_indentation):
+  unlet g:easy_align_indentation
+
+Do (right-align around all .):
+  vip\<Enter>\<Enter>*.
+
+Expect:
+  my_object
+           .      method1.  chain
+           .second_method.   call
+           .        third.   call
+           .     method_4.execute
+
+###########################################################
+
+Execute (define d rule):
+  let g:easy_align_delimiters.d =
+  \ { 'pattern': '\s\+\(\S\+\s*[;=]\)\@=', 'left_margin': 0, 'right_margin': 0 }
+
+Given c (complex var dec):
+  const char* str = "Hello";
+  int64_t count = 1 + 2;
+  static double pi = 3.14;
+  static std::map<std::string, float>* scores =    pointer;
+
+Do (using d rule):
+  vip\<Enter>d
+  gv\<Enter>=
+
+Expect c:
+  const char*                          str    = "Hello";
+  int64_t                              count  = 1 + 2;
+  static double                        pi     = 3.14;
+  static std::map<std::string, float>* scores = pointer;
+
+###########################################################
+
+Given (indented code):
+    apple = 1
+      banana = 2
+        cake = 3
+          daisy = 4
+       eggplant = 5
+
+Do:
+  vip\<Enter>=
+
+Expect:
+    apple       = 1
+      banana    = 2
+        cake    = 3
+          daisy = 4
+       eggplant = 5
+
+Do (shallow indentation):
+  vip\<Enter>\<C-I>=
+
+Expect:
+    apple    = 1
+    banana   = 2
+    cake     = 3
+    daisy    = 4
+    eggplant = 5
+
+Do (deep indentation):
+  vip\<Enter>\<C-I>\<C-I>=
+
+Expect:
+          apple    = 1
+          banana   = 2
+          cake     = 3
+          daisy    = 4
+          eggplant = 5
+
+Do (no indentation):
+  vip\<Enter>\<C-I>\<C-I>\<C-I>=
+
+Expect:
+  apple    = 1
+  banana   = 2
+  cake     = 3
+  daisy    = 4
+  eggplant = 5
+
+Do (right-align, shallow indentation):
+  vip\<Enter>\<Enter>\<C-I>=
+
+Expect:
+       apple = 1
+      banana = 2
+        cake = 3
+       daisy = 4
+    eggplant = 5
+
+Do (center-align, shallow indentation):
+  vip\<Enter>\<Enter>\<Enter>\<C-I>=
+
+Expect:
+     apple   = 1
+     banana  = 2
+      cake   = 3
+     daisy   = 4
+    eggplant = 5
+
+Do (right-align, deep indentation):
+  vip\<Enter>\<Enter>\<C-I>\<C-I>=
+
+Expect:
+             apple = 1
+            banana = 2
+              cake = 3
+             daisy = 4
+          eggplant = 5
+
+Do (center-align, deep indentation):
+  vip\<Enter>\<Enter>\<Enter>\<C-I>\<C-I>=
+
+Expect:
+           apple   = 1
+           banana  = 2
+            cake   = 3
+           daisy   = 4
+          eggplant = 5
+
+Do (right-align, no indentation):
+  vip\<Enter>\<Enter>\<C-I>\<C-I>\<C-I>=
+
+###########################################################
+
+Expect:
+     apple = 1
+    banana = 2
+      cake = 3
+     daisy = 4
+  eggplant = 5
+
+Given (Center-align cases):
+              aaaa = 123456778901234567890 =
+  cccccccccccccc = 12345678 =
+
+                aaaa = 123456778901234567890 =
+                 bbbbbb = 4
+  cccccccccccccccccc = 12345678 =
+
+                      aaaa = 123456778901234567890 =
+       cccccccccccccccccc = 12345678 =
+
+                      aaaaa                     = 123456778901234567890 =
+                       cc                       = 12345678 =
+
+  aaaaa = 123456778901234567890 =
+  bbbbbbbbbb = 12345 =
+
+  aaaaa = 123456778901234567890 =
+  cccccccccccccccccc = 123 =
+
+  aaaaa = 123456778901234567890 =
+  cccccccccccccccccc = 12345678 =
+
+  aaaaa = 12345 =
+  bbbbbbbbbb = 123456778901234567890       =
+
+  aaaaa =             12345
+  bbbbbbbbbb = 123456778901234567890
+
+Do:
+  vip\<Enter>\<Enter>\<Enter>=
+  }jvip\<Enter>\<Enter>\<Enter>=
+  }jvip\<Enter>\<Enter>\<Enter>=
+  }jvip\<Enter>\<Enter>\<Enter>=
+  }jvip\<Enter>\<Enter>\<Enter>2=
+  }jvip\<Enter>\<Enter>\<Enter>2=
+  }jvip\<Enter>\<Enter>\<Enter>2=
+  }jvip\<Enter>\<Enter>\<Enter>2=
+  }jvip\<Enter>\<Enter>\<Enter>2=
+
+Expect:
+              aaaa      = 123456778901234567890 =
+         cccccccccccccc = 12345678 =
+
+                  aaaa        = 123456778901234567890 =
+                 bbbbbb       = 4
+           cccccccccccccccccc = 12345678 =
+
+                      aaaa        = 123456778901234567890 =
+               cccccccccccccccccc = 12345678 =
+
+                      aaaaa = 123456778901234567890 =
+                       cc   = 12345678 =
+
+  aaaaa = 123456778901234567890 =
+  bbbbbbbbbb =    12345         =
+
+  aaaaa =     123456778901234567890 =
+  cccccccccccccccccc = 123          =
+
+  aaaaa =       123456778901234567890 =
+  cccccccccccccccccc = 12345678       =
+
+  aaaaa =              12345         =
+  bbbbbbbbbb = 123456778901234567890 =
+
+  aaaaa =              12345
+  bbbbbbbbbb = 123456778901234567890
+
+###########################################################
+
+Given (long delimiter):
+  ...-.-----
+  ..--..----
+  .---...---
+  ----....--
+  .---.....-
+  ..--......
+  ...-.....-
+
+Do:
+  vip\<Enter>*\<C-X>-\+\<Enter>
+
+Expect:
+  ...    - .     -----
+  ..    -- ..     ----
+  .    --- ...     ---
+      ---- ....     --
+  .    --- .....     -
+  ..    -- ......
+  ...    - .....     -
+
+Do:
+  vip\<Enter>*\<C-D>\<C-X>-\+\<Enter>
+
+Expect:
+  ... -    .     -----
+  ..  --   ..    ----
+  .   ---  ...   ---
+      ---- ....  --
+  .   ---  ..... -
+  ..  --   ......
+  ... -    ..... -
+
+Do:
+  vip\<Enter>*\<C-D>\<C-D>\<C-X>-\+\<Enter>
+
+Expect:
+  ...  -   .     -----
+  ..   --  ..    ----
+  .   ---  ...    ---
+      ---- ....   --
+  .   ---  .....   -
+  ..   --  ......
+  ...  -   .....   -
+
+Execute (set g:easy_align_delimiter_align):
+  let g:easy_align_delimiter_align = 'c'
+
+Do:
+  vip\<Enter>*\<C-X>-\+\<Enter>
+
+Expect:
+  ...  -   .     -----
+  ..   --  ..    ----
+  .   ---  ...    ---
+      ---- ....   --
+  .   ---  .....   -
+  ..   --  ......
+  ...  -   .....   -
+
+Execute (unset g:easy_align_delimiter_align):
+  unlet g:easy_align_delimiter_align
+
+###########################################################
+
+Execute (set g:easy_align_interactive_modes):
+  let g:easy_align_interactive_modes = ['r', 'c']
+  let g:easy_align_bang_interactive_modes = ['c', 'l']
+
+Given (Test g:easy_align_interactive_modes):
+  a = 1
+  bb = 2
+  ccc = 3
+
+Do:
+  vip\<Enter>=
+
+Expect:
+    a = 1
+   bb = 2
+  ccc = 3
+
+Do:
+  vip\<Enter>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>\<Enter>=
+
+Expect:
+  a   = 1
+  bb  = 2
+  ccc = 3
+
+Do:
+  vip\<Space>\<Enter>\<Enter>\<Enter>=
+
+Expect:
+   a  = 1
+  bb  = 2
+  ccc = 3
+
+Execute (unset g:easy_align_interactive_modes):
+  unlet g:easy_align_interactive_modes
+  unlet g:easy_align_bang_interactive_modes
+
