@@ -1275,7 +1275,7 @@ Expect:
   aabba = bbbbb
 
 Do (center-align):
-  vip\<C-U>\<Enter>\<Enter>\<Enter>\<C-U>*=
+  vip\<Enter>\<C-U>\<Enter>\<Enter>\<C-U>*=
 
 Expect:
     a   = b = c
