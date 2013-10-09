@@ -153,13 +153,13 @@ try these commands:
     :EasyAlign */[:;]\+/
     :EasyAlign **/[:;]\+/
 
-Notice that you can't append '\zs' to your regular expression to put delimiters
-on the left. It can be done by providing additional options in Vim dictionary
-format.
+You can also provide a number of alignment options, which will be discussed in
+detail later, to EasyAlign command in Vim dictionary format.
 
     :EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': 0 }
 
-Then we get:
+Which means that the matched delimiter should be positioned right next to the
+preceding token, without margin on the left. So we get:
 
     apple;: banana::   cake
     data;;  exchange:; format
