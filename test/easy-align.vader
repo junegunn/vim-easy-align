@@ -1,0 +1,369 @@
+Execute:
+  silent! unlet g:easy_align_delimiters
+  silent! unlet g:easy_align_ignore_groups
+  silent! unlet g:easy_align_ignore_unmatched
+  silent! unlet g:easy_align_indentation
+  silent! unlet g:easy_align_delimiter_align
+  vnoremap <silent> <Enter> :EasyAlign<Enter>
+
+Given (the beatles):
+  Paul McCartney 1942
+  George Harrison 1943mmdd
+  Ringo Starr 1940mm
+  Pete Best 1941
+
+Do (around first space):
+  vip
+  \<Enter>
+  \<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George Harrison 1943mmdd
+  Ringo  Starr 1940mm
+  Pete   Best 1941
+
+Do (around second space):
+  vip
+  \<Enter>
+  2\<Space>
+
+Expect:
+  Paul McCartney  1942
+  George Harrison 1943mmdd
+  Ringo Starr     1940mm
+  Pete Best       1941
+
+Do (around all spaces):
+  vip
+  \<Enter>
+  *\<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George Harrison  1943mmdd
+  Ringo  Starr     1940mm
+  Pete   Best      1941
+
+Do (right-align around all spaces):
+  vip
+  \<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+    Paul McCartney     1942
+  George  Harrison 1943mmdd
+   Ringo     Starr   1940mm
+    Pete      Best     1941
+
+Do (center-align around all spaces):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  *\<Space>
+
+Expect:
+   Paul  McCartney   1942
+  George Harrison  1943mmdd
+  Ringo    Starr    1940mm
+   Pete    Best      1941
+
+Do (center-align around the last space):
+  vip
+  \<Enter>\<Enter>\<Enter>
+  -\<Space>
+
+Expect:
+  Paul  McCartney 1942
+  George Harrison 1943mmdd
+  Ringo   Starr   1940mm
+  Pete     Best   1941
+
+Do (right-align around second space):
+  vip
+  \<Enter>\<Enter>
+  2\<Space>
+
+Expect:
+  Paul  McCartney 1942
+  George Harrison 1943mmdd
+  Ringo     Starr 1940mm
+  Pete       Best 1941
+
+Do (left-right alternating alignment):
+  vip
+  \<Enter>
+  **\<Space>
+
+Expect:
+  Paul   McCartney 1942
+  George  Harrison 1943mmdd
+  Ringo      Starr 1940mm
+  Pete        Best 1941
+
+Do (right-left alternating alignment):
+  vip
+  \<Enter>\<Enter>
+  **\<Space>
+
+Expect:
+    Paul McCartney     1942
+  George Harrison  1943mmdd
+   Ringo Starr       1940mm
+    Pete Best          1941
+
+Do (with numeric left/right margin):
+  vip
+  \<Enter>
+  *
+  \<C-L>2\<Enter>
+  \<Enter>
+  \<C-R>5\<Enter>
+  *
+  \<Space>
+
+Expect:
+    Paul        McCartney            1942
+  George        Harrison         1943mmdd
+   Ringo        Starr              1940mm
+    Pete        Best                 1941
+
+Do (with string left/right margin):
+  vip
+  \<Enter>
+  \<C-L>lft\<Enter>
+  \<C-R>rgt\<Enter>
+  *\<Space>
+
+Expect:
+  Paul  lft rgtMcCartneylft rgt1942
+  Georgelft rgtHarrison lft rgt1943mmdd
+  Ringo lft rgtStarr    lft rgt1940mm
+  Pete  lft rgtBest     lft rgt1941
+
+Execute (with regular expression):
+  1,4EasyAlign*/../
+
+Expect:
+  Pa  ul  Mc  Ca  rt  ne  y   19  42
+  Ge  or  ge  Ha  rr  is  on  19  43  mm  dd
+  Ri  ng  o   St  ar  r   19  40  mm
+  Pe  te  Be  st  19  41
+
+Expect:
+  Paul McCartney 1942
+  George Harrison 1943mmdd
+  Ringo Starr 1940mm
+  Pete Best 1941
+
+###########################################################
+
+Given ruby (delimiters in comments and strings):
+  xyz="abc=def"
+  a=b#=c
+
+Do (align around all =):
+  vip
+  \<Enter>*=
+
+Expect ruby (are not aligned):
+  xyz = "abc=def"
+  a   = b#=c
+
+###########################################################
+
+Given javascript (json):
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver: "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url: 'jdbc:mysql://localhost/test',
+    database: "test",
+    "user:pass":"r00t:pa55"
+  };
+
+Do (around first colon):
+  vip\<Enter>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:      "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url:         'jdbc:mysql://localhost/test',
+    database:    "test",
+    "user:pass": "r00t:pa55"
+  };
+
+Do (around first colon, do not ignore comments and strings):
+  vip\<Enter>\<C-G>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql: //HOSTNAME/DATABASE) */
+    url:                                  'jdbc: mysql: //localhost/test',
+    database:                             "test",
+    "user:                                pass": "r00t: pa55"
+  };
+
+Do (do not ignore comments and strings, do not ignore unmatched):
+  vip\<Enter>\<C-G>\<C-U>*:
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver:                               "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc: mysql:                    //HOSTNAME/DATABASE) */
+    url:                                  'jdbc:                    mysql:                   //localhost/test',
+    database:                             "test",
+    "user:                                pass":                    "r00t:                   pa55"
+  };
+
+Expect javascript:
+  var jdbc = {
+    // JDBC driver for MySQL database:
+    driver: "com.mysql.jdbc.Driver",
+    /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
+    url: 'jdbc:mysql://localhost/test',
+    database: "test",
+    "user:pass":"r00t:pa55"
+  };
+
+###########################################################
+
+Given (table):
+  | Option| Type | Default | Description |
+  |--|--|--|--|
+  | threads | Fixnum | 1 | number of threads in the thread pool |
+  |queues |Fixnum | 1 | number of concurrent queues |
+  |queue_size | Fixnum | 1000 | size of each queue |
+  |   interval | Numeric | 0 | dispatcher interval for batch processing |
+  |batch | Boolean | false | enables batch processing mode |
+   |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+   |logger | Logger | nil | logger instance for debug logs |
+
+Do (around all |):
+  vip\<Enter>*|
+
+Expect:
+  | Option     | Type    | Default | Description                                    |
+  | --         | --      | --      | --                                             |
+  | threads    | Fixnum  | 1       | number of threads in the thread pool           |
+  | queues     | Fixnum  | 1       | number of concurrent queues                    |
+  | queue_size | Fixnum  | 1000    | size of each queue                             |
+  | interval   | Numeric | 0       | dispatcher interval for batch processing       |
+  | batch      | Boolean | false   | enables batch processing mode                  |
+  | batch_size | Fixnum  | nil     | number of maximum items to be assigned at once |
+  | logger     | Logger  | nil     | logger instance for debug logs                 |
+
+Do (around all |, and right-align 3rd and center-align the last):
+  vip\<Enter>*|
+  gv\<Enter>\<Enter>3|
+  gv\<Enter>\<Enter>\<Enter>-|
+
+Expect:
+  | Option     |    Type | Default |                  Description                   |
+  | --         |      -- | --      |                       --                       |
+  | threads    |  Fixnum | 1       |      number of threads in the thread pool      |
+  | queues     |  Fixnum | 1       |          number of concurrent queues           |
+  | queue_size |  Fixnum | 1000    |               size of each queue               |
+  | interval   | Numeric | 0       |    dispatcher interval for batch processing    |
+  | batch      | Boolean | false   |         enables batch processing mode          |
+  | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+  | logger     |  Logger | nil     |         logger instance for debug logs         |
+
+Do (Left-right alternating alignment):
+  vip\<Enter>**|
+
+Expect:
+  |     Option | Type    | Default | Description                                    |
+  |         -- | --      |      -- | --                                             |
+  |    threads | Fixnum  |       1 | number of threads in the thread pool           |
+  |     queues | Fixnum  |       1 | number of concurrent queues                    |
+  | queue_size | Fixnum  |    1000 | size of each queue                             |
+  |   interval | Numeric |       0 | dispatcher interval for batch processing       |
+  |      batch | Boolean |   false | enables batch processing mode                  |
+  | batch_size | Fixnum  |     nil | number of maximum items to be assigned at once |
+  |     logger | Logger  |     nil | logger instance for debug logs                 |
+
+Do (Right-left alternating alignment):
+  vip\<Enter>\<Enter>**|
+
+Expect:
+  | Option     |    Type | Default |                                    Description |
+  | --         |      -- | --      |                                             -- |
+  | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+  | queues     |  Fixnum | 1       |                    number of concurrent queues |
+  | queue_size |  Fixnum | 1000    |                             size of each queue |
+  | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+  | batch      | Boolean | false   |                  enables batch processing mode |
+  | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+  | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+Do (Right-left alternating alignment, indent: deep):
+  vip\<Enter>\<Enter>**\<C-I>\<C-I>|
+
+Expect:
+    | Option     |    Type | Default |                                    Description |
+    | --         |      -- | --      |                                             -- |
+    | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+    | queues     |  Fixnum | 1       |                    number of concurrent queues |
+    | queue_size |  Fixnum | 1000    |                             size of each queue |
+    | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+    | batch      | Boolean | false   |                  enables batch processing mode |
+    | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+    | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+# Doesn't work. Why?
+# Do (Repeat the last command):
+#   :%\<C-R>=g:easy_align_last_command\<Enter>\<Enter>
+
+Execute (Repeat the last command):
+  execute '%'.g:easy_align_last_command
+
+Expect:
+    | Option     |    Type | Default |                                    Description |
+    | --         |      -- | --      |                                             -- |
+    | threads    |  Fixnum | 1       |           number of threads in the thread pool |
+    | queues     |  Fixnum | 1       |                    number of concurrent queues |
+    | queue_size |  Fixnum | 1000    |                             size of each queue |
+    | interval   | Numeric | 0       |       dispatcher interval for batch processing |
+    | batch      | Boolean | false   |                  enables batch processing mode |
+    | batch_size |  Fixnum | nil     | number of maximum items to be assigned at once |
+    | logger     |  Logger | nil     |                 logger instance for debug logs |
+
+Do (around all | with no margin, right-align 2nd to last):
+  vip\<Enter>\<C-L>0\<Enter>\<C-R>0\<Enter>*|
+  vip\<Enter>\<Enter>\<C-L>0\<Enter>\<C-R>0\<Enter>-2|
+
+Expect:
+  |Option    |Type   |Default|Description                                   |
+  |--        |--     |     --|--                                            |
+  |threads   |Fixnum |      1|number of threads in the thread pool          |
+  |queues    |Fixnum |      1|number of concurrent queues                   |
+  |queue_size|Fixnum |   1000|size of each queue                            |
+  |interval  |Numeric|      0|dispatcher interval for batch processing      |
+  |batch     |Boolean|  false|enables batch processing mode                 |
+  |batch_size|Fixnum |    nil|number of maximum items to be assigned at once|
+  |logger    |Logger |    nil|logger instance for debug logs                |
+
+###########################################################
+
+Given (comma-separated items):
+  aaa,   bb,c
+  d,eeeeeee
+  fffff, gggggggggg,
+  h, ,           ii
+  j,,k
+
+Do (around all commas):
+  vip\<Enter>*,
+
+Expect:
+  aaa,   bb,         c
+  d,     eeeeeee
+  fffff, gggggggggg,
+  h,     ,           ii
+  j,     ,           k
+
