@@ -691,6 +691,11 @@ var jdbc = {
 `g:AlignSkip` function reference which should point to a custom function that
 looks up the syntax group of a character on a certain position)
 
+### Thoroughly tested
+
+Virtually every aspect of vim-easy-align is being tested with a comprehensive
+set of test cases using [Vader.vim](https://github.com/junegunn/vader.vim).
+
 ### "Okay. So should I switch?"
 
 Maybe, but I can't really say. I have no ambition to make vim-easy-align
