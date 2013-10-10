@@ -65,7 +65,7 @@ variant `:EasyAlign!`) for visual mode.
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
 which is identified by a single character, *DELIMITER KEY*, such as `<space>`,
-`=`, `:`, `.`, `|`, and `,`.
+`=`, `:`, `.`, `|`, `&`, and `,`.
 
 Think of it as a shortcut. Instead of writing regular expression and setting
 several options, you can just type in a single character.
@@ -95,7 +95,7 @@ With the mapping, you can align selected lines of text with only a few keystroke
     - `-`         Around the last occurrences of delimiters (`-1`)
     - `-2`        Around the second to last occurrences of delimiters
     - ...
-1. Delimiter key (a single keystroke; `<space>`, `=`, `:`, `.`, `|`, `,`)
+1. Delimiter key (a single keystroke; `<space>`, `=`, `:`, `.`, `|`, `&`, `,`)
 
 Alignment rules for the following delimiters have been defined to meet the most needs.
 
@@ -106,6 +106,7 @@ Alignment rules for the following delimiters have been defined to meet the most 
 | `:`           | Suitable for formatting JSON or YAML                                 |
 | `.`           | Multi-line method chaining                                           |
 | `,`           | Multi-line method arguments                                          |
+| `&`           | LaTeX tables (matches `&` and `\\`)                                  |
 | &#124;        | Table markdown                                                       |
 
 You can override these default rules or define your own rules with

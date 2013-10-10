@@ -1,0 +1,98 @@
+# http://en.wikibooks.org/wiki/LaTeX/Tables
+Execute:
+  let g:easy_align_delimiters = {}
+
+Given tex (table with escaped &):
+  \begin{tabular}{ l c r }
+    1&2&3\\
+    44&55&66\\
+    777&8\&8&999\\
+  \end{tabular}
+
+Do (Align around all &s and \\s):
+  vip\<Enter>*&
+
+Expect tex:
+  \begin{tabular}{ l c r }
+    1   & 2    & 3   \\
+    44  & 55   & 66  \\
+    777 & 8\&8 & 999 \\
+  \end{tabular}
+
+Do (right-align with explicit ignore_unmatched):
+  vip\<Enter>\<Enter>\<C-U>\<C-U>*&
+
+Expect tex:
+  \begin{tabular}{ l c r }
+      1 &    2 &   3 \\
+     44 &   55 &  66 \\
+    777 & 8\&8 & 999 \\
+  \end{tabular}
+
+Do (center-align with explicit ignore_unmatched):
+  vip\<Enter>\<Enter>\<Enter>\<C-U>\<C-U>*&
+
+Expect tex:
+  \begin{tabular}{ l c r }
+     1  &  2   &  3  \\
+    44  &  55  & 66  \\
+    777 & 8\&8 & 999 \\
+  \end{tabular}
+
+Given tex (simple table with \hline):
+  \begin{tabular}{ l c r }
+    1&2&3\\ \hline
+    44&55&66\\ \hline
+    777&8\&&999\\ \hline
+  \end{tabular}
+
+Do:
+  vip\<Enter>*&
+
+Expect tex:
+  \begin{tabular}{ l c r }
+    1   & 2   & 3   \\ \hline
+    44  & 55  & 66  \\ \hline
+    777 & 8\& & 999 \\ \hline
+  \end{tabular}
+
+Given tex (table with lines w/o &s):
+  \begin{tabular}{|r|l|}
+    \hline
+    7C0 & hexadecimal \\
+    3700&octal \\ \cline{2-2}
+    1111100000 & binary \\
+    \hline \hline
+    1984 & decimal \\
+    \hline
+  \end{tabular}
+
+Do (left-align*):
+  vip\<Enter>*&
+
+Expect tex:
+  \begin{tabular}{|r|l|}
+    \hline
+    7C0        & hexadecimal \\
+    3700       & octal       \\ \cline{2-2}
+    1111100000 & binary      \\
+    \hline \hline
+    1984       & decimal     \\
+    \hline
+  \end{tabular}
+
+Do(left-align* and right-align around 2nd):
+  vip\<Enter>*&
+  gv\<Enter>\<Enter>2&
+
+Expect tex:
+  \begin{tabular}{|r|l|}
+    \hline
+    7C0        & hexadecimal \\
+    3700       &       octal \\ \cline{2-2}
+    1111100000 &      binary \\
+    \hline \hline
+    1984       &     decimal \\
+    \hline
+  \end{tabular}
+

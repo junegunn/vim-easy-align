@@ -50,6 +50,7 @@ With this mapping, you can align selected lines of text with a few keystrokes.
     :        Suitable for formatting JSON or YAML
     .        Multi-line method chaining
     ,        Multi-line method arguments. CSV.
+    &        LaTeX tables (matches & and \\)
     |        Table markdown
 
     (You can override these default rules or define your own rules with
