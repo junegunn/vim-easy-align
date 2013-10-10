@@ -619,6 +619,26 @@ let g:easy_align_delimiters = {
 \ }
 ```
 
+### EasyAlign as Vim operator
+
+You can define an operator function which calls EasyAlign command, so that it
+can be used with a Vim movement.
+
+```vim
+function! s:easy_align_1st_eq(type, ...)
+  '[,']EasyAlign=
+endfunction
+nnoremap <Leader>= :set opfunc=<SID>easy_align_1st_eq<Enter>g@
+
+function! s:easy_align_1st_colon(type, ...)
+  '[,']EasyAlign:
+endfunction
+nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
+```
+
+Now without going into Visual mode, you can align text in the paragraph
+by `<Leader>=ip` or `<Leader>:ip`.
+
 Advanced examples and use cases
 -------------------------------
 
