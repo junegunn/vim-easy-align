@@ -278,6 +278,26 @@ my_hash = { :a   => 1,
 However, in this case, we don't really need blockwise visual mode
 since the same can be easily done using the negative N-th parameter: `<Enter>-=`
 
+### EasyAlign as Vim operator
+
+You can define an operator function which executes EasyAlign command, so that it
+can be used with a Vim movement.
+
+```vim
+function! s:easy_align_1st_eq(type, ...)
+  '[,']EasyAlign=
+endfunction
+nnoremap <Leader>= :set opfunc=<SID>easy_align_1st_eq<Enter>g@
+
+function! s:easy_align_1st_colon(type, ...)
+  '[,']EasyAlign:
+endfunction
+nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
+```
+
+Now without going into visual mode, you can align the lines in the paragraph
+by `<Leader>=ip` or `<Leader>:ip`.
+
 Alignment options
 -----------------
 
@@ -618,26 +638,6 @@ let g:easy_align_delimiters = {
 \   }
 \ }
 ```
-
-### EasyAlign as Vim operator
-
-You can define an operator function which calls EasyAlign command, so that it
-can be used with a Vim movement.
-
-```vim
-function! s:easy_align_1st_eq(type, ...)
-  '[,']EasyAlign=
-endfunction
-nnoremap <Leader>= :set opfunc=<SID>easy_align_1st_eq<Enter>g@
-
-function! s:easy_align_1st_colon(type, ...)
-  '[,']EasyAlign:
-endfunction
-nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
-```
-
-Now without going into visual mode, you can align the lines in the paragraph
-by `<Leader>=ip` or `<Leader>:ip`.
 
 Advanced examples and use cases
 -------------------------------
