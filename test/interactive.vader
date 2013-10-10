@@ -800,7 +800,7 @@ Expect ruby:
   dddddd         /= 123
   gg             <=>ee
 
-Do (1st =):
+Do (Center-align around 2nd =):
   vip\<Enter>\<Enter>\<Enter>2=
 
 Expect ruby:
@@ -1234,6 +1234,8 @@ Expect:
 Execute (unset g:easy_align_interactive_modes):
   unlet g:easy_align_interactive_modes
   unlet g:easy_align_bang_interactive_modes
+
+###########################################################
 
 Given (Test ignore_unmatched behavior):
   a = b = c
