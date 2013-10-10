@@ -636,7 +636,7 @@ endfunction
 nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
 ```
 
-Now without going into Visual mode, you can align text in the paragraph
+Now without going into visual mode, you can align the lines in the paragraph
 by `<Leader>=ip` or `<Leader>:ip`.
 
 Advanced examples and use cases
