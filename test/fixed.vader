@@ -1,0 +1,21 @@
+Given (Table):
+  |a|b|c|d|
+  | -|-|>-|-|
+  |aaa|bbb|ccc|ddd|
+
+Do (Partial alignment around 1st |):
+  \<C-V>ljj\<Enter>|
+
+Expect (Right margin should be correctly attached):
+  | a|b|c|d|
+  | -|-|>-|-|
+  | aaa|bbb|ccc|ddd|
+
+Given (empty buffer):
+
+Execute (Aligning lines with many delimiters should not fail):
+  call visualmode(1)
+  call setline(1, repeat('|', &maxfuncdepth + 1))
+  %EasyAlign*|
+  AssertEqual (&maxfuncdepth + 1) * 3 - 2, len(getline(1))
+

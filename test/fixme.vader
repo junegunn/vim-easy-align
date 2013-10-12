@@ -1,0 +1,12 @@
+# It is currently possible that EasyAlign command incorrectly judges
+# that it was executed in block-wise visual mode
+Given:
+  a|b|c
+
+Do (FIXME invalid judgement - block-wise visual mode):
+  \<C-V>\<Esc>
+  :%EasyAlign|\<CR>
+
+Expect:
+  a | b | c
+

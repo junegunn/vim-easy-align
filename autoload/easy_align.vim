@@ -331,7 +331,7 @@ function! s:max(old, new)
   endfor
 endfunction
 
-function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
+function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
       \ ml, mr, da, indentation, stick_to_left, ignore_unmatched, ignore_groups, recur)
   let mode       = a:modes[0]
   let lines      = {}
@@ -392,7 +392,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
       continue
     endif
 
-    let indent        = len(matchstr(tokens[0], '^\s\+'))
+    let indent        = match(tokens[0], '^\s*\zs')
     if min_indent < 0 || indent < min_indent
       let min_indent  = indent
     endif
@@ -527,18 +527,19 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     let tokens[nth] = aligned
 
     " Update the line
-    let newline = s:rtrim(before.join(tokens, '').after)
-    call setline(line, newline)
+    let a:todo[line] = before.join(tokens, '').after
   endfor
 
   if a:nth < max.tokens && (a:recur || len(a:modes) > 1)
     call s:shift(a:modes, a:recur == 2)
-    call s:do_align(
+    return [
+          \ a:todo,
           \ a:modes, a:all_tokens, a:all_delims,
           \ a:fl, a:ll, a:fc, a:lc, a:pattern,
           \ a:nth + 1, a:ml, a:mr, a:da, a:indentation, a:stick_to_left,
-          \ a:ignore_unmatched, a:ignore_groups, a:recur)
+          \ a:ignore_unmatched, a:ignore_groups, a:recur]
   endif
+  return [a:todo]
 endfunction
 
 function! s:input(str, default, vis)
@@ -905,7 +906,9 @@ function! s:align(bang, first_line, last_line, expr)
   let aseq_list = type(aseq) == 1 ? split(tolower(aseq), '\s*') : map(copy(aseq), 'tolower(v:val)')
   let aseq_str = join(aseq_list, '')
 
-  call s:do_align(
+  let todo = {}
+  let args = [
+    \ todo,
     \ aseq_list,
     \ {}, {}, a:first_line, a:last_line,
     \ bvisual ? min([col("'<"), col("'>")]) : 1,
@@ -919,7 +922,13 @@ function! s:align(bang, first_line, last_line, expr)
     \ get(dict, 'stick_to_left', 0),
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 2)),
     \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax())),
-    \ recur)
+    \ recur ]
+  while len(args) > 1
+    let args = call('s:do_align', args)
+  endwhile
+  for [line, content] in items(todo)
+    call setline(line, s:rtrim(content))
+  endfor
 
   let copts = s:compact_options(opts)
   let nbmode = s:modes(0)[0]

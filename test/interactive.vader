@@ -1283,16 +1283,3 @@ Expect:
     a   = b = c
   aabba = bbbbb
 
-Given (Table):
-  |a|b|c|d|
-  | -|-|>-|-|
-  |aaa|bbb|ccc|ddd|
-
-Do (Partial alignment around 1st |):
-  \<C-V>ljj\<Enter>|
-
-Expect (Right margin correctly attached):
-  | a|b|c|d|
-  | -|-|>-|-|
-  | aaa|bbb|ccc|ddd|
-
