@@ -511,8 +511,7 @@ function! s:do_align(modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth
     " Determine the left and right margin around the delimiter
     let rest    = join(tokens[nth + 1 : -1], '')
     let ml      = empty(prefix . token) ? '' : a:ml
-    let mr      = (empty(rest) ||
-          \ (empty(rest) && stridx(after, a:mr) == 0)) ? '' : a:mr
+    let mr      = empty(rest.after) ? '' : a:mr
 
     " Adjust indentation of the lines starting with a delimiter
     let lpad = ''
