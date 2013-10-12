@@ -65,9 +65,7 @@ let s:shorthand = {
 \ }
 
 if exists("*strwidth")
-  function! s:strwidth(str)
-    return strwidth(a:str)
-  endfunction
+  let s:strwidth = function('strwidth')
 else
   function! s:strwidth(str)
     return len(split(a:str, '\zs'))
