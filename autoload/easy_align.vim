@@ -151,11 +151,11 @@ function! s:exit(msg)
 endfunction
 
 function! s:ltrim(str)
-  return substitute(a:str, '^\s*', '', '')
+  return substitute(a:str, '^\s\+', '', '')
 endfunction
 
 function! s:rtrim(str)
-  return substitute(a:str, '\s*$', '', '')
+  return substitute(a:str, '\s\+$', '', '')
 endfunction
 
 function! s:trim(str)
@@ -323,14 +323,6 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
   return [tokens, delims]
 endfunction
 
-function! s:max(old, new)
-  for k in keys(a:new)
-    if a:new[k] > a:old[k]
-      let a:old[k] = a:new[k] " max() doesn't work with Floats
-    endif
-  endfor
-endfunction
-
 function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, pattern, nth,
       \ ml, mr, da, indentation, stick_to_left, ignore_unmatched, ignore_groups, recur)
   let mode       = a:modes[0]
@@ -362,7 +354,7 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, patter
     endif
 
     " Calculate the maximum number of tokens for a line within the range
-    call s:max(max, { 'tokens': len(tokens) })
+    let max.tokens = max([max.tokens, len(tokens)])
 
     if a:nth > 0 " Positive N-th
       if len(tokens) < a:nth
@@ -398,11 +390,16 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, patter
     endif
     if mode ==? 'c' | let token .= matchstr(token, '^\s*') | endif
     let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
-    call s:max(max, { 'indent': indent, 'token_len': tw, 'just_len': pw + tw,
-                     \ 'delim_len': s:strwidth(delim) })
+    let max.indent    = max([max.indent,    indent])
+    let max.token_len = max([max.token_len, tw])
+    let max.just_len  = max([max.just_len,  pw + tw])
+    let max.delim_len = max([max.delim_len, s:strwidth(delim)])
+
     if mode ==? 'c'
-      call s:max(max, { 'pivot_len': pw + tw / 2.0,
-                       \ 'strip_len': s:strwidth(s:trim(token)) })
+      if max.pivot_len < pw + tw / 2.0
+        let max.pivot_len = pw + tw / 2.0
+      endif
+      let max.strip_len = max([max.strip_len, s:strwidth(s:trim(token))])
     endif
     let lines[line]   = [nth, prefix, token, delim]
   endfor
@@ -432,9 +429,12 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, patter
           let token = substitute(token, '\s*$', indent, '')
         endif
         let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
-        call s:max(max, { 'token_len': tw, 'just_len': pw + tw })
+        let max.token_len = max([max.token_len, tw])
+        let max.just_len  = max([max.just_len,  pw + tw])
         if mode ==? 'c'
-          call s:max(max, { 'pivot_len': pw + tw / 2.0 })
+          if max.pivot_len < pw + tw / 2.0
+            let max.pivot_len = pw + tw / 2.0
+          endif
         endif
 
         let lines[line][2] = token
