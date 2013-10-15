@@ -1,6 +1,8 @@
 # http://en.wikibooks.org/wiki/LaTeX/Tables
 Execute:
+  Save g:easy_align_delimiters, g:easy_align_bypass_fold
   let g:easy_align_delimiters = {}
+  silent! unlet g:easy_align_bypass_fold
 
 Given tex (table with escaped &):
   \begin{tabular}{ l c r }
@@ -9,8 +11,9 @@ Given tex (table with escaped &):
     777&8\&8&999\\
   \end{tabular}
 
+# FIXME vip doesn't work if folded
 Do (Align around all &s and \\s):
-  vip\<Enter>*&
+  VG\<Enter>*&
 
 Expect tex:
   \begin{tabular}{ l c r }
@@ -20,7 +23,7 @@ Expect tex:
   \end{tabular}
 
 Do (right-align with explicit ignore_unmatched):
-  vip\<Enter>\<Enter>\<C-U>\<C-U>*&
+  VG\<Enter>\<Enter>\<C-U>\<C-U>*&
 
 Expect tex:
   \begin{tabular}{ l c r }
@@ -30,7 +33,7 @@ Expect tex:
   \end{tabular}
 
 Do (center-align with explicit ignore_unmatched):
-  vip\<Enter>\<Enter>\<Enter>\<C-U>\<C-U>*&
+  VG\<Enter>\<Enter>\<Enter>\<C-U>\<C-U>*&
 
 Expect tex:
   \begin{tabular}{ l c r }
@@ -47,7 +50,7 @@ Given tex (simple table with \hline):
   \end{tabular}
 
 Do:
-  vip\<Enter>*&
+  VG\<Enter>*&
 
 Expect tex:
   \begin{tabular}{ l c r }
@@ -68,7 +71,7 @@ Given tex (table with lines w/o &s):
   \end{tabular}
 
 Do (left-align*):
-  vip\<Enter>*&
+  VG\<Enter>*&
 
 Expect tex:
   \begin{tabular}{|r|l|}
@@ -82,7 +85,7 @@ Expect tex:
   \end{tabular}
 
 Do(left-align* and right-align around 2nd):
-  vip\<Enter>*&
+  VG\<Enter>*&
   gv\<Enter>\<Enter>2&
 
 Expect tex:
@@ -96,3 +99,63 @@ Expect tex:
     \hline
   \end{tabular}
 
+Given tex:
+  \begin{tabular}{}
+    32&1.14\e1&&5.65\e2&&&&1.16\e1&&1.28\e1&\\
+    64&1.03\e1&0.1&4.98\e2&0.2&&&9.21\e2&0.3&1.02\e1&0.3\\
+    128&9.86\e2&0.1&4.69\e2&0.1&&&8.46\e2&0.1&9.45\e2&0.1\\
+    256&9.65\e2&0.0&4.59\e2&0.0&&&8.15\e2&0.1&9.11\e2&0.1\\
+  % 512&9.55\e2&0.0&4.56\e2&0.0&&&8.01\e2&0.0&8.96\e2&0.0\\
+    1024&9.49\e2&0.0&4.53\e2&0.0&&&7.94\e2&0.0&8.89\e2&0.0\\
+    2048&9.47\e2&0.0&4.52\e2&0.0&&&7.91\e2&0.0&8.85\e2&0.0\\
+    4096&9.46\e2&0.0&4.51\e2&0.0%&&&7.90\e2&0.0&8.83\e2&0.0\\
+    8192&9.45\e2&0.0&4.51\e2&0.0&&&&&&\\
+  \end{tabular}
+
+Execute (Alignment around &s, foldmethod should not change):
+  setlocal foldmethod=syntax
+  %EasyAlign*&
+  AssertEqual 'syntax', &l:foldmethod
+
+  setlocal foldmethod=manual
+  %EasyAlign*&
+  AssertEqual 'manual', &l:foldmethod
+
+Expect tex:
+  \begin{tabular}{}
+    32   & 1.14\e1 &     & 5.65\e2 &     &  &  & 1.16\e1 &     & 1.28\e1 &     \\
+    64   & 1.03\e1 & 0.1 & 4.98\e2 & 0.2 &  &  & 9.21\e2 & 0.3 & 1.02\e1 & 0.3 \\
+    128  & 9.86\e2 & 0.1 & 4.69\e2 & 0.1 &  &  & 8.46\e2 & 0.1 & 9.45\e2 & 0.1 \\
+    256  & 9.65\e2 & 0.0 & 4.59\e2 & 0.0 &  &  & 8.15\e2 & 0.1 & 9.11\e2 & 0.1 \\
+  % 512&9.55\e2&0.0&4.56\e2&0.0&&&8.01\e2&0.0&8.96\e2&0.0\\
+    1024 & 9.49\e2 & 0.0 & 4.53\e2 & 0.0 &  &  & 7.94\e2 & 0.0 & 8.89\e2 & 0.0 \\
+    2048 & 9.47\e2 & 0.0 & 4.52\e2 & 0.0 &  &  & 7.91\e2 & 0.0 & 8.85\e2 & 0.0 \\
+    4096 & 9.46\e2 & 0.0 & 4.51\e2 & 0.0%&&&7.90\e2&0.0&8.83\e2&0.0\\
+    8192 & 9.45\e2 & 0.0 & 4.51\e2 & 0.0 &  &  &         &     &         &     \\
+  \end{tabular}
+
+Execute (g:easy_align_bypass_fold set, foldmethod should not change):
+  let g:easy_align_bypass_fold = 1
+  setlocal foldmethod=syntax
+  %EasyAlign*&
+  AssertEqual 'syntax', &l:foldmethod
+
+  setlocal foldmethod=manual
+  %EasyAlign*&
+  AssertEqual 'manual', &l:foldmethod
+
+Expect tex:
+  \begin{tabular}{}
+    32   & 1.14\e1 &     & 5.65\e2 &     &  &  & 1.16\e1 &     & 1.28\e1 &     \\
+    64   & 1.03\e1 & 0.1 & 4.98\e2 & 0.2 &  &  & 9.21\e2 & 0.3 & 1.02\e1 & 0.3 \\
+    128  & 9.86\e2 & 0.1 & 4.69\e2 & 0.1 &  &  & 8.46\e2 & 0.1 & 9.45\e2 & 0.1 \\
+    256  & 9.65\e2 & 0.0 & 4.59\e2 & 0.0 &  &  & 8.15\e2 & 0.1 & 9.11\e2 & 0.1 \\
+  % 512&9.55\e2&0.0&4.56\e2&0.0&&&8.01\e2&0.0&8.96\e2&0.0\\
+    1024 & 9.49\e2 & 0.0 & 4.53\e2 & 0.0 &  &  & 7.94\e2 & 0.0 & 8.89\e2 & 0.0 \\
+    2048 & 9.47\e2 & 0.0 & 4.52\e2 & 0.0 &  &  & 7.91\e2 & 0.0 & 8.85\e2 & 0.0 \\
+    4096 & 9.46\e2 & 0.0 & 4.51\e2 & 0.0%&&&7.90\e2&0.0&8.83\e2&0.0\\
+    8192 & 9.45\e2 & 0.0 & 4.51\e2 & 0.0 &  &  &         &     &         &     \\
+  \end{tabular}
+
+Execute:
+  Restore

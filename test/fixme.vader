@@ -10,3 +10,11 @@ Do (FIXME invalid judgement - block-wise visual mode):
 Expect:
   a | b | c
 
+Do (TODO Workaround: reset visualmode() on error):
+  \<C-V>\<Esc>
+  :%EasyAlign|\<CR>
+  :%EasyAlign|\<CR>
+
+Expect:
+  a | b | c
+

@@ -640,6 +640,42 @@ let g:easy_align_delimiters = {
 \ }
 ```
 
+Other options
+-------------
+
+### Disabling &foldmethod during alignment
+
+[It is reported](https://github.com/junegunn/vim-easy-align/issues/14) that
+&foldmethod of `expr` or `syntax` can significantly slow down the alignment when
+editing a large, complex file with many folds. To alleviate this issue,
+EasyAlign provides an option to temporarily set &foldmethod to manual during the
+alignment task. In order to enable this feature, set `g:easy_align_bypass_fold`
+switch to 1.
+
+```vim
+let g:easy_align_bypass_fold = 1
+```
+
+### Left/right/center mode switch in interactive mode
+
+In interactive mode, you can choose the alignment mode you want by pressing
+enter keys. The non-bang command, `:EasyAlign` starts in left-alignment mode
+and changes to right and center mode as you press enter keys, while the bang
+version first starts in right-alignment mode.
+
+- `:EasyAlign`
+  - Left, Right, Center
+- `:EasyAlign!`
+  - Right, Left, Center
+
+If you do not prefer this default mode transition, you can define your own
+settings as follows.
+
+```vim
+let g:easy_align_interactive_modes = ['l', 'r']
+let g:easy_align_bang_interactive_modes = ['c', 'r']
+```
+
 Advanced examples and use cases
 -------------------------------
 

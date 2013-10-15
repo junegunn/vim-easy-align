@@ -254,6 +254,7 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
   " Phase 1: split
   let ignorable = 0
   let token = ''
+  let phantom = 0
   while 1
     let matches = matchlist(string, pattern, idx)
     " No match
@@ -284,8 +285,7 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
     " If the string is non-empty and ends with the delimiter,
     " append an empty token to the list
     if idx == len(string)
-      call add(tokens, '')
-      call add(delims, '')
+      let phantom = 1
       break
     endif
   endwhile
@@ -294,6 +294,9 @@ function! s:split_line(line, nth, modes, cycle, fc, lc, pattern, stick_to_left, 
   if !empty(leftover)
     let ignorable = s:highlighted_as(a:line, len(string) + a:fc - 1, a:ignore_groups)
     call add(tokens, leftover)
+    call add(delims, '')
+  elseif phantom
+    call add(tokens, '')
     call add(delims, '')
   endif
   let [pmode, mode] = [mode, s:shift(a:modes, a:cycle)]
@@ -926,9 +929,17 @@ function! s:align(bang, first_line, last_line, expr)
   while len(args) > 1
     let args = call('s:do_align', args)
   endwhile
-  for [line, content] in items(todo)
-    call setline(line, s:rtrim(content))
-  endfor
+
+  let bypass_fold = get(g:, 'easy_align_bypass_fold', 0)
+  let ofm = &l:foldmethod
+  try
+    if bypass_fold | let &l:foldmethod = 'manual' | endif
+    for [line, content] in items(todo)
+      call setline(line, s:rtrim(content))
+    endfor
+  finally
+    if bypass_fold | let &l:foldmethod = ofm | endif
+  endtry
 
   let copts = s:compact_options(opts)
   let nbmode = s:modes(0)[0]

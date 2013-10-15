@@ -524,3 +524,14 @@ you can extend the rules by setting a dictionary named
     \ }
 
 
+Disabling &foldmethod during alignment         *g:easy_align_bypass_fold*
+-------------------------------------------------------------------------
+
+It is reported that &foldmethod of expr or syntax can significantly slow
+down the alignment when editing a large, complex file with many folds. To
+alleviate this issue, EasyAlign provides an option to temporarily set
+&foldmethod to manual during the alignment task. In order to enable this
+feature, set g:easy_align_bypass_fold to 1.
+
+    let g:easy_align_bypass_fold = 1
+
