@@ -646,7 +646,7 @@ Other options
 ### Disabling &foldmethod during alignment
 
 [It is reported](https://github.com/junegunn/vim-easy-align/issues/14) that
-`&foldmethod` setting of `expr` or `syntax` can significantly slow down the
+`&foldmethod` value of `expr` or `syntax` can significantly slow down the
 alignment when editing a large, complex file with many folds. To alleviate this
 issue, EasyAlign provides an option to temporarily set `&foldmethod` to `manual`
 during the alignment task. In order to enable this feature, set
