@@ -448,6 +448,7 @@ Expect:
 #   :%\<C-R>=g:easy_align_last_command\<Enter>\<Enter>
 
 Execute (Repeat the last command):
+  Log g:easy_align_last_command
   execute '%'.g:easy_align_last_command
 
 Expect:
