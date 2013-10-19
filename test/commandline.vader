@@ -16,6 +16,7 @@ Given (fruits):
 
 Execute (regular expression):
   %EasyAlign/[:;]\+/
+  AssertEqual ':EasyAlign /[:;]\+/', g:easy_align_last_command
 
 Expect:
   apple ;:;; banana::cake

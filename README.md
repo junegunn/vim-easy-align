@@ -60,6 +60,7 @@ variant `:EasyAlign!`) for visual mode.
 | Interactive mode          | `:EasyAlign[!] [OPTIONS]`                        |
 | Using predefined rules    | `:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]`   |
 | Using regular expressions | `:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]`        |
+| Live interactive mode     | `:LiveEasyAlign[!] [...]`                        |
 
 ### Concept of _alignment rule_
 
@@ -168,17 +169,24 @@ repeatable, non-interactive command recorded in `g:easy_align_last_command`.
 :<C-R>=g:easy_align_last_command<Enter><Enter>
 ```
 
----
+### Live interactive mode
 
-### *Intermission*
+If you're performing a complex alignment where multiple options should be
+carefully adjusted, try "live interactive mode" which aligns the text on-the-fly
+as you type in.
 
-You can stop reading here. Trust me. All the fancy features described in the
-following sections are really powerful but you won't be needing them in most
-of the cases.
+Live interactive mode can be started with `:LiveEasyAlign` command which takes
+the same parameters as `:EasyAlign`. I suggest you define the following mapping
+in addition to the one for `:EasyAlign` command.
 
-Go try out vim-easy-align right now, and come back later when you feel like it.
+```vim
+vnoremap <silent> <Leader><Enter> :LiveEasyAlign<Enter>
+```
 
----
+In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on
+regular expression) again to finalize the alignment. This allows you to preview
+the result of the alignment and freely change the delimiter using backspace key
+without leaving the interactive mode.
 
 ### Using `EasyAlign` in command line
 

@@ -26,4 +26,5 @@ if exists("g:loaded_easy_align_plugin")
 endif
 let g:loaded_easy_align_plugin = 1
 
-command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', <q-args>)
+command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 0, <q-args>)
+command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 1, <q-args>)

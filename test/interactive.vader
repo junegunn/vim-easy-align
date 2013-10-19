@@ -3,6 +3,7 @@ Execute (Clean up test environment):
   Save g:easy_align_indentation,       g:easy_align_delimiter_align
   Save g:easy_align_interactive_modes, g:easy_align_bang_interactive_modes
   Save g:easy_align_delimiters
+  Save mapleader
 
   " TODO: revert after test
   silent! unlet g:easy_align_ignore_groups
@@ -13,8 +14,11 @@ Execute (Clean up test environment):
   silent! unlet g:easy_align_bang_interactive_modes
 
   let g:easy_align_delimiters = {}
-  vnoremap <silent> <Enter> :EasyAlign<Enter>
-  vnoremap <silent> <Space><Enter> :EasyAlign!<Enter>
+  let mapleader = ' '
+  vnoremap <silent> <Enter>          :EasyAlign<Enter>
+  vnoremap <silent> r<Enter>         :EasyAlign!<Enter>
+  vnoremap <silent> <Leader><Enter>  :LiveEasyAlign<Enter>
+  vnoremap <silent> <Leader>r<Enter> :LiveEasyAlign!<Enter>
 
 ###########################################################
 
@@ -476,6 +480,62 @@ Expect:
   |batch     |Boolean|  false|enables batch processing mode                 |
   |batch_size|Fixnum |    nil|number of maximum items to be assigned at once|
   |logger    |Logger |    nil|logger instance for debug logs                |
+
+Do (live interactive mode):
+  vip\<Space>\<Enter>
+  |
+  \<C-L>(\<Enter>
+  \<C-R>)\<Enter>
+  ***
+  **
+  \<BS>\<BS>\<BS>
+  **|\<Enter>|
+
+Expect:
+  |)Option    (|)   Type(|)Default(|)                                   Description(|
+  |)--        (|)     --(|)--     (|)                                            --(|
+  |)threads   (|) Fixnum(|)1      (|)          number of threads in the thread pool(|
+  |)queues    (|) Fixnum(|)1      (|)                   number of concurrent queues(|
+  |)queue_size(|) Fixnum(|)1000   (|)                            size of each queue(|
+  |)interval  (|)Numeric(|)0      (|)      dispatcher interval for batch processing(|
+  |)batch     (|)Boolean(|)false  (|)                 enables batch processing mode(|
+  |)batch_size(|) Fixnum(|)nil    (|)number of maximum items to be assigned at once(|
+  |)logger    (|) Logger(|)nil    (|)                logger instance for debug logs(|
+
+Do (live interactive mode!):
+  vip\<Space>r\<Enter>
+  |
+  \<C-L>[\<Enter>
+  \<C-R>]\<Enter>
+  ***
+  **
+  \<BS>\<BS>\<BS>
+  **
+  \<C-I>\<C-I>
+  \<C-X>|\<Enter>
+  \<Enter>
+  \<C-X>
+
+Expect:
+   [|]    Option[|]Type   [|]Default[|]Description                                   [|[
+   [|]        --[|]--     [|]     --[|]--                                            [|[
+   [|]   threads[|]Fixnum [|]      1[|]number of threads in the thread pool          [|[
+   [|]    queues[|]Fixnum [|]      1[|]number of concurrent queues                   [|[
+   [|]queue_size[|]Fixnum [|]   1000[|]size of each queue                            [|[
+   [|]  interval[|]Numeric[|]      0[|]dispatcher interval for batch processing      [|[
+   [|]     batch[|]Boolean[|]  false[|]enables batch processing mode                 [|[
+   [|]batch_size[|]Fixnum [|]    nil[|]number of maximum items to be assigned at once[|[
+   [|]    logger[|]Logger [|]    nil[|]logger instance for debug logs                [|[
+
+Execute (g:easy_align_last_command should be set):
+  Assert exists('g:easy_align_last_command')
+  unlet g:easy_align_last_command
+
+Do:
+  vip\<Space>\<Enter>**|\<C-C>
+
+Execute (g:easy_align_last_command should not be set if interrupted):
+  Assert !exists('g:easy_align_last_command')
 
 ###########################################################
 
@@ -1214,7 +1274,7 @@ Expect:
   ccc = 3
 
 Do:
-  vip\<Space>\<Enter>=
+  vipr\<Enter>=
 
 Expect:
    a  = 1
@@ -1222,7 +1282,7 @@ Expect:
   ccc = 3
 
 Do:
-  vip\<Space>\<Enter>\<Enter>=
+  vipr\<Enter>\<Enter>=
 
 Expect:
   a   = 1
@@ -1230,7 +1290,7 @@ Expect:
   ccc = 3
 
 Do:
-  vip\<Space>\<Enter>\<Enter>\<Enter>=
+  vipr\<Enter>\<Enter>\<Enter>=
 
 Expect:
    a  = 1
