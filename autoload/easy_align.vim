@@ -507,14 +507,15 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
     endif
 
     " Before and after the range (for blockwise visual mode)
-    let cline   = getline(line)
-    let before  = strpart(cline, 0, a:fc - 1)
-    let after   = a:lc ? strpart(cline, a:lc) : ''
+    let cline  = getline(line)
+    let before = strpart(cline, 0, a:fc - 1)
+    let after  = a:lc ? strpart(cline, a:lc) : ''
 
     " Determine the left and right margin around the delimiter
-    let rest    = join(tokens[nth + 1 : -1], '')
-    let ml      = empty(prefix . token) ? '' : d.ml
-    let mr      = empty(rest.after) ? '' : d.mr
+    let rest   = join(tokens[nth + 1 : -1], '')
+    let nomore = empty(rest.after)
+    let ml     = (empty(prefix . token) || empty(delim) && nomore) ? '' : d.ml
+    let mr     = nomore ? '' : d.mr
 
     " Adjust indentation of the lines starting with a delimiter
     let lpad = ''

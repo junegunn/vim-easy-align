@@ -83,8 +83,8 @@ Execute (merge different option notations):
   %EasyAlign*/../iu0 { 'l': '<', 'r': '>' }
 
 Expect:
-  ap><pl><e;><:;><;b><an><an><a:><:c><ak>e<
-  da><ta><;;><ex><ch><an><ge><:;><::><fo> <rm><at<
+  ap><pl><e;><:;><;b><an><an><a:><:c><ak>e
+  da><ta><;;><ex><ch><an><ge><:;><::><fo> <rm><at
 
 Given javascript (json):
   var jdbc = {
