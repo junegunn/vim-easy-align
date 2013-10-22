@@ -257,12 +257,6 @@ Expect:
   Ri  ng  o   St  ar  r   19  40  mm
   Pe  te  Be  st  19  41
 
-Expect:
-  Paul McCartney 1942
-  George Harrison 1943mmdd
-  Ringo Starr 1940mm
-  Pete Best 1941
-
 ###########################################################
 
 Given ruby (delimiters in comments and strings):
