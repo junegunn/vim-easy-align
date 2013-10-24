@@ -183,9 +183,9 @@ in addition to the one for `:EasyAlign` command.
 vnoremap <silent> <Leader><Enter> :LiveEasyAlign<Enter>
 ```
 
-In live interactive mode, you have to type in the same delimiter or regular
-expression again to finalize the alignment. This allows you to preview the
-result of the alignment and freely change the delimiter using backspace key
+In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on
+regular expression) again to finalize the alignment. This allows you to preview
+the result of the alignment and freely change the delimiter using backspace key
 without leaving the interactive mode.
 
 ### Using `EasyAlign` in command line
