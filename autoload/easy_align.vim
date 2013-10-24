@@ -690,16 +690,16 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live)
         silent! call remove(opts, 'm')
       endif
     elseif ch == "\<C-_>" || ch == "\<C-X>"
-      if a:live && regx && !empty(d)
-        break
-      endif
+      let pd = regx ? d : ''
 
       let prompt = 'Regular expression: '
-      let ch = s:input(prompt, '', a:vis)
+      let ch = s:input(prompt, pd, a:vis)
       if !empty(ch) && s:valid_regexp(ch)
         let regx = 1
         let d = ch
-        if !a:live | break | endif
+        if !a:live || pd == d
+          break
+        endif
       else
         let warn = 'Invalid regular expression: '.ch
       endif

@@ -508,7 +508,7 @@ Do (live interactive mode!):
   \<C-I>\<C-I>
   \<C-X>|\<Enter>
   \<Enter>
-  \<C-X>
+  \<C-X>\<Enter>
 
 Expect:
    [|]    Option[|]Type   [|]Default[|]Description                                   [|
