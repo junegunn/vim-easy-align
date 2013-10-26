@@ -151,13 +151,14 @@ keys listed below. The meaning of each option will be described in
 
 | Key       | Option             | Values                                             |
 | --------  | ------------------ | -------------------------------------------------- |
+| `CTRL-F`  | `filter`           | Input string (`[gv]/.*/?`)                         |
 | `CTRL-I`  | `indentation`      | shallow, deep, none, keep                          |
 | `CTRL-L`  | `left_margin`      | Input number or string                             |
 | `CTRL-R`  | `right_margin`     | Input number or string                             |
 | `CTRL-D`  | `delimiter_align`  | left, center, right                                |
 | `CTRL-U`  | `ignore_unmatched` | 0, 1                                               |
 | `CTRL-G`  | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
-| `CTRL-O`  | `mode_sequence`    | Input string of `/[lrc]+\*{0,2}/`                  |
+| `CTRL-O`  | `mode_sequence`    | Input string (`/[lrc]+\*{0,2}/`)                   |
 | `<Left>`  | `stick_to_left`    | `{ 'stick_to_left': 1, 'left_margin': 0 }`         |
 | `<Right>` | `stick_to_left`    | `{ 'stick_to_left': 0, 'left_margin': 1 }`         |
 | `<Down>`  | `*_margin`         | `{ 'left_margin': 0, 'right_margin': 0 }`          |
@@ -242,6 +243,7 @@ The following table summarizes the shorthand notation.
 
 | Option           | Expression |
 | ---------------- | ---------- |
+| filter           | `[gv]/.*/` |
 | left_margin      | `l[0-9]+`  |
 | right_margin     | `r[0-9]+`  |
 | stick_to_left    | `s[01]`    |
