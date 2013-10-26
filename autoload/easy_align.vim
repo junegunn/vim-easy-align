@@ -47,7 +47,7 @@ let s:known_options = {
 \ 'margin_left':   [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
 \ 'left_margin':   [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
 \ 'ignore_groups': [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
-\ 'mode_sequence': [1   ], 'ignores': [3]
+\ 'mode_sequence': [1   ], 'ignores':          [3],    'filter':          [1]
 \ }
 
 let s:option_values = {
@@ -61,7 +61,7 @@ let s:shorthand = {
 \ 'margin_left':   'lm', 'margin_right':     'rm', 'stick_to_left':   'stl',
 \ 'left_margin':   'lm', 'right_margin':     'rm', 'indentation':     'idt',
 \ 'ignore_groups': 'ig', 'ignore_unmatched': 'iu', 'delimiter_align': 'da',
-\ 'mode_sequence': 'm',  'ignores': 'ig'
+\ 'mode_sequence': 'm',  'ignores':          'ig', 'filter':          'f'
 \ }
 
 if exists("*strwidth")
@@ -333,9 +333,16 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
   let max = { 'pivot_len': 0.0, 'token_len': 0, 'just_len': 0, 'delim_len': 0,
         \ 'indent': 0, 'tokens': 0, 'strip_len': 0 }
   let d = a:dict
+  let [f, fx] = s:parse_filter(d.filter)
 
   " Phase 1
   for line in range(a:fl, a:ll)
+    if f == 1 && getline(line) !~ fx
+      continue
+    elseif f == -1 && getline(line) =~ fx
+      continue
+    endif
+
     if !has_key(a:all_tokens, line)
       " Split line into the tokens by the delimiters
       let [tokens, delims] = s:split_line(
@@ -703,6 +710,16 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live)
       else
         let warn = 'Invalid regular expression: '.ch
       endif
+    elseif ch == "\<C-F>"
+      let f = s:input("Filter (g/../ or v/../): ", get(opts, 'f', ''), a:vis)
+      let m = matchlist(f, '^[gv]/\(.\{-}\)/\?$')
+      if empty(f)
+        silent! call remove(opts, 'f')
+      elseif !empty(m) && s:valid_regexp(m[1])
+        let opts['f'] = f
+      else
+        let warn = 'Invalid filter expression'
+      endif
     elseif ch =~ '[[:print:]]'
       let check = 1
     else
@@ -756,9 +773,9 @@ function! s:test_regexp(regexp)
 endfunction
 
 let s:shorthand_regex =
-  \ '\s*\('
+  \ '\s*\%('
   \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(s\%(tl\)\?[01]\)\|'
-  \   .'\(da\?[clr]\)\|\(ms\?[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\(ig\[.*\]\)'
+  \   .'\(da\?[clr]\)\|\(ms\?[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\([gv]/.*/\)\|\(ig\[.*\]\)'
   \ .'\)\+\s*$'
 
 function! s:parse_shorthand_opts(expr)
@@ -773,13 +790,17 @@ function! s:parse_shorthand_opts(expr)
   else
     let match = matchlist(expr, regex)
     if empty(match) | break | endif
-    for m in filter(match[ 2 : -1 ], '!empty(v:val)')
-      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i']
+    for m in filter(match[ 1 : -1 ], '!empty(v:val)')
+      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v']
         if stridx(tolower(m), key) == 0
           let rest = strpart(m, len(key))
           if key == 'i' | let key = 'idt' | endif
+          if key == 'g' || key == 'v'
+            let rest = key.rest
+            let key = 'f'
+          endif
 
-          if key == 'idt' || index(['d', 'm'], key[0]) >= 0
+          if key == 'idt' || index(['d', 'f', 'm'], key[0]) >= 0
             let opts[key] = rest
           elseif key == 'ig'
             try
@@ -877,6 +898,15 @@ function! s:parse_args(args)
   endif
 endfunction
 
+function! s:parse_filter(f)
+  let m = matchlist(a:f, '^\([gv]\)/\(.\{-}\)/\?$')
+  if empty(m)
+    return [0, '']
+  else
+    return [m[1] == 'g' ? 1 : -1, m[2]]
+  endif
+endfunction
+
 function! s:interactive_modes(bang)
   return get(g:,
     \ (a:bang ? 'easy_align_bang_interactive_modes' : 'easy_align_interactive_modes'),
@@ -936,6 +966,8 @@ function! s:build_dict(delimiters, ch, regexp, opts)
     \ get(dict, 'ignore_unmatched', get(g:, 'easy_align_ignore_unmatched', 2))
   let dict.ignore_groups =
     \ get(dict, 'ignore_groups', get(dict, 'ignores', s:ignored_syntax()))
+  let dict.filter =
+    \ get(dict, 'filter', '')
   return dict
 endfunction
 

@@ -1343,5 +1343,95 @@ Expect:
     a   = b = c
   aabba = bbbbb
 
+###########################################################
+
+Given (test filter option):
+  aaa=aaa=aaa
+  aaaaa=aaaaa=aaaaa
+  aaaaaaa=aaaaaaa=aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa=aaa=aaa
+
+Do (g/a/):
+  vip\<Enter>
+  \<C-F>g/a/\<Enter>
+  *=
+
+Expect:
+  aaa     = aaa     = aaa
+  aaaaa   = aaaaa   = aaaaa
+  aaaaaaa = aaaaaaa = aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa     = aaa     = aaa
+
+Do (g/a - you can omit the trailing /):
+  vip\<Enter>
+  \<C-F>g/a\<Enter>
+  *=
+
+Expect:
+  aaa     = aaa     = aaa
+  aaaaa   = aaaaa   = aaaaa
+  aaaaaaa = aaaaaaa = aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa     = aaa     = aaa
+
+Do (v/b/):
+  vip\<Enter>
+  \<C-F>v/b/\<Enter>
+  *=
+
+Expect:
+  aaa   = aaa   = aaa
+  aaaaa = aaaaa = aaaaa
+  aaaaaaa=aaaaaaa=aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa   = aaa   = aaa
+
+Do (invalid filter expression):
+  vip\<Enter>
+  \<C-F>haha\<Enter>
+  *=
+
+Expect:
+  aaa     = aaa     = aaa
+  aaaaa   = aaaaa   = aaaaa
+  aaaaaaa = aaaaaaa = aaaaaaab
+  bbbbb   = bbbbb   = bbbbb
+  aaa     = aaa     = aaa
+
+Execute (g-filter in shorthand notation):
+  %EasyAlign*=g/a/
+
+Expect:
+  aaa     = aaa     = aaa
+  aaaaa   = aaaaa   = aaaaa
+  aaaaaaa = aaaaaaa = aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa     = aaa     = aaa
+
+Execute (v-filter in shorthand notation):
+  %EasyAlign*=v/b/
+
+Expect:
+  aaa   = aaa   = aaa
+  aaaaa = aaaaa = aaaaa
+  aaaaaaa=aaaaaaa=aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa   = aaa   = aaa
+
+Execute (filter in dictionary format):
+  %EasyAlign*={'filter': 'v/b/'}
+
+Expect:
+  aaa   = aaa   = aaa
+  aaaaa = aaaaa = aaaaa
+  aaaaaaa=aaaaaaa=aaaaaaab
+  bbbbb=bbbbb=bbbbb
+  aaa   = aaa   = aaa
+
+###########################################################
+
 Execute:
   Restore
+

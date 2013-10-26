@@ -314,6 +314,7 @@ Alignment options
 
 | Option             | Type    | Default               | Description                                             |
 | ------------------ | ------- | --------------------- | ------------------------------------------------------- |
+| `filter`           | string  |                       | Line filtering expression: `g/../` or `v/../`           |
 | `left_margin`      | number  | 1                     | Number of spaces to attach before delimiter             |
 | `left_margin`      | string  | `' '`                 | String to attach before delimiter                       |
 | `right_margin`     | number  | 1                     | Number of spaces to attach after delimiter              |
@@ -334,6 +335,7 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 
 | Option name        | Shortcut key        | Abbreviated | Global variable                 |
 | ------------------ | ------------------- | ----------- | ------------------------------- |
+| `filter`           | `CTRL-F`            | `[gv]/.*/`  |                                 |
 | `left_margin`      | `CTRL-L`            | `l[0-9]+`   |                                 |
 | `right_margin`     | `CTRL-R`            | `r[0-9]+`   |                                 |
 | `stick_to_left`    | `<Left>`, `<Right>` | `s[01]`     |                                 |
@@ -342,6 +344,30 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 | `indentation`      | `CTRL-I`            | `i[ksdn]`   | `g:easy_align_indentation`      |
 | `delimiter_align`  | `CTRL-D`            | `d[lrc]`    | `g:easy_align_delimiter_align`  |
 | `mode_sequence`    | `CTRL-O`            | `m[lrc*]*`  |                                 |
+
+### Filtering lines
+
+With `filter` option, you can align lines that only match or do not match a
+given pattern. There are several ways to set the pattern.
+
+1. Press `CTRL-F` in interactive mode and input `g/pat/` or `v/pat/`
+2. In command-line, it can be written in dictionary format: `{'filter': 'g/pat/'}`
+3. Or in shorthand notation: `g/pat/` or `v/pat/`
+
+(You don't need to escape '/'s in the regular expression)
+
+#### Examples
+
+```vim
+" Start interactive mode with filter option set to g/hello/
+EasyAlign g/hello/
+
+" Start live interactive mode with filter option set to v/goodbye/
+LiveEasyAlign v/goodbye/
+
+" Align the lines with 'hi' around the first colons
+EasyAlign:g/hi/
+```
 
 ### Ignoring delimiters in comments or strings
 
