@@ -173,12 +173,12 @@ repeatable, non-interactive command recorded in `g:easy_align_last_command`.
 ### Live interactive mode
 
 If you're performing a complex alignment where multiple options should be
-carefully adjusted, try "live interactive mode" which aligns the text on-the-fly
-as you type in.
+carefully adjusted, try "live interactive mode" where you can preview the result
+of the alignment on-the-fly as you type in.
 
 Live interactive mode can be started with `:LiveEasyAlign` command which takes
-the same parameters as `:EasyAlign`. I suggest you define the following mapping
-in addition to the one for `:EasyAlign` command.
+the same parameters as `:EasyAlign`. I suggest you define a mapping such as
+follows in addition to the one for `:EasyAlign` command.
 
 ```vim
 vnoremap <silent> <Leader><Enter> :LiveEasyAlign<Enter>
