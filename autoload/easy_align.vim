@@ -422,11 +422,11 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
   if a:nth == 1
     let idt = d.indentation
     if idt ==? 'd'
-      let indent = repeat(' ', max.indent)
+      let indent = max.indent
     elseif idt ==? 's'
-      let indent = repeat(' ', min_indent)
+      let indent = min_indent
     elseif idt ==? 'n'
-      let indent = ''
+      let indent = 0
     elseif idt !=? 'k'
       call s:exit('Invalid indentation: ' . idt)
     end
@@ -439,9 +439,22 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
       for [line, elems] in items(lines)
         let [nth, prefix, token, delim] = elems
 
-        let token = substitute(token, '^\s*', indent, '')
+        let tindent = matchstr(token, '^\s*')
+        while 1
+          let len = s:strwidth(tindent)
+          if len < indent
+            let tindent .= repeat(' ', indent - len)
+            break
+          elseif len > indent
+            let tindent = tindent[0 : -2]
+          else
+            break
+          endif
+        endwhile
+
+        let token = tindent . s:ltrim(token)
         if mode ==? 'c'
-          let token = substitute(token, '\s*$', indent, '')
+          let token = substitute(token, '\s*$', repeat(' ', indent), '')
         endif
         let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
         let max.token_len = max([max.token_len, tw])

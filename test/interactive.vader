@@ -1465,6 +1465,24 @@ Expect:
   			 ccccc = 4=5
   				fff  = 4=6
 
+Do (Left alignment with shallow indentation):
+  vip\<Enter>\<C-I>=
+
+Expect:
+  		a     = 1=3
+  		bbb   = 2=4
+  		ccccc = 4=5
+  		fff   = 4=6
+
+Do (Center alignment with deep indentation):
+  vip\<Enter>\<Enter>\<Enter>\<C-I>\<C-I>=
+
+Expect:
+  		      a   = 1=3
+  			   bbb  = 2=4
+  			  ccccc = 4=5
+  				 fff  = 4=6
+
 Given (hard-tab indentation - dictionary (#19)):
   		ddict={'homePage':'360452',
   		'key':'TEST',
