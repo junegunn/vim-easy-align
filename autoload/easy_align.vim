@@ -65,10 +65,12 @@ let s:shorthand = {
 \ }
 
 if exists("*strwidth")
-  let s:strwidth = function('strwidth')
+  function! s:strwidth(str)
+    return strwidth(a:str) + len(matchstr(a:str, '^\t*')) * (&tabstop - 1)
+  endfunction
 else
   function! s:strwidth(str)
-    return len(split(a:str, '\zs'))
+    return len(split(a:str, '\zs')) + len(matchstr(a:str, '^\t*')) * (&tabstop - 1)
   endfunction
 endif
 
@@ -394,11 +396,13 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
       continue
     endif
 
-    let indent        = match(tokens[0], '^\s*\zs')
+    let indent = s:strwidth(matchstr(tokens[0], '^\s*'))
     if min_indent < 0 || indent < min_indent
       let min_indent  = indent
     endif
-    if mode ==? 'c' | let token .= matchstr(token, '^\s*') | endif
+    if mode ==? 'c'
+      let token .= substitute(matchstr(token, '^\s*'), '\t', repeat(' ', &tabstop), 'g')
+    endif
     let [pw, tw] = [s:strwidth(prefix), s:strwidth(token)]
     let max.indent    = max([max.indent,    indent])
     let max.token_len = max([max.token_len, tw])
@@ -476,7 +480,8 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
       endif
     elseif mode ==? 'r'
       let pad = repeat(' ', max.just_len - pw - tw)
-      let token = pad . token
+      let indent = matchstr(token, '^\s*')
+      let token = indent . pad . s:ltrim(token)
     elseif mode ==? 'c'
       let p1  = max.pivot_len - (pw + tw / 2.0)
       let p2  = (max.token_len - tw) / 2.0
@@ -485,7 +490,8 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
       else        | let p2 = floor(p2)
       endif
       let strip = float2nr(ceil((max.token_len - max.strip_len) / 2.0))
-      let token = repeat(' ', float2nr(pf1)) .token. repeat(' ', float2nr(p2))
+      let indent = matchstr(token, '^\s*')
+      let token = indent. repeat(' ', float2nr(pf1)) .s:ltrim(token). repeat(' ', float2nr(p2))
       let token = substitute(token, repeat(' ', strip) . '$', '', '')
 
       if d.stick_to_left

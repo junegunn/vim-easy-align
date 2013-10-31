@@ -1432,6 +1432,57 @@ Expect:
 
 ###########################################################
 
+Given (hard-tab indentation (#19)):
+  		a=1=3
+  			bbb=2=4
+  			ccccc=4=5
+  				fff=4=6
+
+Do (Left alignment):
+  vip\<Enter>=
+
+Expect:
+  		a       = 1=3
+  			bbb   = 2=4
+  			ccccc = 4=5
+  				fff = 4=6
+
+Do (Right alignment):
+  vip\<Enter>\<Enter>=
+
+Expect:
+  		      a = 1=3
+  			  bbb = 2=4
+  			ccccc = 4=5
+  				fff = 4=6
+
+Do (Center alignment):
+  vip\<Enter>\<Enter>\<Enter>=
+
+Expect:
+  		     a   = 1=3
+  			  bbb  = 2=4
+  			 ccccc = 4=5
+  				fff  = 4=6
+
+Given (hard-tab indentation - dictionary (#19)):
+  		ddict={'homePage':'360452',
+  		'key':'TEST',
+  		'name':'DocumentationAPITestingSpace',
+  		'type':'global',
+  		'url':'http://localhost:8090/display/TEST'}
+
+Do (Right alignment):
+  vip\<Enter>\<Enter>:
+
+Expect:
+  		ddict={'homePage': '360452',
+  		            'key': 'TEST',
+  		           'name': 'DocumentationAPITestingSpace',
+  		           'type': 'global',
+  		            'url': 'http://localhost:8090/display/TEST'}
+
+###########################################################
 Execute:
   Restore
 
