@@ -8,7 +8,7 @@ Demo
 
 ![Screencast](https://raw.github.com/junegunn/i/master/vim-easy-align.gif)
 
-(Too fast? Slower GIF is [here](https://raw.github.com/junegunn/i/master/vim-easy-align.gif))
+(Too fast? Slower GIF is [here](https://raw.github.com/junegunn/i/master/vim-easy-align-slow.gif))
 
 Features
 --------
