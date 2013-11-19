@@ -546,7 +546,7 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
     " Adjust indentation of the lines starting with a delimiter
     let lpad = ''
     if nth == 0
-      let ipad = repeat(' ', min_indent - len(token.ml))
+      let ipad = repeat(' ', min_indent - s:strwidth(token.ml))
       if mode ==? 'l'
         let token = ipad . token
       else
