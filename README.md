@@ -298,7 +298,7 @@ can be used with a Vim movement.
 function! s:easy_align_op(type, ...)
   '[,']EasyAlign
 endfunction
-nnoremap <Leader>a :set opfunc=<SID>easy_align_op<Enter>g@
+nnoremap <silent> <Leader>a :set opfunc=<SID>easy_align_op<Enter>g@
 ```
 
 Now without going into visual mode, you can align the lines in the paragraph by
