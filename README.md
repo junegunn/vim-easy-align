@@ -295,6 +295,19 @@ You can define an operator function which executes EasyAlign command, so that it
 can be used with a Vim movement.
 
 ```vim
+function! s:easy_align_op(type, ...)
+  '[,']EasyAlign
+endfunction
+nnoremap <Leader>a :set opfunc=<SID>easy_align_op<Enter>g@
+```
+
+Now without going into visual mode, you can align the lines in the paragraph by
+`<Leader>aip=` or `<Leader>aip:`.
+
+Or you can be more specific as follows, so you can do `<Leader>=ip` or
+`<Leader>:ip`.
+
+```vim
 function! s:easy_align_1st_eq(type, ...)
   '[,']EasyAlign=
 endfunction
@@ -305,9 +318,6 @@ function! s:easy_align_1st_colon(type, ...)
 endfunction
 nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
 ```
-
-Now without going into visual mode, you can align the lines in the paragraph
-by `<Leader>=ip` or `<Leader>:ip`.
 
 Alignment options
 -----------------
