@@ -291,8 +291,8 @@ since the same can be easily done using the negative N-th parameter: `<Enter>-=`
 
 ### EasyAlign as Vim operator
 
-With `<Plug>(EasyAlignOperator)` map, EasyAlign command can be used as a Vim
-operator that can be used with any Vim movement.
+With `<Plug>(EasyAlignOperator)` map, EasyAlign command becomes a Vim operator
+that can be used with any Vim movement.
 
 ```vim
 nmap <leader>a <Plug>(EasyAlignOperator)
