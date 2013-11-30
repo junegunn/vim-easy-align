@@ -291,21 +291,18 @@ since the same can be easily done using the negative N-th parameter: `<Enter>-=`
 
 ### EasyAlign as Vim operator
 
-You can define an operator function which executes EasyAlign command, so that it
-can be used with a Vim movement.
+With `<Plug>(EasyAlignOperator)` map, EasyAlign command can be used as a Vim
+operator that can be used with any Vim movement.
 
 ```vim
-function! s:easy_align_op(type, ...)
-  '[,']EasyAlign
-endfunction
-nnoremap <silent> <Leader>a :set opfunc=<SID>easy_align_op<Enter>g@
+nmap <leader>a <Plug>(EasyAlignOperator)
 ```
 
-Now without going into visual mode, you can align the lines in the paragraph by
-`<Leader>aip=` or `<Leader>aip:`.
+Now without going into visual mode, you can align the lines in the paragraph
+with `<Leader>aip=`, `<Leader>aip*|`, or `<Leader>aip:`.
 
-Or you can be more specific as follows, so you can do `<Leader>=ip` or
-`<Leader>:ip`.
+Or you can be more specific by defining custom operator functions as follows, so
+you can do `<Leader>=ip` or `<Leader>:ip`.
 
 ```vim
 function! s:easy_align_1st_eq(type, ...)

@@ -228,6 +228,18 @@ In blockwise-visual mode (CTRL-V), EasyAlign command aligns only
 the selected text in the block, instead of the whole lines in the range.
 
 
+EasyAlign as Vim operator                     *<Plug>(EasyAlignOperator)*
+-------------------------------------------------------------------------
+
+With `<Plug>(EasyAlignOperator)` map, EasyAlign command can be used as a Vim
+operator that can be used with any Vim movement.
+
+    nmap <leader>a <Plug>(EasyAlignOperator)
+
+Now without going into visual mode, you can align the lines in the paragraph
+with "<Leader>aip=", "<Leader>aip*|", or "<Leader>aip:".
+
+
 Alignment options
 -------------------------------------------------------------------------
 
