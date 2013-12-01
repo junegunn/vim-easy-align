@@ -55,7 +55,6 @@ function! s:generic_easy_align_op(type, vmode, live)
     end
     silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
   finally
-    unlet! g:easy_align_need_repeat
     let &selection = sel_save
   endtry
 endfunction
@@ -68,14 +67,22 @@ function! s:live_easy_align_op(type, ...)
   call s:generic_easy_align_op(a:type, a:0, 1)
 endfunction
 
+function! s:easy_align_repeat()
+  try
+    let g:easy_align_need_repeat = 1
+    normal! .
+  finally
+    unlet! g:easy_align_need_repeat
+  endtry
+endfunction
+
 nnoremap <silent> <Plug>(EasyAlign) :set opfunc=<SID>easy_align_op<Enter>g@
 vnoremap <silent> <Plug>(EasyAlign) :<C-U>call <SID>easy_align_op(visualmode(), 1)<Enter>
 nnoremap <silent> <Plug>(LiveEasyAlign) :set opfunc=<SID>live_easy_align_op<Enter>g@
 vnoremap <silent> <Plug>(LiveEasyAlign) :<C-U>call <SID>live_easy_align_op(visualmode(), 1)<Enter>
 
 " vim-repeat support
-nnoremap <silent> <Plug>(EasyAlignRepeat) :let g:easy_align_need_repeat = 1<Enter>.
-vnoremap <silent> <Plug>(EasyAlignRepeat) :<C-U>let g:easy_align_need_repeat = 1<Enter>gv.
+nnoremap <silent> <Plug>(EasyAlignRepeat) :call <SID>easy_align_repeat()<Enter>
 
 " Backward-compatibility (deprecated)
 nnoremap <silent> <Plug>(EasyAlignOperator) :set opfunc=<SID>easy_align_op<Enter>g@
