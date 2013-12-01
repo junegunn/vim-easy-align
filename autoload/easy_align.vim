@@ -1041,10 +1041,16 @@ function s:summarize(opts, recur, mode_sequence)
   return copts
 endfunction
 
-function! s:align(bang, live, first_line, last_line, expr)
+function! s:align(bang, live, visualmode, first_line, last_line, expr)
   " Heuristically determine if the user was in visual mode
-  let vis   = a:first_line == line("'<") && a:last_line == line("'>")
-  let bvis  = vis && char2nr(visualmode()) == 22 " ^V
+  if empty(a:visualmode)
+    let vis  = a:first_line == line("'<") && a:last_line == line("'>")
+    let bvis = vis && char2nr(visualmode()) == 22 " ^V
+  " Visual-mode explicitly given
+  else
+    let vis  = 1
+    let bvis = a:visualmode == "\<C-V>"
+  end
   let range = [a:first_line, a:last_line]
   let modes = s:interactive_modes(a:bang)
   let mode  = modes[0]
@@ -1080,9 +1086,9 @@ function! s:align(bang, live, first_line, last_line, expr)
   endtry
 endfunction
 
-function! easy_align#align(bang, live, expr) range
+function! easy_align#align(bang, live, visualmode, expr) range
   try
-    call s:align(a:bang, a:live, a:firstline, a:lastline, a:expr)
+    call s:align(a:bang, a:live, a:visualmode, a:firstline, a:lastline, a:expr)
   catch 'exit'
   endtry
 endfunction

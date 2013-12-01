@@ -49,11 +49,27 @@ and extract in ~/.vim or
   1. Add `Plug 'junegunn/vim-easy-align'` to .vimrc
   2. Run `:PlugInstall`
 
+TL;DR
+-----
+
+Define the following mappings in your .vimrc.
+(Of course, you are free to change the mapping keys)
+
+```vim
+" Interactive mode
+vmap <Enter>         <Plug>(EasyAlign)
+nmap <leader>a       <Plug>(EasyAlign)
+
+" Live interactive mode (optional)
+vmap <leader><Enter> <Plug>(LiveEasyAlign)
+nmap <leader>A       <Plug>(LiveEasyAlign)
+```
+
 Usage
 -----
 
 _vim-easy-align_ defines `:EasyAlign` command (and the right-align
-variant `:EasyAlign!`) for visual mode.
+variant `:EasyAlign!`).
 
 | Mode                      | Command                                          |
 | ------------------------- | ------------------------------------------------ |
@@ -74,18 +90,23 @@ several options, you can just type in a single character.
 ### Interactive mode
 
 The command will go into the interactive mode when no argument is given.
-For convenience, it is advised that you define a mapping for triggering it in
+For convenience, it is advised that you define mappings for triggering it in
 your `.vimrc`.
 
 ```vim
-vnoremap <silent> <Enter> :EasyAlign<Enter>
+" For visual mode (e.g. vip<Enter>)
+vmap <Enter>   <Plug>(EasyAlign)
+
+" For normal mode, with Vim movement (e.g. <Leader>aip)
+nmap <Leader>a <Plug>(EasyAlign)
 ```
 
-(Of course you can use any key combination as the trigger. e.g. `<Leader>a`)
+(Of course you can use any key combination as the trigger.)
 
 With the mapping, you can align selected lines of text with only a few keystrokes.
 
-1. `<Enter>` key to start interactive EasyAlign command
+1. `<Enter>` key (or `<Leader>a` followed by a Vim movement) to start
+   interactive EasyAlign command
 1. Optional: Enter keys to select alignment mode (left, right, or center)
 1. Optional: N-th delimiter (default: 1)
     - `1`         Around the 1st occurrences of delimiters
@@ -170,6 +191,20 @@ repeatable, non-interactive command recorded in `g:easy_align_last_command`.
 :<C-R>=g:easy_align_last_command<Enter><Enter>
 ```
 
+### EasyAlign as Vim operator
+
+With normal-mode map to `<Plug>(EasyAlign)`, EasyAlign command becomes a Vim
+operator that can be used with any Vim movement.
+
+```vim
+nmap <leader>a <Plug>(EasyAlign)
+```
+
+Now without going into visual mode, you can align the lines in the paragraph
+with `<Leader>aip=`, `<Leader>aip*|`, or `<Leader>aip:`. And if you have
+installed [vim-repeat](https://github.com/tpope/vim-repeat) by Tim Pope, the
+exact alignment can be repeated with `.` key.
+
 ### Live interactive mode
 
 If you're performing a complex alignment where multiple options should be
@@ -177,11 +212,12 @@ carefully adjusted, try "live interactive mode" where you can preview the result
 of the alignment on-the-fly as you type in.
 
 Live interactive mode can be started with `:LiveEasyAlign` command which takes
-the same parameters as `:EasyAlign`. I suggest you define a mapping such as
-follows in addition to the one for `:EasyAlign` command.
+the same parameters as `:EasyAlign`. I suggest you define mappings such as
+follows in addition to the ones for `:EasyAlign` command.
 
 ```vim
-vnoremap <silent> <Leader><Enter> :LiveEasyAlign<Enter>
+vmap <leader><Enter> <Plug>(LiveEasyAlign)
+nmap <leader>A       <Plug>(LiveEasyAlign)
 ```
 
 In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on
@@ -289,32 +325,6 @@ my_hash = { :a   => 1,
 However, in this case, we don't really need blockwise visual mode
 since the same can be easily done using the negative N-th parameter: `<Enter>-=`
 
-### EasyAlign as Vim operator
-
-With `<Plug>(EasyAlignOperator)` map, EasyAlign command becomes a Vim operator
-that can be used with any Vim movement.
-
-```vim
-nmap <leader>a <Plug>(EasyAlignOperator)
-```
-
-Now without going into visual mode, you can align the lines in the paragraph
-with `<Leader>aip=`, `<Leader>aip*|`, or `<Leader>aip:`.
-
-Or you can be more specific by defining custom operator functions as follows, so
-you can do `<Leader>=ip` or `<Leader>:ip`.
-
-```vim
-function! s:easy_align_1st_eq(type, ...)
-  '[,']EasyAlign=
-endfunction
-nnoremap <Leader>= :set opfunc=<SID>easy_align_1st_eq<Enter>g@
-
-function! s:easy_align_1st_colon(type, ...)
-  '[,']EasyAlign:
-endfunction
-nnoremap <Leader>: :set opfunc=<SID>easy_align_1st_colon<Enter>g@
-```
 
 Alignment options
 -----------------
