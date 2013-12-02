@@ -49,20 +49,33 @@ and extract in ~/.vim or
   1. Add `Plug 'junegunn/vim-easy-align'` to .vimrc
   2. Run `:PlugInstall`
 
-TL;DR
------
+TL;DR - One-minute guide
+------------------------
 
 Define the following mappings in your .vimrc.
-(Of course, you are free to change the mapping keys)
 
 ```vim
-" Interactive mode
-vmap <Enter>         <Plug>(EasyAlign)
-nmap <leader>a       <Plug>(EasyAlign)
+" Start interactive EasyAlign in visual mode
+vmap <Enter> <Plug>(EasyAlign)
 
-" Live interactive mode (optional)
-vmap <leader><Enter> <Plug>(LiveEasyAlign)
-nmap <leader>A       <Plug>(LiveEasyAlign)
+" Start interactive EasyAlign with a Vim movement
+nmap <leader>a <Plug>(EasyAlign)
+```
+
+And for the following paragraph, try
+
+- `vip<Enter>=`
+    - `v`isual-select `i`nner `p`aragraph
+    - Start EasyAlign command (`<Enter>`)
+    - Align around `=`
+- `<leader>aip=`
+    - Start EasyAlign command (`<Leader>a`) for `i`nner `p`aragraph
+    - Align around `=`
+
+```
+apple = red
+grass=green
+sky=blue
 ```
 
 Usage
