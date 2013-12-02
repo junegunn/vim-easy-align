@@ -52,7 +52,7 @@ and extract in ~/.vim or
 TL;DR - One-minute guide
 ------------------------
 
-Define the following mappings in your .vimrc.
+Add the following mappings to your .vimrc.
 
 ```vim
 " Start interactive EasyAlign in visual mode
