@@ -62,7 +62,15 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap <leader>a <Plug>(EasyAlign)
 ```
 
-And for the following paragraph, try
+And with the following lines of text,
+
+```
+apple = red
+grass=green
+sky=blue
+```
+
+try these commands:
 
 - `vip<Enter>=`
     - `v`isual-select `i`nner `p`aragraph
@@ -71,12 +79,6 @@ And for the following paragraph, try
 - `<leader>aip=`
     - Start EasyAlign command (`<Leader>a`) for `i`nner `p`aragraph
     - Align around `=`
-
-```
-apple = red
-grass=green
-sky=blue
-```
 
 Usage
 -----
