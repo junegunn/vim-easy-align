@@ -80,6 +80,9 @@ try these commands:
     - Start EasyAlign command (`<Leader>a`) for `i`nner `p`aragraph
     - Align around `=`
 
+Notice that the commands are repeatable with `.` key if you have installed
+[repeat.vim](https://github.com/tpope/vim-repeat).
+
 Usage
 -----
 
@@ -217,7 +220,7 @@ nmap <leader>a <Plug>(EasyAlign)
 
 Now without going into visual mode, you can align the lines in the paragraph
 with `<Leader>aip=`, `<Leader>aip*|`, or `<Leader>aip:`. And if you have
-installed [vim-repeat](https://github.com/tpope/vim-repeat) by Tim Pope, the
+installed [repeat.vim](https://github.com/tpope/vim-repeat) by Tim Pope, the
 exact alignment can be repeated with `.` key.
 
 ### Live interactive mode

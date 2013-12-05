@@ -31,12 +31,41 @@ command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#alig
 
 let s:last_command = 'EasyAlign'
 
+function! s:remember_visual(mode)
+  let s:last_visual = [a:mode, abs(line("'>") - line("'<")), abs(col("'>") - col("'<"))]
+endfunction
+
+function! s:repeat_visual()
+  let [mode, ldiff, cdiff] = s:last_visual
+  let cmd = 'normal! '.mode
+  if ldiff > 0
+    let cmd .= ldiff . 'j'
+  endif
+
+  let ve_save = &virtualedit
+  try
+    if mode == "\<C-V>"
+      if cdiff > 0
+        let cmd .= cdiff . 'l'
+      endif
+      set virtualedit+=block
+    endif
+    execute cmd.":\<C-r>=g:easy_align_last_command\<Enter>\<Enter>"
+    silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
+  finally
+    if ve_save != &virtualedit
+      let &virtualedit = ve_save
+    endif
+  endtry
+endfunction
+
 function! s:generic_easy_align_op(type, vmode, live)
   let sel_save = &selection
   let &selection = "inclusive"
 
   if a:vmode
     let vmode = a:type
+    call s:remember_visual(vmode)
   else
     let tail = "\<C-c>"
     if a:type == 'line'
@@ -47,17 +76,14 @@ function! s:generic_easy_align_op(type, vmode, live)
       silent execute "normal! `[v`]".tail
     endif
     let vmode = ''
+    unlet! s:last_visual
   endif
 
   try
     if get(g:, 'easy_align_need_repeat', 0)
-      execute "'<,'>". s:last_command
+      execute "'<,'>". g:easy_align_last_command
     else
       '<,'>call easy_align#align('<bang>' == '!', a:live, vmode, '')
-      " Currently visual-mode operator is not repeatable
-      if !a:vmode
-        let s:last_command = g:easy_align_last_command
-      endif
     end
     silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
   finally
@@ -74,12 +100,16 @@ function! s:live_easy_align_op(type, ...)
 endfunction
 
 function! s:easy_align_repeat()
-  try
-    let g:easy_align_need_repeat = 1
-    normal! .
-  finally
-    unlet! g:easy_align_need_repeat
-  endtry
+  if exists('s:last_visual')
+    call s:repeat_visual()
+  else
+    try
+      let g:easy_align_need_repeat = 1
+      normal! .
+    finally
+      unlet! g:easy_align_need_repeat
+    endtry
+  endif
 endfunction
 
 nnoremap <silent> <Plug>(EasyAlign) :set opfunc=<SID>easy_align_op<Enter>g@

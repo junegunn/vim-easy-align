@@ -1528,9 +1528,27 @@ Given (Two paragraphs (requires vim-repeat)):
   cc = 2
   bbb = 3
   aaaa = 4
+  _____ = 5
 
 Do (Align and repeat):
   \<Space>Aip\<Enter>=
+  6G
+  .
+
+Expect:
+     a = 1
+    bb = 2
+   ccc = 3
+  dddd = 4
+
+      d = 1
+     cc = 2
+    bbb = 3
+   aaaa = 4
+  _____ = 5
+
+Do (Visual-mode operator is also repeatable):
+  vip\<Enter>\<Enter>=
   6G
   .
 
@@ -1544,24 +1562,46 @@ Expect:
     cc = 2
    bbb = 3
   aaaa = 4
+  _____ = 5
 
-Do (Visual-mode operator is not repeatable and shouldn't affect normal-mode repeat):
-  \<Space>Aj=
-  3G
-  Vj\<Enter>\<Enter>=
+Given:
+  :: a : 1
+  :: bb : 2
+  :: ccc : 3
+  :: dd : 4
+  :: e : 5
+
+  :: :: a:1
+  :: :: b :2
+  :: :: ccc : 3
+  :: :: dd : 4
+  :: :: e : 5
+  :: :: f : 6
+
+Do (Blockwise-visual-operator is also repeatable):
+  fa
+  \<C-V>
+  f1
+  4j
+  \<Enter>:
   7G
+  fa
   .
 
 Expect:
-  a  = 1
-  bb = 2
-   ccc = 3
-  dddd = 4
+  :: a:   1
+  :: bb:  2
+  :: ccc:  3
+  :: dd:  4
+  :: e:   5
 
-  d = 1
-  cc  = 2
-  bbb = 3
-  aaaa = 4
+  :: :: a:   1
+  :: :: b:   2
+  :: :: ccc:  3
+  :: :: dd:  4
+  :: :: e:   5
+  :: :: f : 6
+
 ###########################################################
 Execute:
   Restore
