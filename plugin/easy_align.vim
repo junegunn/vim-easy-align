@@ -29,6 +29,8 @@ let g:loaded_easy_align_plugin = 1
 command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 0, '', <q-args>)
 command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 1, '', <q-args>)
 
+let s:last_command = 'EasyAlign'
+
 function! s:generic_easy_align_op(type, vmode, live)
   let sel_save = &selection
   let &selection = "inclusive"
@@ -49,9 +51,13 @@ function! s:generic_easy_align_op(type, vmode, live)
 
   try
     if get(g:, 'easy_align_need_repeat', 0)
-      execute "'<,'>". g:easy_align_last_command
+      execute "'<,'>". s:last_command
     else
       '<,'>call easy_align#align('<bang>' == '!', a:live, vmode, '')
+      " Currently visual-mode operator is not repeatable
+      if !a:vmode
+        let s:last_command = g:easy_align_last_command
+      endif
     end
     silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
   finally
