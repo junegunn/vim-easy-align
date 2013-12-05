@@ -83,6 +83,15 @@ try these commands:
 Notice that the commands are repeatable with `.` key if you have installed
 [repeat.vim](https://github.com/tpope/vim-repeat).
 
+If you want to repeat the previous alignment for the selected range in visual
+mode, install [visualrepeat](https://github.com/vim-scripts/visualrepeat)
+(recommended) or add the following mapping to your .vimrc.
+
+```vim
+" Repeat alignment in visual mode with . key
+vmap . <Plug>(EasyAlignRepeat)
+```
+
 Usage
 -----
 

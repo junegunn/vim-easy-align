@@ -51,12 +51,23 @@ function! s:repeat_visual()
       set virtualedit+=block
     endif
     execute cmd.":\<C-r>=g:easy_align_last_command\<Enter>\<Enter>"
-    silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
+    call s:set_repeat()
   finally
     if ve_save != &virtualedit
       let &virtualedit = ve_save
     endif
   endtry
+endfunction
+
+function! s:repeat_in_visual()
+  if exists('g:easy_align_last_command')
+    call s:remember_visual(visualmode())
+    call s:repeat_visual()
+  endif
+endfunction
+
+function! s:set_repeat()
+  silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
 endfunction
 
 function! s:generic_easy_align_op(type, vmode, live)
@@ -85,7 +96,7 @@ function! s:generic_easy_align_op(type, vmode, live)
     else
       '<,'>call easy_align#align('<bang>' == '!', a:live, vmode, '')
     end
-    silent! call repeat#set("\<Plug>(EasyAlignRepeat)")
+    call s:set_repeat()
   finally
     let &selection = sel_save
   endtry
@@ -119,6 +130,7 @@ vnoremap <silent> <Plug>(LiveEasyAlign) :<C-U>call <SID>live_easy_align_op(visua
 
 " vim-repeat support
 nnoremap <silent> <Plug>(EasyAlignRepeat) :call <SID>easy_align_repeat()<Enter>
+vnoremap <silent> <Plug>(EasyAlignRepeat) :<C-U>call <SID>repeat_in_visual()<Enter>
 
 " Backward-compatibility (deprecated)
 nnoremap <silent> <Plug>(EasyAlignOperator) :set opfunc=<SID>easy_align_op<Enter>g@
