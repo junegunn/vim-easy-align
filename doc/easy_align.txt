@@ -3,44 +3,46 @@ easy-align.txt	vim-easy-align	Last change: December 8 2013
 VIM-EASY-ALIGN - TABLE OF CONTENTS         *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
 
-    Demo
-    Features
-        "I already have a similar one. Should I switch?"
-    Installation
-    TLDR - One-minute guide
-    Usage
-        Concept of alignment rule
-        Interactive mode
-            Example command sequences
-            Using regular expressions
-            Alignment options in interactive mode
-        EasyAlign as Vim operator
-        Live interactive mode
-        Using EasyAlign in command line
-        Partial alignment in blockwise-visual mode
-    Alignment options
-        List of options
-        Filtering lines
-            Examples
-        Ignoring delimiters in comments or strings
-        Ignoring unmatched lines
-        Aligning delimiters of different lengths
-        Adjusting indentation
-        Alignments over multiple occurrences of delimiters
-        Extending alignment rules
-            Example
-    Other options
-        Disabling &foldmethod during alignment
-        Left/right/center mode switch in interactive mode
-    Advanced examples and use cases
-    Related work
-        Ease of use
-        Clean
-        Optimized for code editing
-        Thoroughly tested
-        "Okay. So should I switch?"
-    Author
-    License
+    Demo                                                      |easy-align-1|
+    Features                                                  |easy-align-2|
+        "I already have a similar one. Should I switch?"      |easy-align-2-1|
+    Installation                                              |easy-align-3|
+    TLDR - One-minute guide                                   |easy-align-4|
+    Usage                                                     |easy-align-5|
+        Concept of alignment rule                             |easy-align-5-1|
+        Interactive mode                                      |easy-align-5-2|
+            Example command sequences                         |easy-align-5-2-1|
+            Using regular expressions                         |easy-align-5-2-2|
+            Alignment options in interactive mode             |easy-align-5-2-3|
+        EasyAlign as Vim operator                             |easy-align-5-3|
+        Live interactive mode                                 |easy-align-5-4|
+        Using EasyAlign in command line                       |easy-align-5-5|
+        Partial alignment in blockwise-visual mode            |easy-align-5-6|
+    Alignment options                                         |easy-align-6|
+        List of options                                       |easy-align-6-1|
+        Filtering lines                                       |easy-align-6-2|
+            Examples                                          |easy-align-6-2-1|
+        Ignoring delimiters in comments or strings            |easy-align-6-3|
+        Ignoring unmatched lines                              |easy-align-6-4|
+        Aligning delimiters of different lengths              |easy-align-6-5|
+        Adjusting indentation                                 |easy-align-6-6|
+        Alignments over multiple occurrences of delimiters    |easy-align-6-7|
+        Extending alignment rules                             |easy-align-6-8|
+            Examples                                          |easy-align-6-8-1|
+    Other options                                             |easy-align-7|
+        Disabling &foldmethod during alignment                |easy-align-7-1|
+        Left/right/center mode switch in interactive mode     |easy-align-7-2|
+    Advanced examples and use cases                           |easy-align-8|
+    Related work                                              |easy-align-9|
+        Ease of use                                           |easy-align-9-1|
+        Clean                                                 |easy-align-9-2|
+        Optimized for code editing                            |easy-align-9-3|
+        Thoroughly tested                                     |easy-align-9-4|
+        "Okay. So should I switch?"                           |easy-align-9-5|
+    Author                                                    |easy-align-10|
+    License                                                   |easy-align-11|
+
+
 
 
 VIM-EASY-ALIGN                                                  *vim-easy-align*
@@ -49,6 +51,7 @@ VIM-EASY-ALIGN                                                  *vim-easy-align*
 A simple, easy-to-use Vim alignment plugin.
 
 
+                                                                  *easy-align-1*
 DEMO                                                           *easy-align-demo*
 ==============================================================================
 
@@ -59,6 +62,7 @@ Screencast: https://raw.github.com/junegunn/i/master/vim-easy-align.gif
           {1} https://raw.github.com/junegunn/i/master/vim-easy-align-slow.gif
 
 
+                                                                  *easy-align-2*
 FEATURES                                                   *easy-align-features*
 ==============================================================================
 
@@ -74,10 +78,12 @@ FEATURES                                                   *easy-align-features*
 
 < "I already have a similar one. Should I switch?" >__________________________~
                        *easy-align-i-already-have-a-similar-one-should-i-switch*
+                                                                *easy-align-2-1*
 
 Maybe or maybe not. See related work (|easy-align-related-work|) section.
 
 
+                                                                  *easy-align-3*
 INSTALLATION                                           *easy-align-installation*
 ==============================================================================
 
@@ -106,6 +112,7 @@ Either {download zip file}{2} and extract in ~/.vim or {use}{3} {your}{4}
      - Run `:PlugInstall`
 
 
+                                                                  *easy-align-4*
 TLDR - ONE-MINUTE GUIDE                       *easy-align-tldr-one-minute-guide*
 ==============================================================================
 
@@ -144,6 +151,7 @@ visual mode. Or you can add the following mapping to your .vimrc.
     vmap . <Plug>(EasyAlignRepeat)
 <
 
+                                                                  *easy-align-5*
 USAGE                                                         *easy-align-usage*
 ==============================================================================
 
@@ -162,6 +170,7 @@ vim-easy-align defines `:EasyAlign` command (and the right-align variant
 
 < Concept of alignment rule >_________________________________________________~
                                           *easy-align-concept-of-alignment-rule*
+                                                                *easy-align-5-1*
 
 An alignment rule is a predefined set of options for common alignment tasks,
 which is identified by a single character, DELIMITER KEY, such as <Space> ,
@@ -173,6 +182,7 @@ several options, you can just type in a single character.
 
 < Interactive mode >__________________________________________________________~
                                                    *easy-align-interactive-mode*
+                                                                *easy-align-5-2*
 
 The command will go into the interactive mode when no argument is given.
 >
@@ -232,6 +242,7 @@ You can override these default rules or define your own rules with
 
 < Example command sequences >_________________________________________________~
                                           *easy-align-example-command-sequences*
+                                                              *easy-align-5-2-1*
 
  With visual map     | Description                        | Equivalent command~
  ------------------- | ---------------------------------- | ----------------------
@@ -252,6 +263,7 @@ You can override these default rules or define your own rules with
 
 < Using regular expressions >_________________________________________________~
                                           *easy-align-using-regular-expressions*
+                                                              *easy-align-5-2-2*
 
 Instead of finishing the command with a predefined delimiter key, you can type
 in a regular expression after CTRL-/ or CTRL-X key. For example, if you want to
@@ -265,6 +277,7 @@ align text around all occurrences of numbers:
 
 < Alignment options in interactive mode >_____________________________________~
                               *easy-align-alignment-options-in-interactive-mode*
+                                                              *easy-align-5-2-3*
 
 While in interactive mode, you can set alignment options using special shortcut
 keys listed below. The meaning of each option will be described in the
@@ -294,6 +307,7 @@ repeatable, non-interactive command recorded in `g:easy_align_last_command`.
 
 < EasyAlign as Vim operator >_________________________________________________~
                                           *easy-align-easyalign-as-vim-operator*
+                                                                *easy-align-5-3*
 
                                                              *<Plug>(EasyAlign)*
 
@@ -311,6 +325,7 @@ with <Leader>aip= , <Leader>aip*| , or <Leader>aip: . And if you have installed
 
 < Live interactive mode >_____________________________________________________~
                                               *easy-align-live-interactive-mode*
+                                                                *easy-align-5-4*
 
 If you're performing a complex alignment where multiple options should be
 carefully adjusted, try "live interactive mode" where you can preview the
@@ -333,6 +348,7 @@ without leaving the interactive mode.
 
 < Using EasyAlign in command line >___________________________________________~
                                     *easy-align-using-easyalign-in-command-line*
+                                                                *easy-align-5-5*
 
 Instead of going into the interactive mode, you can just type in arguments to
 `:EasyAlign` command.
@@ -406,6 +422,7 @@ well with the following key combination.
 
 < Partial alignment in blockwise-visual mode >________________________________~
                          *easy-align-partial-alignment-in-blockwise-visual-mode*
+                                                                *easy-align-5-6*
 
 In blockwise-visual mode (CTRL-V), EasyAlign command aligns only the selected
 text in the block, instead of the whole lines in the range.
@@ -429,12 +446,14 @@ However, in this case, we don't really need blockwise visual mode since the
 same can be easily done using the negative N-th parameter: <Enter>-=
 
 
+                                                                  *easy-align-6*
 ALIGNMENT OPTIONS                                 *easy-align-alignment-options*
 ==============================================================================
 
 
 < List of options >___________________________________________________________~
                                                     *easy-align-list-of-options*
+                                                                *easy-align-6-1*
 
  Option             | Type    | Default               | Description~
  ------------------ | ------- | --------------------- | -------------------------------------------------------
@@ -475,6 +494,7 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 
 < Filtering lines >___________________________________________________________~
                                                     *easy-align-filtering-lines*
+                                                                *easy-align-6-2*
 
 With `filter` option, you can align lines that only match or do not match a
 given pattern. There are several ways to set the pattern.
@@ -488,6 +508,7 @@ given pattern. There are several ways to set the pattern.
 
 < Examples >__________________________________________________________________~
                                                            *easy-align-examples*
+                                                              *easy-align-6-2-1*
 >
     " Start interactive mode with filter option set to g/hello/
     EasyAlign g/hello/
@@ -501,6 +522,7 @@ given pattern. There are several ways to set the pattern.
 
 < Ignoring delimiters in comments or strings >________________________________~
                          *easy-align-ignoring-delimiters-in-comments-or-strings*
+                                                                *easy-align-6-3*
 
 EasyAlign can be configured to ignore delimiters in certain syntax highlight
 groups, such as code comments or strings. By default, delimiters that are
@@ -558,6 +580,7 @@ Satisfied?
 
 < Ignoring unmatched lines >__________________________________________________~
                                            *easy-align-ignoring-unmatched-lines*
+                                                                *easy-align-6-4*
 
 `ignore_unmatched` option determines how EasyAlign command processes lines that
 do not have N-th delimiter.
@@ -612,6 +635,7 @@ Then we get,
 
 < Aligning delimiters of different lengths >__________________________________~
                            *easy-align-aligning-delimiters-of-different-lengths*
+                                                                *easy-align-6-5*
 
 Global `g:easy_align_delimiter_align` option and rule-wise/command-wise
 `delimiter_align` option determines how matched delimiters of different lengths
@@ -644,6 +668,7 @@ In interactive mode, you can change the option value with CTRL-D key.
 
 < Adjusting indentation >_____________________________________________________~
                                               *easy-align-adjusting-indentation*
+                                                                *easy-align-6-6*
 
 By default :EasyAlign command keeps the original indentation of the lines. But
 then again we have `indentation` option. See the following example.
@@ -694,6 +719,7 @@ In interactive mode, you can change the option value with CTRL-I key.
 
 < Alignments over multiple occurrences of delimiters >________________________~
                  *easy-align-alignments-over-multiple-occurrences-of-delimiters*
+                                                                *easy-align-6-7*
 
 As stated above, "N-th" parameter is used to target specific occurrences of the
 delimiter when it appears multiple times in each line.
@@ -753,6 +779,7 @@ interactive mode with the special key CTRL-O)
 
 < Extending alignment rules >_________________________________________________~
                                           *easy-align-extending-alignment-rules*
+                                                                *easy-align-6-8*
 
 Although the default rules should cover the most of the use cases, you can
 extend the rules by setting a dictionary named `g:easy_align_delimiters`.
@@ -762,8 +789,9 @@ You may refer to the definitions of the default alignment rules {here}{10}.
 {10} https://github.com/junegunn/vim-easy-align/blob/2.9.0/autoload/easy_align.vim#L29
 
 
-< Example >___________________________________________________________________~
-                                                            *easy-align-example*
+< Examples >__________________________________________________________________~
+                                                         *easy-align-examples-2*
+                                                              *easy-align-6-8-1*
 >
     let g:easy_align_delimiters = {
     \ '>': { 'pattern': '>>\|=>\|>' },
@@ -789,12 +817,14 @@ You may refer to the definitions of the default alignment rules {here}{10}.
     \ }
 <
 
+                                                                  *easy-align-7*
 OTHER OPTIONS                                         *easy-align-other-options*
 ==============================================================================
 
 
 < Disabling &foldmethod during alignment >____________________________________~
                               *easy-align-disabling-foldmethod-during-alignment*
+                                                                *easy-align-7-1*
 
                                                       *g:easy_align_bypass_fold*
 
@@ -811,6 +841,7 @@ enable this feature, set `g:easy_align_bypass_fold` switch to 1.
 
 < Left/right/center mode switch in interactive mode >_________________________~
                   *easy-align-left-right-center-mode-switch-in-interactive-mode*
+                                                                *easy-align-7-2*
 
 In interactive mode, you can choose the alignment mode you want by pressing
 enter keys. The non-bang command, `:EasyAlign` starts in left-alignment mode
@@ -829,6 +860,7 @@ settings as follows.
     let g:easy_align_bang_interactive_modes = ['c', 'r']
 <
 
+                                                                  *easy-align-8*
 ADVANCED EXAMPLES AND USE CASES     *easy-align-advanced-examples-and-use-cases*
 ==============================================================================
 
@@ -837,6 +869,7 @@ See {EXAMPLES.md}{12} for more examples.
        {12} https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md
 
 
+                                                                  *easy-align-9*
 RELATED WORK                                           *easy-align-related-work*
 ==============================================================================
 
@@ -858,6 +891,7 @@ just a few core benefits of vim-easy-align.
 
 < Ease of use >_______________________________________________________________~
                                                         *easy-align-ease-of-use*
+                                                                *easy-align-9-1*
 
 As the name implies, vim-easy-align is easier to use. Its interactive mode
 allows you to achieve what you want with just a few keystrokes. The key
@@ -878,6 +912,7 @@ without affecting the ones before it?"
 
 < Clean >_____________________________________________________________________~
                                                               *easy-align-clean*
+                                                                *easy-align-9-2*
 
 vim-easy-align doesn't clutter your workspace with mappings and global
 variables. All you would need is a single mapping to the interactive EasyAlign
@@ -886,6 +921,7 @@ command, and even that is totally up to you.
 
 < Optimized for code editing >________________________________________________~
                                          *easy-align-optimized-for-code-editing*
+                                                                *easy-align-9-3*
 
 vim-easy-align by default performs syntax-aware alignment, which is invaluable
 when editing codes.
@@ -912,6 +948,7 @@ looks up the syntax group of a character on a certain position)
 
 < Thoroughly tested >_________________________________________________________~
                                                   *easy-align-thoroughly-tested*
+                                                                *easy-align-9-4*
 
 Virtually every aspect of vim-easy-align is being tested with a comprehensive
 set of test cases using {Vader.vim}{15}.
@@ -921,6 +958,7 @@ set of test cases using {Vader.vim}{15}.
 
 < "Okay. So should I switch?" >_______________________________________________~
                                             *easy-align-okay-so-should-i-switch*
+                                                                *easy-align-9-5*
 
 Maybe, but I can't really say. I have no ambition to make vim-easy-align an
 absolute superior to the others. For some cases, vim-easy-align works better
@@ -930,6 +968,7 @@ better choice.
 So try it yourself and see if it works for you!
 
 
+                                                                 *easy-align-10*
 AUTHOR                                                       *easy-align-author*
 ==============================================================================
 
@@ -938,6 +977,7 @@ AUTHOR                                                       *easy-align-author*
                                               {16} https://github.com/junegunn
 
 
+                                                                 *easy-align-11*
 LICENSE                                                     *easy-align-license*
 ==============================================================================
 

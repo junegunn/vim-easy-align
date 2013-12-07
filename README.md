@@ -703,7 +703,7 @@ you can extend the rules by setting a dictionary named `g:easy_align_delimiters`
 You may refer to the definitions of the default alignment rules
 [here](https://github.com/junegunn/vim-easy-align/blob/2.9.0/autoload/easy_align.vim#L29).
 
-#### Example
+#### Examples
 
 ```vim
 let g:easy_align_delimiters = {
