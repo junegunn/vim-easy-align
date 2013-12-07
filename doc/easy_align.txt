@@ -98,9 +98,7 @@ Either {download zip file}{2} and extract in ~/.vim or {use}{3} {your}{4}
                       {7} https://github.com/MarcWeber/vim-addon-manager
 
  - {Pathogen}{3}
-     - `git clone https://github.com/junegunn/vim-easy-align.git
-
-       ~/.vim/bundle/vim-easy-align`
+     - `git clone https://github.com/junegunn/vim-easy-align.git ~/.vim/bundle/vim-easy-align`
  - {Vundle}{4}
      - Add `Bundle 'junegunn/vim-easy-align'` to .vimrc
      - Run `:BundleInstall`
