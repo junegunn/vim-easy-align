@@ -144,6 +144,8 @@ visual mode. Or you can add the following mapping to your .vimrc.
 
                                {8} https://github.com/tpope/vim-repeat
                                {9} https://github.com/vim-scripts/visualrepeat
+
+                                                       *<Plug>(EasyAlignRepeat)*
 >
     " Repeat alignment in visual mode with . key
     vmap . <Plug>(EasyAlignRepeat)
@@ -334,6 +336,8 @@ result of the alignment on-the-fly as you type in.
 Live interactive mode can be started with `:LiveEasyAlign` command which takes
 the same parameters as `:EasyAlign`. I suggest you define mappings such as
 follows in addition to the ones for `:EasyAlign` command.
+
+                                                         *<Plug>(LiveEasyAlign)*
 >
     vmap <Leader><Enter> <Plug>(LiveEasyAlign)
     nmap <Leader>A       <Plug>(LiveEasyAlign)
@@ -853,6 +857,9 @@ version first starts in right-alignment mode.
 
 If you do not prefer this default mode transition, you can define your own
 settings as follows.
+
+                                                *g:easy_align_interactive_modes*
+                                           *g:easy_align_bang_interactive_modes*
 >
     let g:easy_align_interactive_modes = ['l', 'r']
     let g:easy_align_bang_interactive_modes = ['c', 'r']
@@ -937,8 +944,6 @@ be done with just two keystrokes: <Enter>:
       "user:pass":"r00t:pa55"
     };
 <
-                                                                   *g:AlignSkip*
-
 (To be fair, Align also can be configured to consider syntax highlighting with
 `g:AlignSkip` function reference which should point to a custom function that
 looks up the syntax group of a character on a certain position)
