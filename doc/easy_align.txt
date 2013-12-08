@@ -238,7 +238,7 @@ You can override these default rules or define your own rules with
 (|easy-align-extending-alignment-rules|).
 
 
-< Example command sequences >_________________________________________________~
+Example command sequences~
                                           *easy-align-example-command-sequences*
                                                               *easy-align-5-2-1*
 
@@ -259,7 +259,7 @@ You can override these default rules or define your own rules with
  <Enter><Enter>**=   | Right-left alternating around =    | :'<,'>EasyAlign!**=
 
 
-< Using regular expressions >_________________________________________________~
+Using regular expressions~
                                           *easy-align-using-regular-expressions*
                                                               *easy-align-5-2-2*
 
@@ -273,7 +273,7 @@ align text around all occurrences of numbers:
      - `[0-9]\+`
 
 
-< Alignment options in interactive mode >_____________________________________~
+Alignment options in interactive mode~
                               *easy-align-alignment-options-in-interactive-mode*
                                                               *easy-align-5-2-3*
 
@@ -504,7 +504,7 @@ given pattern. There are several ways to set the pattern.
 (You don't need to escape '/'s in the regular expression)
 
 
-< Examples >__________________________________________________________________~
+Examples~
                                                            *easy-align-examples*
                                                               *easy-align-6-2-1*
 >
@@ -787,7 +787,7 @@ You may refer to the definitions of the default alignment rules {here}{10}.
 {10} https://github.com/junegunn/vim-easy-align/blob/2.9.0/autoload/easy_align.vim#L29
 
 
-< Examples >__________________________________________________________________~
+Examples~
                                                          *easy-align-examples-2*
                                                               *easy-align-6-8-1*
 >
