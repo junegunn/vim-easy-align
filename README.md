@@ -65,9 +65,9 @@ nmap <Leader>a <Plug>(EasyAlign)
 And with the following lines of text,
 
 ```
-apple = red
-grass=green
-sky=blue
+apple   =red
+grass+=green
+sky-=   blue
 ```
 
 try these commands:
