@@ -26,6 +26,9 @@ if exists("g:loaded_easy_align")
 endif
 let g:loaded_easy_align = 1
 
+let s:cpo_save = &cpo
+set cpo&vim
+
 let s:easy_align_delimiters_default = {
 \  ' ': { 'pattern': ' ',  'left_margin': 0, 'right_margin': 0, 'stick_to_left': 0 },
 \  '=': { 'pattern': '===\|<=>\|\(&&\|||\|<<\|>>\)=\|=\~[#?]\?\|=>\|[:+/*!%^=><&|.-]\?=[#?]\?',
@@ -1092,4 +1095,7 @@ function! easy_align#align(bang, live, visualmode, expr) range
   catch 'exit'
   endtry
 endfunction
+
+let &cpo = s:cpo_save
+unlet s:cpo_save
 
