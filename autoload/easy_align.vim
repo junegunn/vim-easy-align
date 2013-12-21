@@ -335,7 +335,7 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
   let mode       = a:modes[0]
   let lines      = {}
   let min_indent = -1
-  let max = { 'pivot_len': 0.0, 'token_len': 0, 'just_len': 0, 'delim_len': 0,
+  let max = { 'pivot_len': str2float('0.0'), 'token_len': 0, 'just_len': 0, 'delim_len': 0,
         \ 'indent': 0, 'tokens': 0, 'strip_len': 0 }
   let d = a:dict
   let [f, fx] = s:parse_filter(d.filter)
