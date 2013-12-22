@@ -253,8 +253,8 @@ the same parameters as `:EasyAlign`. I suggest you define mappings such as
 follows in addition to the ones for `:EasyAlign` command.
 
 ```vim
-vmap <Leader><Enter> <Plug>(LiveEasyAlign)
-nmap <Leader>A       <Plug>(LiveEasyAlign)
+vmap <Leader><Enter>   <Plug>(LiveEasyAlign)
+nmap <Leader><Leader>a <Plug>(LiveEasyAlign)
 ```
 
 In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on

@@ -1,4 +1,4 @@
-easy-align.txt	vim-easy-align	Last change: December 11 2013
+easy-align.txt	vim-easy-align	Last change: December 22 2013
 
 VIM-EASY-ALIGN - TABLE OF CONTENTS         *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
@@ -339,8 +339,8 @@ follows in addition to the ones for `:EasyAlign` command.
 
                                                          *<Plug>(LiveEasyAlign)*
 >
-    vmap <Leader><Enter> <Plug>(LiveEasyAlign)
-    nmap <Leader>A       <Plug>(LiveEasyAlign)
+    vmap <Leader><Enter>   <Plug>(LiveEasyAlign)
+    nmap <Leader><Leader>a <Plug>(LiveEasyAlign)
 <
 In live interactive mode, you have to type in the same delimiter (or CTRL-X on
 regular expression) again to finalize the alignment. This allows you to preview
