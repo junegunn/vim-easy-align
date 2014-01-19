@@ -1,0 +1,32 @@
+Execute (Clean up test environment):
+  Save g:easy_align_ignore_groups,     g:easy_align_ignore_unmatched
+  Save g:easy_align_indentation,       g:easy_align_delimiter_align
+  Save g:easy_align_interactive_modes, g:easy_align_bang_interactive_modes
+  Save g:easy_align_delimiters,        g:easy_align_bypass_fold
+  Save &tabstop, mapleader
+
+  unlet! g:easy_align_ignore_groups
+  unlet! g:easy_align_ignore_unmatched
+  unlet! g:easy_align_indentation
+  unlet! g:easy_align_delimiter_align
+  unlet! g:easy_align_interactive_modes
+  unlet! g:easy_align_bang_interactive_modes
+  unlet! g:easy_align_bypass_fold
+
+  let g:easy_align_delimiters = {}
+  let mapleader = ' '
+  vnoremap <silent> r<Enter>         :EasyAlign!<Enter>
+  vnoremap <silent> <Leader>r<Enter> :LiveEasyAlign!<Enter>
+
+  " " Legacy
+  " vnoremap <silent> <Enter>          :EasyAlign<Enter>
+  " vnoremap <silent> <Leader><Enter>  :LiveEasyAlign<Enter>
+  " nmap <leader>A <Plug>(EasyAlignOperator)
+
+  set ts=2
+
+  vmap <Enter>         <Plug>(EasyAlign)
+  vmap <leader><Enter> <Plug>(LiveEasyAlign)
+  nmap <leader>A       <Plug>(EasyAlign)
+  vmap <leader>.       <Plug>(EasyAlignRepeat)
+

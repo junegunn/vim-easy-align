@@ -1,0 +1,18 @@
+#!/bin/bash
+
+VIMRC=$TMPDIR/mini-vimrc
+SOURCE=$(dirname $BASH_SOURCE)/..
+
+cat > $VIMRC << EOF
+set nocompatible
+syntax on
+
+for dep in ['vader.vim', 'vim-repeat']
+  execute 'set rtp+=' . finddir(dep, expand('~/.vim').'/**')
+endfor
+set rtp+=$SOURCE
+EOF
+
+vim -u $VIMRC +Vader*
+
+rm -f $VIMRC

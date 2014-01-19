@@ -1,3 +1,5 @@
+Include: include/setup.vader
+
 # It is currently possible that EasyAlign command incorrectly judges
 # that it was executed in block-wise visual mode
 Given:
@@ -17,4 +19,6 @@ Do (TODO Workaround: reset visualmode() on error):
 
 Expect:
   a | b | c
+
+Include: include/teardown.vader
 

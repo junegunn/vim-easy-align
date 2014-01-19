@@ -1,8 +1,6 @@
 # http://en.wikibooks.org/wiki/LaTeX/Tables
-Execute:
-  Save g:easy_align_delimiters, g:easy_align_bypass_fold
-  let g:easy_align_delimiters = {}
-  silent! unlet g:easy_align_bypass_fold
+
+Include: include/setup.vader
 
 Given tex (table with escaped &):
   \begin{tabular}{ l c r }
@@ -157,5 +155,4 @@ Expect tex:
     8192 & 9.45\e2 & 0.0 & 4.51\e2 & 0.0 &  &  &         &     &         &     \\
   \end{tabular}
 
-Execute:
-  Restore
+Include: include/teardown.vader

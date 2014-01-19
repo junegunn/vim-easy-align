@@ -1,5 +1,4 @@
-Execute:
-  Save &tabstop
+Include: include/setup.vader
 
 Given (Table):
   |a|b|c|d|
@@ -118,5 +117,4 @@ Expect:
   		n2gv = {}
   		n2vt = {}
 
-Execute:
-  Restore
+Include: include/teardown.vader

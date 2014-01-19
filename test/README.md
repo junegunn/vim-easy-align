@@ -7,7 +7,7 @@ Test cases for vim-easy-align
 
 ### Run
 
-```vim
-:Vader*
+```
+./run
 ```
 
