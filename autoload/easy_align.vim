@@ -77,6 +77,14 @@ else
   endfunction
 endif
 
+function! s:ceil2(v)
+  return a:v % 2 == 0 ? a:v : a:v + 1
+endfunction
+
+function! s:floor2(v)
+  return a:v % 2 == 0 ? a:v : a:v - 1
+endfunction
+
 function! s:highlighted_as(line, col, groups)
   if empty(a:groups) | return 0 | endif
   let hl = synIDattr(synID(a:line, a:col, 0), 'name')
@@ -335,7 +343,7 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
   let mode       = a:modes[0]
   let lines      = {}
   let min_indent = -1
-  let max = { 'pivot_len': str2float('0.0'), 'token_len': 0, 'just_len': 0, 'delim_len': 0,
+  let max = { 'pivot_len2': 0, 'token_len': 0, 'just_len': 0, 'delim_len': 0,
         \ 'indent': 0, 'tokens': 0, 'strip_len': 0 }
   let d = a:dict
   let [f, fx] = s:parse_filter(d.filter)
@@ -413,8 +421,9 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
     let max.delim_len = max([max.delim_len, s:strwidth(delim)])
 
     if mode ==? 'c'
-      if max.pivot_len < pw + tw / 2.0
-        let max.pivot_len = pw + tw / 2.0
+      let pivot_len2 = pw * 2 + tw
+      if max.pivot_len2 < pivot_len2
+        let max.pivot_len2 = pivot_len2
       endif
       let max.strip_len = max([max.strip_len, s:strwidth(s:trim(token))])
     endif
@@ -435,9 +444,9 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
     end
 
     if idt !=? 'k'
-      let max.just_len  = 0
-      let max.token_len = 0
-      let max.pivot_len = 0
+      let max.just_len   = 0
+      let max.token_len  = 0
+      let max.pivot_len2 = 0
 
       for [line, elems] in items(lines)
         let [nth, prefix, token, delim] = elems
@@ -463,8 +472,9 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
         let max.token_len = max([max.token_len, tw])
         let max.just_len  = max([max.just_len,  pw + tw])
         if mode ==? 'c'
-          if max.pivot_len < pw + tw / 2.0
-            let max.pivot_len = pw + tw / 2.0
+          let pivot_len2 = pw * 2 + tw
+          if max.pivot_len2 < pivot_len2
+            let max.pivot_len2 = pivot_len2
           endif
         endif
 
@@ -499,15 +509,15 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
       let indent = matchstr(token, '^\s*')
       let token = indent . pad . s:ltrim(token)
     elseif mode ==? 'c'
-      let p1  = max.pivot_len - (pw + tw / 2.0)
-      let p2  = (max.token_len - tw) / 2.0
-      let pf1 = floor(p1)
-      if pf1 < p1 | let p2 = ceil(p2)
-      else        | let p2 = floor(p2)
+      let p1  = max.pivot_len2 - (pw * 2 + tw)
+      let p2  = max.token_len - tw
+      let pf1 = s:floor2(p1)
+      if pf1 < p1 | let p2 = s:ceil2(p2)
+      else        | let p2 = s:floor2(p2)
       endif
-      let strip = float2nr(ceil((max.token_len - max.strip_len) / 2.0))
+      let strip = s:ceil2(max.token_len - max.strip_len) / 2
       let indent = matchstr(token, '^\s*')
-      let token = indent. repeat(' ', float2nr(pf1)) .s:ltrim(token). repeat(' ', float2nr(p2))
+      let token = indent. repeat(' ', pf1 / 2) .s:ltrim(token). repeat(' ', p2 / 2)
       let token = substitute(token, repeat(' ', strip) . '$', '', '')
 
       if d.stick_to_left

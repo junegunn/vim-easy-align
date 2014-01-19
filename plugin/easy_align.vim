@@ -31,8 +31,12 @@ command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#alig
 
 let s:last_command = 'EasyAlign'
 
+function! s:abs(v)
+  return a:v >= 0 ? a:v : - a:v
+endfunction
+
 function! s:remember_visual(mode)
-  let s:last_visual = [a:mode, abs(line("'>") - line("'<")), abs(col("'>") - col("'<"))]
+  let s:last_visual = [a:mode, s:abs(line("'>") - line("'<")), s:abs(col("'>") - col("'<"))]
 endfunction
 
 function! s:repeat_visual()
