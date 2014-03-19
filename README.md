@@ -625,8 +625,6 @@ daisy    = 4
 eggplant = 5
 ```
 
-Notice that `idt` is fuzzy-matched to `indentation`.
-
 In interactive mode, you can change the option value with `CTRL-I` key.
 
 ### Alignments over multiple occurrences of delimiters
