@@ -83,12 +83,7 @@ try these commands:
 Notice that the commands are repeatable with `.` key if you have installed
 [repeat.vim](https://github.com/tpope/vim-repeat). Install
 [visualrepeat](https://github.com/vim-scripts/visualrepeat) as well if you want
-to repeat in visual mode. Or you can add the following mapping to your .vimrc.
-
-```vim
-" Repeat alignment in visual mode with . key
-vmap . <Plug>(EasyAlignRepeat)
-```
+to repeat in visual mode.
 
 Usage
 -----
