@@ -117,4 +117,26 @@ Expect:
   		n2gv = {}
   		n2vt = {}
 
+Given (Tab-indented code (#20)):
+  class MyUnitTest(unittest.TestCase):
+  	def test_base(self):
+  	# 	n2f= {}
+  	## 	n2v= {}
+  	# 	f2v = {}
+  	## 	n2gv  = {}
+  	# 	n2vt   = {}
+
+Execute:
+  set tabstop=12
+  %EasyAlign=
+
+Expect:
+  class MyUnitTest(unittest.TestCase):
+  	def test_base(self):
+  	# 	n2f  = {}
+  	## 	n2v  = {}
+  	# 	f2v  = {}
+  	## 	n2gv = {}
+  	# 	n2vt = {}
+
 Include: include/teardown.vader

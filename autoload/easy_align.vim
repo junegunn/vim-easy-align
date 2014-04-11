@@ -67,9 +67,9 @@ let s:shorthand = {
 \ 'mode_sequence': 'm',  'ignores':          'ig', 'filter':          'f'
 \ }
 
-if exists("*strwidth")
+if exists("*strdisplaywidth")
   function! s:strwidth(str)
-    return strwidth(a:str) + len(matchstr(a:str, '^\t*')) * (&tabstop - 1)
+    return strdisplaywidth(a:str)
   endfunction
 else
   function! s:strwidth(str)
