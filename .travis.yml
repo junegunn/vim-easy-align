@@ -1,0 +1,13 @@
+language: vim
+
+before_script: |
+  git clone https://github.com/junegunn/vader.vim.git
+
+script: |
+  vim -Nu <(cat << VIMRC
+  filetype off
+  set rtp+=vader.vim
+  set rtp+=.
+  set rtp+=after
+  filetype plugin indent on
+  VIMRC) -c 'Vader! test/*'
