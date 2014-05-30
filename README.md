@@ -37,14 +37,9 @@ and extract in ~/.vim or
 [plugin](https://github.com/Shougo/neobundle.vim)
 [manager](https://github.com/MarcWeber/vim-addon-manager).
 
-- [Pathogen](https://github.com/tpope/vim-pathogen)
-  - `git clone https://github.com/junegunn/vim-easy-align.git ~/.vim/bundle/vim-easy-align`
 - [Vundle](https://github.com/gmarik/vundle)
-  1. Add `Bundle 'junegunn/vim-easy-align'` to .vimrc
-  2. Run `:BundleInstall`
-- [NeoBundle](https://github.com/Shougo/neobundle.vim)
-  1. Add `NeoBundle 'junegunn/vim-easy-align'` to .vimrc
-  2. Run `:NeoBundleInstall`
+  1. Add `Plugin 'junegunn/vim-easy-align'` to .vimrc
+  2. Run `:PluginInstall`
 - [vim-plug](https://github.com/junegunn/vim-plug)
   1. Add `Plug 'junegunn/vim-easy-align'` to .vimrc
   2. Run `:PlugInstall`
@@ -55,10 +50,10 @@ TL;DR - One-minute guide
 Add the following mappings to your .vimrc.
 
 ```vim
-" Start interactive EasyAlign in visual mode
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 
-" Start interactive EasyAlign with a Vim movement
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
 nmap <Leader>a <Plug>(EasyAlign)
 ```
 
@@ -88,17 +83,10 @@ to repeat in visual mode.
 Usage
 -----
 
-_vim-easy-align_ defines `:EasyAlign` command (and the right-align
-variant `:EasyAlign!`).
-
-| Mode                      | Command                                          |
-| ------------------------- | ------------------------------------------------ |
-| Interactive mode          | `:EasyAlign[!] [OPTIONS]`                        |
-| Using predefined rules    | `:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]`   |
-| Using regular expressions | `:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]`        |
-| Live interactive mode     | `:LiveEasyAlign[!] [...]`                        |
-
 ### Concept of _alignment rule_
+
+easy-align can align lines of text around any delimiter, but it provides
+shortcuts for the most common use cases with the concept of "_alignment rule_".
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
 which is identified by a single character, *DELIMITER KEY*, such as `<Space>`,
@@ -107,38 +95,50 @@ which is identified by a single character, *DELIMITER KEY*, such as `<Space>`,
 Think of it as a shortcut. Instead of writing regular expression and setting
 several options, you can just type in a single character.
 
+### Starting easy-align
+
+There are two ways to start easy-align.
+
+#### 1. With `<Plug>` mappings
+
+The recommended method is to use `<Plug>` mappings as described earlier.
+
+| Mapping                 | Mode   | Description                                          |
+| ----------------------- | ------ | ---------------------------------------------------- |
+| `<Plug>(EasyAlign)`     | normal | Start interactive mode for a motion/text object      |
+| `<Plug>(EasyAlign)`     | visual | Start interactive mode for the selection             |
+| `<Plug>(LiveEasyAlign)` | normal | Start live-interactive mode for a motion/text object |
+| `<Plug>(LiveEasyAlign)` | visual | Start live-interactive mode for the selection        |
+
+#### 2. Using `:EasyAlign` command
+
+If you prefer command-line or do not want to start interactive mode, you can use
+`:EasyAlign` command instead.
+
+| Mode                                  | Command                                          |
+| ------------------------------------- | ------------------------------------------------ |
+| Interactive mode                      | `:EasyAlign[!] [OPTIONS]`                        |
+| Live interactive mode                 | `:LiveEasyAlign[!] [...]`                        |
+| Non-interactive (predefined rules)    | `:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]`   |
+| Non-interactive (regular expressions) | `:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]`        |
+
 ### Interactive mode
 
-The command will go into the interactive mode when no argument is given.
+The following sections will assume that you have the following mappings in your
+.vimrc:
 
 ```vim
-:EasyAlign
-```
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
 
-However, it is strongly advised that you define mappings for triggering it in
-your `.vimrc` as follows. (Of course you can use any key combination as the
-trigger.)
-
-```vim
-" For visual mode (e.g. vip<Enter>)
-vmap <Enter>   <Plug>(EasyAlign)
-
-" For normal mode, with Vim movement (e.g. <Leader>aip)
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
 nmap <Leader>a <Plug>(EasyAlign)
 ```
 
-The advantages of using the above mappings are two-fold:
+With these mappings, you can align text with only a few keystrokes.
 
-- They require less keystrokes
-- They make alignments repeatable with
-  [repeat.vim](https://github.com/tpope/vim-repeat) and
-  [visualrepeat](https://github.com/vim-scripts/visualrepeat)
-
-
-With the mapping, you can align selected lines of text with only a few keystrokes.
-
-1. `<Enter>` key in visual mode, or `<Leader>a` followed by a Vim movement to
-   start interactive EasyAlign command
+1. `<Enter>` key in visual mode, or `<Leader>a` followed by a motion or a text
+   object to start interactive mode
 1. Optional: Enter keys to select alignment mode (left, right, or center)
 1. Optional: N-th delimiter (default: 1)
     - `1`         Around the 1st occurrences of delimiters
@@ -151,7 +151,7 @@ With the mapping, you can align selected lines of text with only a few keystroke
     - ...
 1. Delimiter key (a single keystroke; `<Space>`, `=`, `:`, `.`, `|`, `&`, `,`)
 
-Alignment rules for the following delimiters have been defined to meet the most needs.
+#### Predefined alignment rules
 
 | Delimiter key | Description/Use cases                                                |
 | ------------- | -------------------------------------------------------------------- |
@@ -167,7 +167,7 @@ You can override these default rules or define your own rules with
 `g:easy_align_delimiters`, which will be described in
 [the later section](https://github.com/junegunn/vim-easy-align#extending-alignment-rules).
 
-#### Example command sequences
+#### Examples
 
 | With visual map     | Description                        | Equivalent command     |
 | ------------------- | ---------------------------------- | ---------------------- |
@@ -178,7 +178,6 @@ You can override these default rules or define your own rules with
 | `<Enter>:`          | Around 1st colon (`key:  value`)   | `:'<,'>EasyAlign:`     |
 | `<Enter><Right>:`   | Around 1st colon (`key : value`)   | `:'<,'>EasyAlign:s0l1` |
 | `<Enter>=`          | Around 1st operators with =        | `:'<,'>EasyAlign=`     |
-| `<Enter>2=`         | Around 2nd operators with =        | `:'<,'>EasyAlign2=`    |
 | `<Enter>3=`         | Around 3rd operators with =        | `:'<,'>EasyAlign3=`    |
 | `<Enter>*=`         | Around all operators with =        | `:'<,'>EasyAlign*=`    |
 | `<Enter>**=`        | Left-right alternating around =    | `:'<,'>EasyAlign**=`   |
@@ -193,7 +192,7 @@ For example, if you want to align text around all occurrences of numbers:
 
 - `<Enter>`
 - `*`
-- `<CTRL-/>` (or `<CTRL-X>` on GVim)
+- `<CTRL-X>`
   - `[0-9]\+`
 
 #### Alignment options in interactive mode
@@ -216,80 +215,50 @@ keys listed below. The meaning of each option will be described in
 | `<Right>` | `stick_to_left`    | `{ 'stick_to_left': 0, 'left_margin': 1 }`         |
 | `<Down>`  | `*_margin`         | `{ 'left_margin': 0, 'right_margin': 0 }`          |
 
-After a successful alignment, you can repeat the same operation using the
-repeatable, non-interactive command recorded in `g:easy_align_last_command`.
-
-```vim
-:<C-R>=g:easy_align_last_command<Enter><Enter>
-```
-
-### EasyAlign as Vim operator
-
-With normal-mode map to `<Plug>(EasyAlign)`, EasyAlign command becomes a Vim
-operator that can be used with any Vim movement.
-
-```vim
-nmap <Leader>a <Plug>(EasyAlign)
-```
-
-Now without going into visual mode, you can align the lines in the paragraph
-with `<Leader>aip=`, `<Leader>aip*|`, or `<Leader>aip:`. And if you have
-installed [repeat.vim](https://github.com/tpope/vim-repeat) by Tim Pope, the
-exact alignment can be repeated with `.` key.
-
 ### Live interactive mode
 
 If you're performing a complex alignment where multiple options should be
 carefully adjusted, try "live interactive mode" where you can preview the result
 of the alignment on-the-fly as you type in.
 
-Live interactive mode can be started with `:LiveEasyAlign` command which takes
-the same parameters as `:EasyAlign`. I suggest you define mappings such as
-follows in addition to the ones for `:EasyAlign` command.
-
-```vim
-vmap <Leader><Enter>   <Plug>(LiveEasyAlign)
-nmap <Leader><Leader>a <Plug>(LiveEasyAlign)
-```
+Live interactive mode can be started with either `<Plug>(LiveEasyAlign)` or
+`:LiveEasyAlign` command.
 
 In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on
 regular expression) again to finalize the alignment. This allows you to preview
 the result of the alignment and freely change the delimiter using backspace key
 without leaving the interactive mode.
 
-### Using `EasyAlign` in command line
+### Non-interactive mode
 
-Instead of going into the interactive mode, you can just type in arguments to
+Instead of starting interactive mode, you can use declarative, non-interactive
 `:EasyAlign` command.
 
 ```vim
 " Using predefined alignment rules
-:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]
+"   :EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]
+:EasyAlign :
+:EasyAlign =
+:EasyAlign *=
+:EasyAlign 3\
 
 " Using arbitrary regular expressions
-:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]
+"   :EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]
+:EasyAlign /[:;]\+/
+:EasyAlign 2/[:;]\+/
+:EasyAlign */[:;]\+/
+:EasyAlign **/[:;]\+/
 ```
 
-For example, when aligning the following lines around colons and semi-colons,
-
-    apple;:banana::cake
-    data;;exchange:;format
-
-try these commands:
-
-- `:EasyAlign /[:;]\+/`
-- `:EasyAlign 2/[:;]\+/`
-- `:EasyAlign */[:;]\+/`
-- `:EasyAlign **/[:;]\+/`
-
-You can also provide a number of alignment options, [which will be discussed in
+A command can end with alignment options, [each of which will be discussed in
 detail later](https://github.com/junegunn/vim-easy-align#alignment-options),
-to EasyAlign command in Vim dictionary format.
+in Vim dictionary format.
 
 - `:EasyAlign * /[:;]\+/ { 'stick_to_left': 1, 'left_margin': 0 }`
 
-Which means that the matched delimiter should be positioned right next to the
-preceding token, without margin on the left. So we get:
+`stick_to_left` of 1 means that the matched delimiter should be positioned right
+next to the preceding token, and `left_margin` of 0 removes the margin on the
+left. So we get:
 
     apple;: banana::   cake
     data;;  exchange:; format
@@ -321,13 +290,13 @@ The following table summarizes the shorthand notation.
 | `mode_sequence`    | `m[lrc*]*` |
 | `indentation`      | `i[ksdn]`  |
 
-For your information, the same thing can be done in the interactive mode as well
-with the following key combination.
+For your information, the same operation can be done in interactive mode as
+follows:
 
 - `<Enter>`
 - `*`
 - `<Left>`
-- `<CTRL-/>` (or `<CTRL-X>` on GVim)
+- `<CTRL-X>`
   - `[:;]\+`
 
 ### Partial alignment in blockwise-visual mode
@@ -769,7 +738,7 @@ for more examples.
 Related work
 ------------
 
-There are two well-known plugins with the same goal as that of vim-easy-align.
+There are two well-known plugins with the same goal as that of easy-align.
 
 - [DrChip's Alignment Tool for Vim](http://www.drchip.org/astronaut/vim/align.html) (herein will be referred to as "Align")
 - [Tabular](https://github.com/godlygeek/tabular)
@@ -777,15 +746,15 @@ There are two well-known plugins with the same goal as that of vim-easy-align.
 Both are great plugins with very large user bases. I actually had been a Tabular
 user for a couple of years before I finally made up my mind to roll out my own.
 
-So why would someone choose vim-easy-align over those two?
+So why would someone choose easy-align over those two?
 
 Feature-by-feature comparison I believe is not quite useful, since a typical
 user will end up using only a small subset of the features.
-So I will mention just a few core benefits of vim-easy-align.
+So I will mention just a few core benefits of easy-align.
 
 ### Ease of use
 
-As the name implies, vim-easy-align is *easier* to use. Its interactive mode
+As the name implies, easy-align is *easier* to use. Its interactive mode
 allows you to achieve what you want with just a few keystrokes.
 The key sequence is mnemonic, so it's easy to remember and execute.
 It even feels like a native Vim command!
@@ -803,17 +772,17 @@ without affecting the ones before it?"_
 
 ### Clean
 
-vim-easy-align doesn't clutter your workspace with mappings and global
+easy-align doesn't clutter your workspace with mappings and global
 variables. All you would need is a single mapping to the interactive EasyAlign
 command, and even that is totally up to you.
 
 ### Optimized for code editing
 
-vim-easy-align by default performs syntax-aware alignment, which is invaluable
+easy-align by default performs syntax-aware alignment, which is invaluable
 when editing codes.
 
 Try to come up with a regular expression to correctly format the following code
-snippet. With vim-easy-align under default configuration and a mapping, it can
+snippet. With easy-align under default configuration and a mapping, it can
 be done with just two keystrokes: `<Enter>:`
 
 ```javascript
@@ -833,13 +802,13 @@ looks up the syntax group of a character on a certain position)
 
 ### Thoroughly tested
 
-Virtually every aspect of vim-easy-align is being tested with a comprehensive
+Virtually every aspect of easy-align is being tested with a comprehensive
 set of test cases using [Vader.vim](https://github.com/junegunn/vader.vim).
 
 ### "Okay. So should I switch?"
 
-Maybe, but I can't really say. I have no ambition to make vim-easy-align
-an absolute superior to the others. For some cases, vim-easy-align works better
+Maybe, but I can't really say. I have no ambition to make easy-align
+an absolute superior to the others. For some cases, easy-align works better
 than the others, but for some other cases, Tabular or Align.vim might be a
 better choice.
 
