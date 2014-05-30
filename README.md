@@ -85,7 +85,7 @@ Usage
 
 ### Concept of _alignment rule_
 
-easy-align can align lines of text around any delimiter, but it provides
+Though easy-align can align lines of text around any delimiter, it provides
 shortcuts for the most common use cases with the concept of "_alignment rule_".
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
@@ -95,11 +95,11 @@ which is identified by a single character, *DELIMITER KEY*, such as `<Space>`,
 Think of it as a shortcut. Instead of writing regular expression and setting
 several options, you can just type in a single character.
 
-### Starting easy-align
+### Execution models
 
-There are two ways to start easy-align.
+There are two ways to use easy-align.
 
-#### 1. With `<Plug>` mappings
+#### 1. Using `<Plug>` mappings
 
 The recommended method is to use `<Plug>` mappings as described earlier.
 
@@ -115,17 +115,17 @@ The recommended method is to use `<Plug>` mappings as described earlier.
 If you prefer command-line or do not want to start interactive mode, you can use
 `:EasyAlign` command instead.
 
-| Mode                                  | Command                                          |
-| ------------------------------------- | ------------------------------------------------ |
-| Interactive mode                      | `:EasyAlign[!] [OPTIONS]`                        |
-| Live interactive mode                 | `:LiveEasyAlign[!] [...]`                        |
-| Non-interactive (predefined rules)    | `:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]`   |
-| Non-interactive (regular expressions) | `:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]`        |
+| Mode                                       | Command                                          |
+| ------------------------------------------ | ------------------------------------------------ |
+| Interactive mode                           | `:EasyAlign[!] [OPTIONS]`                        |
+| Live interactive mode                      | `:LiveEasyAlign[!] [...]`                        |
+| Non-interactive mode (predefined rules)    | `:EasyAlign[!] [N-th] DELIMITER_KEY [OPTIONS]`   |
+| Non-interactive mode (regular expressions) | `:EasyAlign[!] [N-th] /REGEXP/ [OPTIONS]`        |
 
 ### Interactive mode
 
-The following sections will assume that you have the following mappings in your
-.vimrc:
+The following sections will assume that you have `<Plug>(EasyAlign)` mappings in
+your .vimrc as below:
 
 ```vim
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -370,7 +370,7 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 With `filter` option, you can align lines that only match or do not match a
 given pattern. There are several ways to set the pattern.
 
-1. Press `CTRL-F` in interactive mode and input `g/pat/` or `v/pat/`
+1. Press `CTRL-F` in interactive mode and type in `g/pat/` or `v/pat/`
 2. In command-line, it can be written in dictionary format: `{'filter': 'g/pat/'}`
 3. Or in shorthand notation: `g/pat/` or `v/pat/`
 
