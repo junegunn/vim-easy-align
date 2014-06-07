@@ -3,10 +3,14 @@ vim-easy-align examples
 
 Open this document in your Vim and try it yourself.
 
-This document assumes that you have defined the following mapping.
+This document assumes that you have defined the following mappings.
 
 ```vim
-vnoremap <silent> <Enter> :EasyAlign<cr>
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+nmap <Leader>a <Plug>(EasyAlign)
 ```
 
 To enable syntax highlighting in the code blocks, define and call the following
