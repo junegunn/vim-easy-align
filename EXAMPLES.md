@@ -218,6 +218,9 @@ This only works when syntax highlighting is enabled.
 Aligning in-line comments
 -------------------------
 
+*Note: Since the current version provides '#'-rule as one of the default rules,
+you can ignore this section*
+
 ```ruby
 apple = 1 # comment not aligned
 banana = 'Gros Michel' # comment 2

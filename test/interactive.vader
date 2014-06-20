@@ -893,10 +893,6 @@ Expect ruby:
   apricot = 'DAD' +      'F#AD'
   banana = 'Gros Michel' ## comment 2
 
-Execute (define # rule):
-  let g:easy_align_delimiters =
-  \ { '#': { 'pattern': '#\+', 'ignores': ['String'], 'delimiter_align': 'l' } }
-
 Do (using # rule):
   vip\<Enter>\<C-U>#
 

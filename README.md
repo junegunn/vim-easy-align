@@ -161,6 +161,7 @@ With these mappings, you can align text with only a few keystrokes.
 | `.`           | Multi-line method chaining                                           |
 | `,`           | Multi-line method arguments                                          |
 | `&`           | LaTeX tables (matches `&` and `\\`)                                  |
+| `#`           | Ruby/Python comments                                                 |
 | `<Bar>`       | Table markdown                                                       |
 
 You can override these default rules or define your own rules with
@@ -670,8 +671,10 @@ You may refer to the definitions of the default alignment rules
 ```vim
 let g:easy_align_delimiters = {
 \ '>': { 'pattern': '>>\|=>\|>' },
-\ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignore_groups': ['String'] },
-\ '#': { 'pattern': '#\+', 'ignore_groups': ['String'], 'delimiter_align': 'l' },
+\ '/': {
+\     'pattern':         '//\+\|/\*\|\*/',
+\     'delimiter_align': 'l',
+\     'ignore_groups':   ['^\(.\(Comment\)\@!\)*$'] },
 \ ']': {
 \     'pattern':       '[[\]]',
 \     'left_margin':   0,
@@ -685,8 +688,8 @@ let g:easy_align_delimiters = {
 \     'stick_to_left': 0
 \   },
 \ 'd': {
-\     'pattern': ' \(\S\+\s*[;=]\)\@=',
-\     'left_margin': 0,
+\     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+\     'left_margin':  0,
 \     'right_margin': 0
 \   }
 \ }
