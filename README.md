@@ -90,7 +90,7 @@ shortcuts for the most common use cases with the concept of "_alignment rule_".
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
 which is identified by a single character, *DELIMITER KEY*, such as `<Space>`,
-`=`, `:`, `.`, `|`, `&`, and `,`.
+`=`, `:`, `.`, `|`, `&`, `#`, and `,`.
 
 Think of it as a shortcut. Instead of writing regular expression and setting
 several options, you can just type in a single character.
@@ -149,7 +149,7 @@ With these mappings, you can align text with only a few keystrokes.
     - `-`         Around the last occurrences of delimiters (`-1`)
     - `-2`        Around the second to last occurrences of delimiters
     - ...
-1. Delimiter key (a single keystroke; `<Space>`, `=`, `:`, `.`, `|`, `&`, `,`)
+1. Delimiter key (a single keystroke; `<Space>`, `=`, `:`, `.`, `|`, `&`, `#`, `,`)
 
 #### Predefined alignment rules
 
@@ -452,7 +452,9 @@ For example if you set `ignore_groups` option to be an empty list, you get
 }
 ```
 
-Satisfied? :satisfied:
+If a pattern in `ignore_groups` is prepended by a `!`, it will have the opposite
+meaning. For instance, if `ignore_groups` is given as `['!Comment']`, delimiters
+that are *not* highlighted as Comment will be ignored during the alignment.
 
 ### Ignoring unmatched lines
 
@@ -674,7 +676,7 @@ let g:easy_align_delimiters = {
 \ '/': {
 \     'pattern':         '//\+\|/\*\|\*/',
 \     'delimiter_align': 'l',
-\     'ignore_groups':   ['^\(.\(Comment\)\@!\)*$'] },
+\     'ignore_groups':   ['!Comment'] },
 \ ']': {
 \     'pattern':       '[[\]]',
 \     'left_margin':   0,

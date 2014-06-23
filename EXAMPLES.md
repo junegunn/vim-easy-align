@@ -219,7 +219,7 @@ Aligning in-line comments
 -------------------------
 
 *Note: Since the current version provides '#'-rule as one of the default rules,
-you can ignore this section*
+you can ignore this section.*
 
 ```ruby
 apple = 1 # comment not aligned
