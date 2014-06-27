@@ -80,25 +80,20 @@ function! s:generic_easy_align_op(type, vmode, live)
 
   if a:vmode
     let vmode = a:type
+    let [l1, l2] = ["'<", "'>"]
     call s:remember_visual(vmode)
   else
-    let tail = "\<C-c>"
-    if a:type == 'line'
-      silent execute "normal! '[V']".tail
-    elseif a:type == 'block'
-      silent execute "normal! `[\<C-V>`]".tail
-    else
-      silent execute "normal! `[v`]".tail
-    endif
     let vmode = ''
+    let [l1, l2] = [line("'["), line("']")]
     unlet! s:last_visual
   endif
 
   try
+    let range = l1.','.l2
     if get(g:, 'easy_align_need_repeat', 0)
-      execute "'<,'>". g:easy_align_last_command
+      execute range . g:easy_align_last_command
     else
-      '<,'>call easy_align#align('<bang>' == '!', a:live, vmode, '')
+      execute range . "call easy_align#align('<bang>' == '!', a:live, vmode, '')"
     end
     call s:set_repeat()
   finally

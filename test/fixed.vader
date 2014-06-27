@@ -139,4 +139,26 @@ Expect:
   	## 	n2gv = {}
   	# 	n2vt = {}
 
+Given (Some text):
+  a,b,c
+
+  d,e,f
+
+Do (Select 1st line, align 3rd line):
+- First line
+  V\<esc>
+- Last line
+  G
+- Align
+  \<space>Aip*,
+- Previous selection
+  gv
+- Upcase
+  U
+
+Expect:
+  A,B,C
+
+  d, e, f
+
 Include: include/teardown.vader
