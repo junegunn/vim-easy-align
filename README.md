@@ -170,20 +170,20 @@ You can override these default rules or define your own rules with
 
 #### Examples
 
-| With visual map     | Description                        | Equivalent command     |
-| ------------------- | ---------------------------------- | ---------------------- |
-| `<Enter><Space>`    | Around 1st whitespaces             | `:'<,'>EasyAlign\ `    |
-| `<Enter>2<Space>`   | Around 2nd whitespaces             | `:'<,'>EasyAlign2\ `   |
-| `<Enter>-<Space>`   | Around the last whitespaces        | `:'<,'>EasyAlign-\ `   |
-| `<Enter>-2<Space>`  | Around the 2nd to last whitespaces | `:'<,'>EasyAlign-2\ `  |
-| `<Enter>:`          | Around 1st colon (`key:  value`)   | `:'<,'>EasyAlign:`     |
-| `<Enter><Right>:`   | Around 1st colon (`key : value`)   | `:'<,'>EasyAlign:s0l1` |
-| `<Enter>=`          | Around 1st operators with =        | `:'<,'>EasyAlign=`     |
-| `<Enter>3=`         | Around 3rd operators with =        | `:'<,'>EasyAlign3=`    |
-| `<Enter>*=`         | Around all operators with =        | `:'<,'>EasyAlign*=`    |
-| `<Enter>**=`        | Left-right alternating around =    | `:'<,'>EasyAlign**=`   |
-| `<Enter><Enter>=`   | Right alignment around 1st =       | `:'<,'>EasyAlign!=`    |
-| `<Enter><Enter>**=` | Right-left alternating around =    | `:'<,'>EasyAlign!**=`  |
+| With visual map     | Description                        | Equivalent command    |
+| ------------------- | ---------------------------------- | --------------------- |
+| `<Enter><Space>`    | Around 1st whitespaces             | `:'<,'>EasyAlign\ `   |
+| `<Enter>2<Space>`   | Around 2nd whitespaces             | `:'<,'>EasyAlign2\ `  |
+| `<Enter>-<Space>`   | Around the last whitespaces        | `:'<,'>EasyAlign-\ `  |
+| `<Enter>-2<Space>`  | Around the 2nd to last whitespaces | `:'<,'>EasyAlign-2\ ` |
+| `<Enter>:`          | Around 1st colon (`key:  value`)   | `:'<,'>EasyAlign:`    |
+| `<Enter><Right>:`   | Around 1st colon (`key : value`)   | `:'<,'>EasyAlign:<l1` |
+| `<Enter>=`          | Around 1st operators with =        | `:'<,'>EasyAlign=`    |
+| `<Enter>3=`         | Around 3rd operators with =        | `:'<,'>EasyAlign3=`   |
+| `<Enter>*=`         | Around all operators with =        | `:'<,'>EasyAlign*=`   |
+| `<Enter>**=`        | Left-right alternating around =    | `:'<,'>EasyAlign**=`  |
+| `<Enter><Enter>=`   | Right alignment around 1st =       | `:'<,'>EasyAlign!=`   |
+| `<Enter><Enter>**=` | Right-left alternating around =    | `:'<,'>EasyAlign!**=` |
 
 #### Using regular expressions
 
@@ -211,7 +211,7 @@ keys listed below. The meaning of each option will be described in
 | `CTRL-D`  | `delimiter_align`  | left, center, right                                |
 | `CTRL-U`  | `ignore_unmatched` | 0, 1                                               |
 | `CTRL-G`  | `ignore_groups`    | [], ['String'], ['Comment'], ['String', 'Comment'] |
-| `CTRL-O`  | `mode_sequence`    | Input string (`/[lrc]+\*{0,2}/`)                   |
+| `CTRL-A`  | `align`            | Input string (`/[lrc]+\*{0,2}/`)                   |
 | `<Left>`  | `stick_to_left`    | `{ 'stick_to_left': 1, 'left_margin': 0 }`         |
 | `<Right>` | `stick_to_left`    | `{ 'stick_to_left': 0, 'left_margin': 1 }`         |
 | `<Down>`  | `*_margin`         | `{ 'left_margin': 0, 'right_margin': 0 }`          |
@@ -275,21 +275,21 @@ You can even omit spaces between the arguments, so concisely (or cryptically):
 Nice. But let's make it even shorter. Option values can be written in shorthand
 notation.
 
-- `:EasyAlign*/[:;]\+/s1l0`
+- `:EasyAlign*/[:;]\+/<l0`
 
 The following table summarizes the shorthand notation.
 
-| Option             | Expression |
-| ------------------ | ---------- |
-| `filter`           | `[gv]/.*/` |
-| `left_margin`      | `l[0-9]+`  |
-| `right_margin`     | `r[0-9]+`  |
-| `stick_to_left`    | `s[01]`    |
-| `ignore_unmatched` | `iu[01]`   |
-| `ignore_groups`    | `ig\[.*\]` |
-| `delimiter_align`  | `d[lrc]`   |
-| `mode_sequence`    | `m[lrc*]*` |
-| `indentation`      | `i[ksdn]`  |
+| Option             | Expression     |
+| ------------------ | -------------- |
+| `filter`           | `[gv]/.*/`     |
+| `left_margin`      | `l[0-9]+`      |
+| `right_margin`     | `r[0-9]+`      |
+| `stick_to_left`    | `<` or `s[01]` |
+| `ignore_unmatched` | `iu[01]`       |
+| `ignore_groups`    | `ig\[.*\]`     |
+| `align`            | `a[lrc*]*`     |
+| `delimiter_align`  | `d[lrc]`       |
+| `indentation`      | `i[ksdn]`      |
 
 For your information, the same operation can be done in interactive mode as
 follows:
@@ -345,7 +345,7 @@ Alignment options
 | `ignore_unmatched` | boolean | 1                     | Whether to ignore lines without matching delimiter      |
 | `indentation`      | string  | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
 | `delimiter_align`  | string  | `r`                   | Determines how to align delimiters of different lengths |
-| `mode_sequence`    | string  |                       | Alignment modes for multiple occurrences of delimiters  |
+| `align`            | string  |                       | Alignment modes for multiple occurrences of delimiters  |
 
 There are 4 ways to set alignment options (from lowest precedence to highest):
 
@@ -364,7 +364,7 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 | `ignore_unmatched` | `CTRL-U`            | `iu[01]`    | `g:easy_align_ignore_unmatched` |
 | `indentation`      | `CTRL-I`            | `i[ksdn]`   | `g:easy_align_indentation`      |
 | `delimiter_align`  | `CTRL-D`            | `d[lrc]`    | `g:easy_align_delimiter_align`  |
-| `mode_sequence`    | `CTRL-O`            | `m[lrc*]*`  |                                 |
+| `align`            | `CTRL-A`            | `m[lrc*]*`  |                                 |
 
 ### Filtering lines
 
@@ -626,38 +626,38 @@ To recap:
 :EasyAlign! **=
 ```
 
-In addition to these, you can fine-tune alignments over multiple occurrences of
-the delimiters with 'mode_sequence' option. (The option can also be set
-in interactive mode with the special key `CTRL-O`)
+In addition to these, you can fine-tune alignments over multiple occurrences
+of the delimiters with 'align' option. (The option can also be set in
+interactive mode with the special key `CTRL-A`)
 
 ```vim
 " Left alignment over the first two occurrences of delimiters
-:EasyAlign = { 'mode_sequence': 'll' }
+:EasyAlign = { 'align': 'll' }
 
 " Right, left, center alignment over the 1st to 3rd occurrences of delimiters
-:EasyAlign = { 'm': 'rlc' }
+:EasyAlign = { 'a': 'rlc' }
 
 " Using shorthand notation
-:EasyAlign = mrlc
+:EasyAlign = arlc
 
 " Right, left, center alignment over the 2nd to 4th occurrences of delimiters
-:EasyAlign 2=mrlc
+:EasyAlign 2=arlc
 
 " (*) Repeating alignments (default: l, r, or c)
 "   Right, left, center, center, center, center, ...
-:EasyAlign *=mrlc
+:EasyAlign *=arlc
 
 " (**) Alternating alignments (default: lr or rl)
 "   Right, left, center, right, left, center, ...
-:EasyAlign **=mrlc
+:EasyAlign **=arlc
 
 " Right, left, center, center, center, ... repeating alignment
 " over the 3rd to the last occurrences of delimiters
-:EasyAlign 3=mrlc*
+:EasyAlign 3=arlc*
 
 " Right, left, center, right, left, center, ... alternating alignment
 " over the 3rd to the last occurrences of delimiters
-:EasyAlign 3=mrlc**
+:EasyAlign 3=arlc**
 ```
 
 ### Extending alignment rules

@@ -758,7 +758,7 @@ Expect ruby:
   dddddd   /=      123
   gg      <=>       ee
 
-Do (Alignment using mode_sequence, delimiter_align):
+Do (DEPRECATED: Alignment using mode_sequence, delimiter_align):
   vip\<Enter>\<C-O>\<Backspace>cr*\<Enter>\<C-D>=
 
 Expect ruby:
@@ -787,8 +787,67 @@ Expect ruby:
       dddddd      /=       123
         gg        <=>       ee
 
-Do (mode_sequence starting from 2nd, delimiter_align = center):
+Do (Alignment using align, delimiter_align):
+  vip\<Enter>\<C-A>\<Backspace>cr*\<Enter>\<C-D>=
+
+Expect ruby:
+         a        =
+         a        =          1
+       bbbb       .=         2
+      ccccccc     =          3
+  ccccccccccccccc
+        ddd       =          #
+       eeee       ===      eee =  eee =   eee = f
+        fff       =        ggg +=  gg &&=  gg
+         g        !=  hhhhhhhh == # 8
+         i        :=         5
+         i        %=         5
+         i        *=         5
+         j        =~         5
+         j        >=         5
+        aa        =>       123
+        aa        <<=      123
+        aa        >>=      123
+        bbb       =>       123
+         c        =>   1233123
+         d        =>       123
+      dddddd      &&=      123
+      dddddd      ||=      123
+      dddddd      /=       123
+        gg        <=>       ee
+
+
+Do (DEPRECATED: mode_sequence starting from 2nd, delimiter_align = center):
   vip\<Enter>\<C-O>\<Backspace>rc**\<Enter>\<C-D>\<C-D>2=
+
+Expect ruby:
+  a =
+  a =                    1
+  bbbb .=                2
+  ccccccc =              3
+  ccccccccccccccc
+  ddd =                  #
+  eeee ===             eee =  eee  =  eee = f
+  fff =                ggg += gg  &&=  gg
+  g !=            hhhhhhhh == # 8
+  i   :=                 5
+  i     %=               5
+  i       *=             5
+  j     =~               5
+  j   >=                 5
+  aa      =>           123
+  aa <<=               123
+  aa        >>=        123
+  bbb               => 123
+  c     =>         1233123
+  d   =>               123
+  dddddd &&=           123
+  dddddd ||=           123
+  dddddd /=            123
+  gg <=>                ee
+
+Do (align starting from 2nd, delimiter_align = center):
+  vip\<Enter>\<C-A>\<Backspace>rc**\<Enter>\<C-D>\<C-D>2=
 
 Expect ruby:
   a =

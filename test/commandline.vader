@@ -40,14 +40,21 @@ Expect:
   apple;:;;banana   :: cake
   data  ;; exchange:;::format
 
-Execute (shorthand notation of mode_sequence and margin):
+Execute (DEPRECATED: shorthand notation of mode_sequence and margin):
   %EasyAlign/[:;]\+/mrc*l2r2
 
 Expect:
   apple  ;:;;   banana     ::   cake
    data    ;;  exchange  :;::  format
 
-Execute (deep indentation):
+Execute (shorthand notation of align and margin):
+  %EasyAlign/[:;]\+/arc*l2r2
+
+Expect:
+  apple  ;:;;   banana     ::   cake
+   data    ;;  exchange  :;::  format
+
+Execute (DEPRECATED: deep indentation):
   %EasyAlign/[:;]\+/mrc*l2r2
   %EasyAlign*/[:;]\+/idmrl*
 
@@ -55,8 +62,23 @@ Expect:
    apple ;:;; banana     :: cake
     data   ;; exchange :;:: format
 
+Execute (deep indentation):
+  %EasyAlign/[:;]\+/arc*l2r2
+  %EasyAlign*/[:;]\+/idarl*
+
+Expect:
+   apple ;:;; banana     :: cake
+    data   ;; exchange :;:: format
+
 Execute (stick_to_left):
   %EasyAlign*/[:;]\+/stl1l0dlrm3
+
+Expect:
+  apple;:;;   banana::       cake
+  data;;      exchange:;::   format
+
+Execute (<):
+  %EasyAlign*/[:;]\+/<l0dlrm3
 
 Expect:
   apple;:;;   banana::       cake

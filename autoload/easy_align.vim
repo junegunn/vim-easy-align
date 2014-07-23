@@ -51,7 +51,8 @@ let s:known_options = {
 \ 'margin_left':   [0, 1], 'margin_right':     [0, 1], 'stick_to_left':   [0],
 \ 'left_margin':   [0, 1], 'right_margin':     [0, 1], 'indentation':     [1],
 \ 'ignore_groups': [3   ], 'ignore_unmatched': [0   ], 'delimiter_align': [1],
-\ 'mode_sequence': [1   ], 'ignores':          [3],    'filter':          [1]
+\ 'mode_sequence': [1   ], 'ignores':          [3],    'filter':          [1],
+\ 'align':         [1   ]
 \ }
 
 let s:option_values = {
@@ -65,7 +66,8 @@ let s:shorthand = {
 \ 'margin_left':   'lm', 'margin_right':     'rm', 'stick_to_left':   'stl',
 \ 'left_margin':   'lm', 'right_margin':     'rm', 'indentation':     'idt',
 \ 'ignore_groups': 'ig', 'ignore_unmatched': 'iu', 'delimiter_align': 'da',
-\ 'mode_sequence': 'm',  'ignores':          'ig', 'filter':          'f'
+\ 'mode_sequence': 'a',  'ignores':          'ig', 'filter':          'f',
+\ 'align':         'a'
 \ }
 
 if exists("*strdisplaywidth")
@@ -227,8 +229,9 @@ function! s:normalize_options(opts)
     let v = a:opts[k]
     let k = s:fuzzy_lu(k)
     " Backward-compatibility
-    if k == 'margin_left'  | let k = 'left_margin'  | endif
-    if k == 'margin_right' | let k = 'right_margin' | endif
+    if k == 'margin_left'   | let k = 'left_margin'    | endif
+    if k == 'margin_right'  | let k = 'right_margin'   | endif
+    if k == 'mode_sequence' | let k = 'align'          | endif
     let ret[k] = v
     unlet v
   endfor
@@ -668,7 +671,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live)
       endif
     elseif c == 13 " Enter key
       let mode = s:shift(a:modes, 1)
-      if has_key(opts, 'm')
+      if has_key(opts, 'a')
         let opts.m = mode . strpart(opts.m, 1)
       endif
     elseif ch == '-'
@@ -723,15 +726,15 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live)
       silent! call remove(opts, 'stl')
       silent! call remove(opts, 'lm')
       silent! call remove(opts, 'rm')
-    elseif ch == "\<C-O>"
-      let modes = tolower(s:input("Mode sequence: ", get(opts, 'm', mode), a:vis))
+    elseif ch == "\<C-A>" || ch == "\<C-O>"
+      let modes = tolower(s:input("Alignment ([lrc...][[*]*]): ", get(opts, 'a', mode), a:vis))
       if match(modes, '^[lrc]\+\*\{0,2}$') != -1
-        let opts['m'] = modes
+        let opts['a'] = modes
         let mode      = modes[0]
         while mode != s:shift(a:modes, 1)
         endwhile
       else
-        silent! call remove(opts, 'm')
+        silent! call remove(opts, 'a')
       endif
     elseif ch == "\<C-_>" || ch == "\<C-X>"
       if a:live && regx && !empty(d)
@@ -811,8 +814,8 @@ endfunction
 
 let s:shorthand_regex =
   \ '\s*\%('
-  \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(s\%(tl\)\?[01]\)\|'
-  \   .'\(da\?[clr]\)\|\(ms\?[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\([gv]/.*/\)\|\(ig\[.*\]\)'
+  \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(\%(s\%(tl\)\?[01]\)\|<\)\|'
+  \   .'\(da\?[clr]\)\|\(\%(ms\?\|a\)[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\([gv]/.*/\)\|\(ig\[.*\]\)'
   \ .'\)\+\s*$'
 
 function! s:parse_shorthand_opts(expr)
@@ -828,7 +831,7 @@ function! s:parse_shorthand_opts(expr)
     let match = matchlist(expr, regex)
     if empty(match) | break | endif
     for m in filter(match[ 1 : -1 ], '!empty(v:val)')
-      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v']
+      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', '<', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v', 'a']
         if stridx(tolower(m), key) == 0
           let rest = strpart(m, len(key))
           if key == 'i' | let key = 'idt' | endif
@@ -837,7 +840,7 @@ function! s:parse_shorthand_opts(expr)
             let key = 'f'
           endif
 
-          if key == 'idt' || index(['d', 'f', 'm'], key[0]) >= 0
+          if key == 'idt' || index(['d', 'f', 'm', 'a'], key[0]) >= 0
             let opts[key] = rest
           elseif key == 'ig'
             try
@@ -850,6 +853,8 @@ function! s:parse_shorthand_opts(expr)
             catch
               call s:exit("Invalid ignore_groups: ". a:expr)
             endtry
+          elseif key == '<'
+            let opts['stl'] = 1
           else
             let opts[key] = str2nr(rest)
           endif
@@ -1025,7 +1030,7 @@ function! s:process(range, mode, n, ch, opts, regexp, rules, bvis)
   let [nth, recur] = s:parse_nth(a:n)
   let dict = s:build_dict(a:rules, a:ch, a:regexp, a:opts)
   let [mode_sequence, recur] = s:build_mode_sequence(
-    \ get(dict, 'mode_sequence', recur == 2 ? s:alternating_modes(a:mode) : a:mode),
+    \ get(dict, 'align', recur == 2 ? s:alternating_modes(a:mode) : a:mode),
     \ recur)
 
   if recur && a:bvis
@@ -1050,11 +1055,11 @@ endfunction
 function s:summarize(opts, recur, mode_sequence)
   let copts = s:compact_options(a:opts)
   let nbmode = s:interactive_modes(0)[0]
-  if !has_key(copts, 'm') && (
+  if !has_key(copts, 'a') && (
     \  (a:recur == 2 && s:alternating_modes(nbmode) != a:mode_sequence) ||
     \  (a:recur != 2 && (a:mode_sequence[0] != nbmode || len(a:mode_sequence) > 1))
     \ )
-    call extend(copts, { 'm': a:mode_sequence })
+    call extend(copts, { 'a': a:mode_sequence })
   endif
   return copts
 endfunction
