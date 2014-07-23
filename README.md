@@ -345,7 +345,7 @@ Alignment options
 | `ignore_unmatched` | boolean | 1                     | Whether to ignore lines without matching delimiter      |
 | `indentation`      | string  | `k`                   | Indentation method (*k*eep, *d*eep, *s*hallow, *n*one)  |
 | `delimiter_align`  | string  | `r`                   | Determines how to align delimiters of different lengths |
-| `align`            | string  |                       | Alignment modes for multiple occurrences of delimiters  |
+| `align`            | string  | `l`                   | Alignment modes for multiple occurrences of delimiters  |
 
 There are 4 ways to set alignment options (from lowest precedence to highest):
 
@@ -354,17 +354,17 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 3. Option values can be given as arguments to `:EasyAlign` command
 4. Option values can be set in interactive mode using special shortcut keys
 
-| Option name        | Shortcut key        | Abbreviated | Global variable                 |
-| ------------------ | ------------------- | ----------- | ------------------------------- |
-| `filter`           | `CTRL-F`            | `[gv]/.*/`  |                                 |
-| `left_margin`      | `CTRL-L`            | `l[0-9]+`   |                                 |
-| `right_margin`     | `CTRL-R`            | `r[0-9]+`   |                                 |
-| `stick_to_left`    | `<Left>`, `<Right>` | `s[01]`     |                                 |
-| `ignore_groups`    | `CTRL-G`            | `ig\[.*\]`  | `g:easy_align_ignore_groups`    |
-| `ignore_unmatched` | `CTRL-U`            | `iu[01]`    | `g:easy_align_ignore_unmatched` |
-| `indentation`      | `CTRL-I`            | `i[ksdn]`   | `g:easy_align_indentation`      |
-| `delimiter_align`  | `CTRL-D`            | `d[lrc]`    | `g:easy_align_delimiter_align`  |
-| `align`            | `CTRL-A`            | `m[lrc*]*`  |                                 |
+| Option name        | Shortcut key        | Abbreviated    | Global variable                 |
+| ------------------ | ------------------- | -------------- | ------------------------------- |
+| `filter`           | `CTRL-F`            | `[gv]/.*/`     |                                 |
+| `left_margin`      | `CTRL-L`            | `l[0-9]+`      |                                 |
+| `right_margin`     | `CTRL-R`            | `r[0-9]+`      |                                 |
+| `stick_to_left`    | `<Left>`, `<Right>` | `<` or `s[01]` |                                 |
+| `ignore_groups`    | `CTRL-G`            | `ig\[.*\]`     | `g:easy_align_ignore_groups`    |
+| `ignore_unmatched` | `CTRL-U`            | `iu[01]`       | `g:easy_align_ignore_unmatched` |
+| `indentation`      | `CTRL-I`            | `i[ksdn]`      | `g:easy_align_indentation`      |
+| `delimiter_align`  | `CTRL-D`            | `d[lrc]`       | `g:easy_align_delimiter_align`  |
+| `align`            | `CTRL-A`            | `a[lrc*]*`     |                                 |
 
 ### Filtering lines
 
