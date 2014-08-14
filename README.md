@@ -666,7 +666,7 @@ Although the default rules should cover the most of the use cases,
 you can extend the rules by setting a dictionary named `g:easy_align_delimiters`.
 
 You may refer to the definitions of the default alignment rules
-[here](https://github.com/junegunn/vim-easy-align/blob/2.9.0/autoload/easy_align.vim#L29).
+[here](https://github.com/junegunn/vim-easy-align/blob/2.9.6/autoload/easy_align.vim#L32-L46).
 
 #### Examples
 
