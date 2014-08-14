@@ -814,7 +814,7 @@ endfunction
 
 let s:shorthand_regex =
   \ '\s*\%('
-  \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(\%(s\%(tl\)\?[01]\)\|<\)\|'
+  \   .'\(lm\?[0-9]\+\)\|\(rm\?[0-9]\+\)\|\(iu[01]\)\|\(\%(s\%(tl\)\?[01]\)\|[<>]\)\|'
   \   .'\(da\?[clr]\)\|\(\%(ms\?\|a\)[lrc*]\+\)\|\(i\%(dt\)\?[kdsn]\)\|\([gv]/.*/\)\|\(ig\[.*\]\)'
   \ .'\)\+\s*$'
 
@@ -831,7 +831,7 @@ function! s:parse_shorthand_opts(expr)
     let match = matchlist(expr, regex)
     if empty(match) | break | endif
     for m in filter(match[ 1 : -1 ], '!empty(v:val)')
-      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', '<', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v', 'a']
+      for key in ['lm', 'rm', 'l', 'r', 'stl', 's', '<', '>', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v', 'a']
         if stridx(tolower(m), key) == 0
           let rest = strpart(m, len(key))
           if key == 'i' | let key = 'idt' | endif
@@ -853,8 +853,8 @@ function! s:parse_shorthand_opts(expr)
             catch
               call s:exit("Invalid ignore_groups: ". a:expr)
             endtry
-          elseif key == '<'
-            let opts['stl'] = 1
+          elseif key =~ '[<>]'
+            let opts['stl'] = key == '<'
           else
             let opts[key] = str2nr(rest)
           endif

@@ -84,6 +84,13 @@ Expect:
   apple;:;;   banana::       cake
   data;;      exchange:;::   format
 
+Execute (>):
+  %EasyAlign*/[:;]\+/l0dl<>rm3
+
+Expect:
+  apple;:;;   banana  ::     cake
+  data ;;     exchange:;::   format
+
 Execute (different regular expression):
   %EasyAlign*/../{'lm':'<','rm':'>'}
 

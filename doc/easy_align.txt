@@ -385,7 +385,7 @@ The following table summarizes the shorthand notation.
  `filter`             | `[gv]/.*/`
  `left_margin`        | `l[0-9]+`
  `right_margin`       | `r[0-9]+`
- `stick_to_left`      | `<`   or `s[01]`
+ `stick_to_left`      | `<` or `>`
  `ignore_unmatched`   | `iu[01]`
  `ignore_groups`      | `ig\[.*\]`
  `align`              | `a[lrc*]*`
