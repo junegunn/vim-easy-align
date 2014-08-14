@@ -359,7 +359,7 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
 | `filter`           | `CTRL-F`            | `[gv]/.*/`     |                                 |
 | `left_margin`      | `CTRL-L`            | `l[0-9]+`      |                                 |
 | `right_margin`     | `CTRL-R`            | `r[0-9]+`      |                                 |
-| `stick_to_left`    | `<Left>`, `<Right>` | `<` or `s[01]` |                                 |
+| `stick_to_left`    | `<Left>`, `<Right>` | `<` or `>`     |                                 |
 | `ignore_groups`    | `CTRL-G`            | `ig\[.*\]`     | `g:easy_align_ignore_groups`    |
 | `ignore_unmatched` | `CTRL-U`            | `iu[01]`       | `g:easy_align_ignore_unmatched` |
 | `indentation`      | `CTRL-I`            | `i[ksdn]`      | `g:easy_align_indentation`      |
