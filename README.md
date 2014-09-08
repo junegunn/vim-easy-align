@@ -1,4 +1,4 @@
-vim-easy-align
+vim-easy-align ![travis-ci](https://travis-ci.org/junegunn/vim-easy-align.svg?branch=master)
 ==============
 
 A simple, easy-to-use Vim alignment plugin.
