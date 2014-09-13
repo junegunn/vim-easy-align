@@ -1,0 +1,22 @@
+Include: include/setup.vader
+
+Given clojure:
+  (def world [[1      1 1 1       1]
+              [999 999 999 999 1]
+              [1 1 1 1 1]
+              [1 999 999 999 999]
+              [1 1 1 1 1]])
+
+Do (Recursive alignment in blockwise-visual mode):
+  f[;
+  \<C-V>G
+  \<Enter>*\<Space>
+
+Expect clojure:
+  (def world [[1   1   1   1   1]
+              [999 999 999 999 1]
+              [1   1   1   1   1]
+              [1   999 999 999 999]
+              [1   1   1   1   1]])
+
+Include: include/teardown.vader

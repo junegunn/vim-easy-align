@@ -617,7 +617,7 @@ function! s:shift_opts(opts, key, vals)
   endif
 endfunction
 
-function! s:interactive(range, modes, n, d, opts, rules, vis, live)
+function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
   let mode = s:shift(a:modes, 1)
   let n    = a:n
   let d    = a:d
@@ -637,7 +637,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live)
       let rdrw = 1
     endif
     if a:live && !empty(d)
-      let output = s:process(a:range, mode, n, d, s:normalize_options(opts), regx, a:rules, 0)
+      let output = s:process(a:range, mode, n, d, s:normalize_options(opts), regx, a:rules, a:bvis)
       let &undolevels = &undolevels " Break undo block
       call s:update_lines(output.todo)
       let undo = 1
@@ -1033,15 +1033,11 @@ function! s:process(range, mode, n, ch, opts, regexp, rules, bvis)
     \ get(dict, 'align', recur == 2 ? s:alternating_modes(a:mode) : a:mode),
     \ recur)
 
-  if recur && a:bvis
-    call s:exit('Recursive alignment is not supported in blockwise-visual mode')
-  endif
-
   let args = [
     \ {}, split(mode_sequence, '\zs'),
     \ {}, {}, a:range[0], a:range[1],
-    \ a:bvis ? min([col("'<"), col("'>")]) : 1,
-    \ a:bvis ? max([col("'<"), col("'>")]) : 0,
+    \ a:bvis             ? min([col("'<"), col("'>")]) : 1,
+    \ (!recur && a:bvis) ? max([col("'<"), col("'>")]) : 0,
     \ nth, recur, dict ]
   while len(args) > 1
     let args = call('s:do_align', args)
@@ -1078,10 +1074,6 @@ function! s:align(bang, live, visualmode, first_line, last_line, expr)
   let modes = s:interactive_modes(a:bang)
   let mode  = modes[0]
 
-  if bvis && a:live
-    call s:exit('Live mode is not supported in blockwise-visual mode')
-  endif
-
   let rules = s:easy_align_delimiters_default
   if exists('g:easy_align_delimiters')
     let rules = extend(copy(rules), g:easy_align_delimiters)
@@ -1095,7 +1087,7 @@ function! s:align(bang, live, visualmode, first_line, last_line, expr)
     if bypass_fold | let &l:foldmethod = 'manual' | endif
 
     if empty(n) && empty(ch) || a:live
-      let [mode, n, ch, opts, regexp] = s:interactive(range, copy(modes), n, ch, opts, rules, vis, a:live)
+      let [mode, n, ch, opts, regexp] = s:interactive(range, copy(modes), n, ch, opts, rules, vis, a:live, bvis)
     endif
 
     if !a:live
