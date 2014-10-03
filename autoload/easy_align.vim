@@ -641,7 +641,6 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       let &undolevels = &undolevels " Break undo block
       call s:update_lines(output.todo)
       let undo = !empty(output.todo)
-      let undo = !empty(output.todo)
       let rdrw = 1
     endif
     if rdrw
