@@ -640,7 +640,8 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       let output = s:process(a:range, mode, n, d, s:normalize_options(opts), regx, a:rules, a:bvis)
       let &undolevels = &undolevels " Break undo block
       call s:update_lines(output.todo)
-      let undo = 1
+      let undo = !empty(output.todo)
+      let undo = !empty(output.todo)
       let rdrw = 1
     endif
     if rdrw

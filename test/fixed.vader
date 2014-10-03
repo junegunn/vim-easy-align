@@ -161,4 +161,17 @@ Expect:
 
   d, e, f
 
+Given c (#40 Ignored delimiters in LiveEasyAlign causes spurious undo):
+  printf("foo = %f\n", foo);
+  printf("foobar = %f\n", foobar);
+
+Do:
+  gUiw
+  :%LiveEasyAlign\<enter>
+  =\<bs>==
+
+Expect c:
+  PRINTF("foo = %f\n", foo);
+  printf("foobar = %f\n", foobar);
+
 Include: include/teardown.vader
