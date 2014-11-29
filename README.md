@@ -22,27 +22,16 @@ Features
 - Optimized for code editing
   - Takes advantage of syntax highlighting feature to avoid unwanted alignments
 
-### _"I already have a similar one. Should I switch?"_
-
-Maybe or maybe not. See [related work](https://github.com/junegunn/vim-easy-align#related-work) section.
-
 Installation
 ------------
 
-Either [download zip file](http://www.vim.org/scripts/script.php?script_id=4520)
-and extract in ~/.vim or
-[use](https://github.com/tpope/vim-pathogen)
-[your](https://github.com/gmarik/vundle)
-[favorite](https://github.com/junegunn/vim-plug)
-[plugin](https://github.com/Shougo/neobundle.vim)
-[manager](https://github.com/MarcWeber/vim-addon-manager).
+User your favorite plugin manager.
 
-- [Vundle](https://github.com/gmarik/vundle)
-  1. Add `Plugin 'junegunn/vim-easy-align'` to .vimrc
-  2. Run `:PluginInstall`
-- [vim-plug](https://github.com/junegunn/vim-plug)
-  1. Add `Plug 'junegunn/vim-easy-align'` to .vimrc
-  2. Run `:PlugInstall`
+Using [vim-plug](https://github.com/junegunn/vim-plug):
+
+```vim
+Plug 'junegunn/vim-easy-align'
+```
 
 TL;DR - One-minute guide
 ------------------------
@@ -53,8 +42,8 @@ Add the following mappings to your .vimrc.
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 
-" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-nmap <Leader>a <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 ```
 
 And with the following lines of text,
@@ -71,8 +60,8 @@ try these commands:
     - `v`isual-select `i`nner `p`aragraph
     - Start EasyAlign command (`<Enter>`)
     - Align around `=`
-- `<Leader>aip=`
-    - Start EasyAlign command (`<Leader>a`) for `i`nner `p`aragraph
+- `gaip=`
+    - Start EasyAlign command (`ga`) for `i`nner `p`aragraph
     - Align around `=`
 
 Notice that the commands are repeatable with `.` key if you have installed
@@ -131,13 +120,13 @@ your .vimrc as below:
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 
-" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-nmap <Leader>a <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 ```
 
 With these mappings, you can align text with only a few keystrokes.
 
-1. `<Enter>` key in visual mode, or `<Leader>a` followed by a motion or a text
+1. `<Enter>` key in visual mode, or `ga` followed by a motion or a text
    object to start interactive mode
 1. Optional: Enter keys to select alignment mode (left, right, or center)
 1. Optional: N-th delimiter (default: 1)
@@ -222,8 +211,9 @@ If you're performing a complex alignment where multiple options should be
 carefully adjusted, try "live interactive mode" where you can preview the result
 of the alignment on-the-fly as you type in.
 
-Live interactive mode can be started with either `<Plug>(LiveEasyAlign)` or
-`:LiveEasyAlign` command.
+Live interactive mode can be started with either `<Plug>(LiveEasyAlign)` map
+or `:LiveEasyAlign` command. Or you can switch to live interactive mode while
+in ordinary interactive mode by pressing `<CTRL-P>`. (P for Preview)
 
 In live interactive mode, you have to type in the same delimiter (or `CTRL-X` on
 regular expression) again to finalize the alignment. This allows you to preview
@@ -739,85 +729,11 @@ Advanced examples and use cases
 See [EXAMPLES.md](https://github.com/junegunn/vim-easy-align/blob/master/EXAMPLES.md)
 for more examples.
 
-
 Related work
 ------------
 
-There are two well-known plugins with the same goal as that of easy-align.
-
-- [DrChip's Alignment Tool for Vim](http://www.drchip.org/astronaut/vim/align.html) (herein will be referred to as "Align")
+- [DrChip's Alignment Tool for Vim](http://www.drchip.org/astronaut/vim/align.html)
 - [Tabular](https://github.com/godlygeek/tabular)
-
-Both are great plugins with very large user bases. I actually had been a Tabular
-user for a couple of years before I finally made up my mind to roll out my own.
-
-So why would someone choose easy-align over those two?
-
-Feature-by-feature comparison I believe is not quite useful, since a typical
-user will end up using only a small subset of the features.
-So I will mention just a few core benefits of easy-align.
-
-### Ease of use
-
-As the name implies, easy-align is *easier* to use. Its interactive mode
-allows you to achieve what you want with just a few keystrokes.
-The key sequence is mnemonic, so it's easy to remember and execute.
-It even feels like a native Vim command!
-
-- *Right-align*: `<Enter><Enter>`
-- around the *second* occurrences: `2`
-- of *whitespaces*: `<Space>`
-
-For the simplest cases, Tabular and Align are also easy to use. But sooner or
-later, you will find yourself scratching your head, trying to come up with some
-complex regular expressions.
-
-_"How am I going to align the third to the last word in each line to the right
-without affecting the ones before it?"_
-
-### Clean
-
-easy-align doesn't clutter your workspace with mappings and global
-variables. All you would need is a single mapping to the interactive EasyAlign
-command, and even that is totally up to you.
-
-### Optimized for code editing
-
-easy-align by default performs syntax-aware alignment, which is invaluable
-when editing codes.
-
-Try to come up with a regular expression to correctly format the following code
-snippet. With easy-align under default configuration and a mapping, it can
-be done with just two keystrokes: `<Enter>:`
-
-```javascript
-var jdbc = {
-  // JDBC driver for MySQL database:
-  driver: "com.mysql.jdbc.Driver",
-  /* JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE) */
-  url: 'jdbc:mysql://localhost/test',
-  database: "test",
-  "user:pass":"r00t:pa55"
-};
-```
-
-(To be fair, Align also can be configured to consider syntax highlighting with
-`g:AlignSkip` function reference which should point to a custom function that
-looks up the syntax group of a character on a certain position)
-
-### Thoroughly tested
-
-Virtually every aspect of easy-align is being tested with a comprehensive
-set of test cases using [Vader.vim](https://github.com/junegunn/vader.vim).
-
-### "Okay. So should I switch?"
-
-Maybe, but I can't really say. I have no ambition to make easy-align
-an absolute superior to the others. For some cases, easy-align works better
-than the others, but for some other cases, Tabular or Align.vim might be a
-better choice.
-
-So try it yourself and see if it works for you!
 
 Author
 ------

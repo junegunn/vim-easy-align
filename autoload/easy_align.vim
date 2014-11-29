@@ -146,7 +146,7 @@ endfunction
 
 function! s:echon(l, n, r, d, o, warn)
   let tokens = [
-  \ ['Function', ':EasyAlign'],
+  \ ['Function', s:live ? ':LiveEasyAlign' : ':EasyAlign'],
   \ ['ModeMsg', get(s:mode_labels, a:l, a:l)],
   \ ['None', ' ']]
 
@@ -617,7 +617,7 @@ function! s:shift_opts(opts, key, vals)
   endif
 endfunction
 
-function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
+function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
   let mode = s:shift(a:modes, 1)
   let n    = a:n
   let d    = a:d
@@ -636,7 +636,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       let undo = 0
       let rdrw = 1
     endif
-    if a:live && !empty(d)
+    if s:live && !empty(d)
       let output = s:process(a:range, mode, n, d, s:normalize_options(opts), regx, a:rules, a:bvis)
       let &undolevels = &undolevels " Break undo block
       call s:update_lines(output.todo)
@@ -713,6 +713,13 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       call s:shift_opts(opts, 'iu', vals['ignore_unmatched'])
     elseif ch == "\<C-G>"
       call s:shift_opts(opts, 'ig', vals['ignore_groups'])
+    elseif ch == "\<C-P>"
+      if !empty(d) && s:live
+        let ch = d
+        break
+      else
+        let s:live = 1
+      endif
     elseif c == "\<Left>"
       let opts['stl'] = 1
       let opts['lm']  = 0
@@ -737,7 +744,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
         silent! call remove(opts, 'a')
       endif
     elseif ch == "\<C-_>" || ch == "\<C-X>"
-      if a:live && regx && !empty(d)
+      if s:live && regx && !empty(d)
         break
       endif
 
@@ -746,7 +753,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       if !empty(ch) && s:valid_regexp(ch)
         let regx = 1
         let d = ch
-        if !a:live | break | endif
+        if !s:live | break | endif
       else
         let warn = 'Invalid regular expression: '.ch
       endif
@@ -770,7 +777,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       if empty(d)
         if has_key(a:rules, ch)
           let d = ch
-          if !a:live
+          if !s:live
             break
           endif
         else
@@ -789,7 +796,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, live, bvis)
       endif
     endif
   endwhile
-  if a:live
+  if s:live
     let copts = call('s:summarize', output.summarize)
     let g:easy_align_last_command = s:echon('', n, regx, d, copts, '')
   end
@@ -1073,6 +1080,7 @@ function! s:align(bang, live, visualmode, first_line, last_line, expr)
   let range = [a:first_line, a:last_line]
   let modes = s:interactive_modes(a:bang)
   let mode  = modes[0]
+  let s:live = a:live
 
   let rules = s:easy_align_delimiters_default
   if exists('g:easy_align_delimiters')
@@ -1086,11 +1094,11 @@ function! s:align(bang, live, visualmode, first_line, last_line, expr)
   try
     if bypass_fold | let &l:foldmethod = 'manual' | endif
 
-    if empty(n) && empty(ch) || a:live
-      let [mode, n, ch, opts, regexp] = s:interactive(range, copy(modes), n, ch, opts, rules, vis, a:live, bvis)
+    if empty(n) && empty(ch) || s:live
+      let [mode, n, ch, opts, regexp] = s:interactive(range, copy(modes), n, ch, opts, rules, vis, bvis)
     endif
 
-    if !a:live
+    if !s:live
       let output = s:process(range, mode, n, ch, s:normalize_options(opts), regexp, rules, bvis)
       call s:update_lines(output.todo)
       let copts = call('s:summarize', output.summarize)

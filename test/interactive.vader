@@ -485,6 +485,42 @@ Expect:
   |)batch_size(|) Fixnum(|)nil    (|)number of maximum items to be assigned at once(|
   |)logger    (|) Logger(|)nil    (|)                logger instance for debug logs(|
 
+Do (Switching to live interactive mode):
+  vip\<Enter>
+* Switch to live interactive mode
+  \<C-P>
+  |
+  \<C-L><\<Enter>
+  \<C-R>>\<Enter>
+  ***
+  **
+  \<BS>\<BS>\<BS>
+  **|\<Enter>|
+
+Expect:
+  |>Option    <|>   Type<|>Default<|>                                   Description<|
+  |>--        <|>     --<|>--     <|>                                            --<|
+  |>threads   <|> Fixnum<|>1      <|>          number of threads in the thread pool<|
+  |>queues    <|> Fixnum<|>1      <|>                   number of concurrent queues<|
+  |>queue_size<|> Fixnum<|>1000   <|>                            size of each queue<|
+  |>interval  <|>Numeric<|>0      <|>      dispatcher interval for batch processing<|
+  |>batch     <|>Boolean<|>false  <|>                 enables batch processing mode<|
+  |>batch_size<|> Fixnum<|>nil    <|>number of maximum items to be assigned at once<|
+  |>logger    <|> Logger<|>nil    <|>                logger instance for debug logs<|
+
+Do (Toggling live interactive mode):
+  vip\<Enter>
+* Enable live mode
+  \<C-P>
+  |*
+* Disable live mode
+  \<C-P>
+  gg2jdG
+
+Expect:
+  | Option     | Type    | Default | Description                                    |
+  | --         | --      | --      | --                                             |
+
 Do (live interactive mode!):
   vip\<Space>r\<Enter>
   |
