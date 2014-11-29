@@ -778,6 +778,9 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
         if has_key(a:rules, ch)
           let d = ch
           if !s:live
+            if a:vis
+              execute "normal! gv\<esc>"
+            endif
             break
           endif
         else

@@ -19,6 +19,17 @@ Expect:
   111  22    333  444 55555 6666 7   88888
   1111 2     33   444 555   66   777 8
 
+Do (left-align / cursor position retained):
+  vGww
+  \<Enter>
+  *\<Space>D
+
+Expect:
+  1    22222 33   444 555   6666 7   888
+  11   222   3333 4   55    6666 77  888
+  111  22    333  444 55555 6666 7   88888
+  1111 2 
+
 Do (left-align using operator map):
   \<Space>Aip*\<Space>
 
@@ -1663,7 +1674,7 @@ Do (Blockwise-visual-operator is also repeatable):
   f1
   4j
   \<Enter>:
-  7G
+  7G0
   fa
   .
 
