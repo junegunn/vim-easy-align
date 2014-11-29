@@ -967,9 +967,9 @@ function! s:alternating_modes(mode)
 endfunction
 
 function! s:update_lines(todo)
-    for [line, content] in items(a:todo)
-      call setline(line, s:rtrim(content))
-    endfor
+  for [line, content] in items(a:todo)
+    call setline(line, s:rtrim(content))
+  endfor
 endfunction
 
 function! s:parse_nth(n)
