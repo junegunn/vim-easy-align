@@ -1,0 +1,13 @@
+Include: include/setup.vader
+
+Before:
+  set nomodifiable
+After:
+  set modifiable
+  AssertEqual "hello\nworld\n", @"
+Given:
+  hello
+  world
+Do (#43 Do nothing when nomodifiable):
+  vip\<enter>\<enter>\<enter>y
+

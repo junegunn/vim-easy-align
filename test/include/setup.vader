@@ -31,3 +31,8 @@ Execute (Clean up test environment):
   vmap <leader>.       <Plug>(EasyAlignRepeat)
 
   silent! call plug#load('vim-easy-align')
+
+Before:
+After:
+Given:
+
