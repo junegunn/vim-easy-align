@@ -1,4 +1,4 @@
-easy-align.txt	easy-align	Last change: November 30 2014
+easy-align.txt	easy-align	Last change: December 1 2014
 EASY-ALIGN - TABLE OF CONTENTS             *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
 
@@ -487,7 +487,7 @@ given pattern. There are several ways to set the pattern.
 
 
 Examples~
-                                                           *easy-align-examples*
+
                                                               *easy-align-6-2-1*
 >
     " Start interactive mode with filter option set to g/hello/
@@ -777,7 +777,7 @@ You may refer to the definitions of the default alignment rules {here}{7}.
 
 
 Examples~
-                                                           *easy-align-examples*
+
                                                               *easy-align-6-8-1*
 >
     let g:easy_align_delimiters = {
