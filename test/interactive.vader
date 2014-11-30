@@ -519,7 +519,7 @@ Expect:
   |>batch_size<|> Fixnum<|>nil    <|>number of maximum items to be assigned at once<|
   |>logger    <|> Logger<|>nil    <|>                logger instance for debug logs<|
 
-Do (Toggling live interactive mode):
+Do (Toggling live interactive mode (delimiter entered)):
   vip\<Enter>
 * Enable live mode
   \<C-P>
@@ -531,6 +531,20 @@ Do (Toggling live interactive mode):
 Expect:
   | Option     | Type    | Default | Description                                    |
   | --         | --      | --      | --                                             |
+
+Do (Toggling live interactive mode (delimiter not entered)):
+  vip\<Enter>
+* Enable live mode
+  \<C-P>
+  \<Enter>
+* Disable live mode
+  \<C-P>
+  *|
+  gg2jdG
+
+Expect:
+  |     Option |    Type | Default |                                    Description |
+  |         -- |      -- |      -- |                                             -- |
 
 Do (live interactive mode!):
   vip\<Space>r\<Enter>

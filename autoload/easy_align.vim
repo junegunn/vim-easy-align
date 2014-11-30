@@ -714,9 +714,13 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
     elseif ch == "\<C-G>"
       call s:shift_opts(opts, 'ig', vals['ignore_groups'])
     elseif ch == "\<C-P>"
-      if !empty(d) && s:live
-        let ch = d
-        break
+      if s:live
+        if !empty(d)
+          let ch = d
+          break
+        else
+          let s:live = 0
+        endif
       else
         let s:live = 1
       endif
