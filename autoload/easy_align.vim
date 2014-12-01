@@ -843,7 +843,6 @@ function! s:parse_shorthand_opts(expr)
     call s:exit("Invalid expression: ". a:expr)
   else
     let match = matchlist(expr, regex)
-    if empty(match) | break | endif
     for m in filter(match[ 1 : -1 ], '!empty(v:val)')
       for key in ['lm', 'rm', 'l', 'r', 'stl', 's', '<', '>', 'iu', 'da', 'd', 'ms', 'm', 'ig', 'i', 'g', 'v', 'a']
         if stridx(tolower(m), key) == 0
