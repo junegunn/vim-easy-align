@@ -6,9 +6,9 @@ A simple, easy-to-use Vim alignment plugin.
 Demo
 ----
 
-![Screencast](https://raw.github.com/junegunn/i/master/vim-easy-align.gif)
+<img src="https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align.gif" height="494" alt="Screencast">
 
-(Too fast? Slower GIF is [here](https://raw.github.com/junegunn/i/master/vim-easy-align-slow.gif))
+(Too fast? Slower GIF is [here](https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align-slow.gif))
 
 Features
 --------
