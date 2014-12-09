@@ -672,7 +672,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
     elseif c == 13 " Enter key
       let mode = s:shift(a:modes, 1)
       if has_key(opts, 'a')
-        let opts.m = mode . strpart(opts.m, 1)
+        let opts.a = mode . strpart(opts.a, 1)
       endif
     elseif ch == '-'
       if empty(n)      | let n = '-'
