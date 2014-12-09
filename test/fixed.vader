@@ -174,4 +174,18 @@ Expect c:
   PRINTF("foo = %f\n", foo);
   printf("foobar = %f\n", foobar);
 
+# Error when using delimiter alignment option (#50)
+Given:
+  a  | b | c
+  aa | bb | cc
+
+Do:
+  :%EasyAlign {'a': 'l'}\<cr>
+  \<cr>
+  *|
+
+Expect (Some text):
+   a |  b |  c
+  aa | bb | cc
+
 Include: include/teardown.vader
