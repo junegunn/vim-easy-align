@@ -805,7 +805,9 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
   endwhile
   if s:live
     let copts = call('s:summarize', output.summarize)
+    let s:live = 0
     let g:easy_align_last_command = s:echon('', n, regx, d, copts, '')
+    let s:live = 1
   end
   return [mode, n, ch, opts, regx]
 endfunction
