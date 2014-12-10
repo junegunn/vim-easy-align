@@ -174,18 +174,28 @@ Expect c:
   PRINTF("foo = %f\n", foo);
   printf("foobar = %f\n", foobar);
 
-# Error when using delimiter alignment option (#50)
+* #50 Error when using delimiter alignment option
 Given:
-  a  | b | c
-  aa | bb | cc
+  a|bbb|c
+  aa|bb|cc
 
-Do:
+Do (#50 EasyAlign command with 'a' option):
   :%EasyAlign {'a': 'l'}\<cr>
   \<cr>
   *|
 
 Expect (Some text):
-   a |  b |  c
+   a | bbb |  c
+  aa |  bb | cc
+
+* #51 Repeat of visual <Plug>(LiveEasyAlign) broken
+Do (#51/#52 <Plug>(EasyAlignRepeat) in visual mode):
+  V\<space>\<enter>\<enter>*||
+  G
+  V\<space>.
+
+Expect:
+  a | bbb | c
   aa | bb | cc
 
 Include: include/teardown.vader
