@@ -1,4 +1,4 @@
-easy-align.txt	easy-align	Last change: December 1 2014
+easy-align.txt	easy-align	Last change: December 14 2014
 EASY-ALIGN - TABLE OF CONTENTS             *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
 
@@ -50,11 +50,12 @@ A simple, easy-to-use Vim alignment plugin.
 DEMO                                                           *easy-align-demo*
 ==============================================================================
 
-Screencast: https://raw.github.com/junegunn/i/master/vim-easy-align.gif
+Screencast:
+https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align.gif
 
 (Too fast? Slower GIF is {here}{1})
 
-          {1} https://raw.github.com/junegunn/i/master/vim-easy-align-slow.gif
+{1} https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align-slow.gif
 
 
                                                                   *easy-align-2*
@@ -156,6 +157,8 @@ There are two ways to use easy-align.
 
 The recommended method is to use <Plug> mappings as described earlier.
 
+                                                         *<Plug>(LiveEasyAlign)*
+
  ----------------------+--------+-----------------------------------------------------
  Mapping               | Mode   | Description                                         ~
  ----------------------+--------+-----------------------------------------------------
@@ -174,6 +177,8 @@ The recommended method is to use <Plug> mappings as described earlier.
 
 If you prefer command-line or do not want to start interactive mode, you can
 use `:EasyAlign` command instead.
+
+                                                                *:LiveEasyAlign*
 
  -------------------------------------------+-----------------------------------------------
  Mode                                       | Command                                       ~
@@ -310,8 +315,6 @@ shortcut keys listed below. The meaning of each option will be described in
 If you're performing a complex alignment where multiple options should be
 carefully adjusted, try "live interactive mode" where you can preview the
 result of the alignment on-the-fly as you type in.
-
-                                          *<Plug>(LiveEasyAlign)* *:LiveEasyAlign*
 
 Live interactive mode can be started with either <Plug>(LiveEasyAlign) map or
 `:LiveEasyAlign` command. Or you can switch to live interactive mode while in
@@ -456,6 +459,9 @@ There are 4 ways to set alignment options (from lowest precedence to highest):
  3. Option values can be given as arguments to `:EasyAlign` command
  4. Option values can be set in interactive mode using special shortcut keys
 
+                      *g:easy_align_ignore_groups* *g:easy_align_ignore_unmatched*
+                         *g:easy_align_indentation* *g:easy_align_delimiter_align*
+
  -------------------+-----------------+-------------+--------------------------------
  Option name        | Shortcut key    | Abbreviated | Global variable                ~
  -------------------+-----------------+-------------+--------------------------------
@@ -507,8 +513,6 @@ Examples~
 EasyAlign can be configured to ignore delimiters in certain syntax highlight
 groups, such as code comments or strings. By default, delimiters that are
 highlighted as code comments or strings are ignored.
-
-                                                    *g:easy_align_ignore_groups*
 >
     " Default:
     "   If a delimiter is in a highlight group whose name matches
@@ -602,8 +606,6 @@ However, we can override this default behavior by setting `ignore_unmatched`
 option to zero using one of the following methods.
 
  1. Press CTRL-U in interactive mode to toggle `ignore_unmatched` option
-                                                 *g:easy_align_ignore_unmatched*
-
  2. Set the global `g:easy_align_ignore_unmatched` variable to 0
  3. Define a custom alignment rule with `ignore_unmatched` option set to 0
  4. Provide `ignore_unmatched` option to `:EasyAlign` command. e.g.
@@ -623,8 +625,6 @@ Then we get,
 < Aligning delimiters of different lengths >__________________________________~
                            *easy-align-aligning-delimiters-of-different-lengths*
                                                                 *easy-align-6-5*
-
-                                                  *g:easy_align_delimiter_align*
 
 Global `g:easy_align_delimiter_align` option and rule-wise/command-wise
 `delimiter_align` option determines how matched delimiters of different
