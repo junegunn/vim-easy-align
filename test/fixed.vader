@@ -198,4 +198,18 @@ Expect:
   a | bbb | c
   aa | bb | cc
 
+* #65 ?=
+Given:
+  a?=b
+  aa?=bb
+  aaa?=bbb
+
+Do (#65 Alignment around ?=):
+  \<space>Aip=
+
+Expect:
+  a   ?= b
+  aa  ?= bb
+  aaa ?= bbb
+
 Include: include/teardown.vader
