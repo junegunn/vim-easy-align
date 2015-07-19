@@ -201,7 +201,7 @@ Expect:
 * #65 ?=
 Given:
   a?=b
-  aa?=bb
+  aa-=bb
   aaa?=bbb
 
 Do (#65 Alignment around ?=):
@@ -209,7 +209,7 @@ Do (#65 Alignment around ?=):
 
 Expect:
   a   ?= b
-  aa  ?= bb
+  aa  -= bb
   aaa ?= bbb
 
 Include: include/teardown.vader
