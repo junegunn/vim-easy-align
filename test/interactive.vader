@@ -1535,6 +1535,28 @@ Expect:
   bbbbb=bbbbb=bbbbb
   aaa   = aaa   = aaa
 
+Given clojure (filter with blockwise-visual mode):
+  (let [a 1
+        bbb 2
+        ccccc (range
+                10 20)]
+    (prn [a bbb ccccc]))
+
+Do (filter with blockwise-visual mode):
+  f[
+  vi[
+  \<C-V>
+  \<Enter>
+  \<C-F>g/^\S\<Enter>
+  \<Space>
+
+Expect clojure:
+  (let [a     1
+        bbb   2
+        ccccc (range
+                10 20)]
+    (prn [a bbb ccccc]))
+
 ###########################################################
 
 Given (hard-tab indentation (#19)):

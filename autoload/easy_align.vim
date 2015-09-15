@@ -358,9 +358,10 @@ function! s:do_align(todo, modes, all_tokens, all_delims, fl, ll, fc, lc, nth, r
 
   " Phase 1
   for line in range(a:fl, a:ll)
-    if f == 1 && getline(line) !~ fx
+    let snip = a:lc > 0 ? getline(line)[a:fc-1 : a:lc-1] : getline(line)
+    if f == 1 && snip !~ fx
       continue
-    elseif f == -1 && getline(line) =~ fx
+    elseif f == -1 && snip =~ fx
       continue
     endif
 
