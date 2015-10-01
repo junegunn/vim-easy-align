@@ -1557,6 +1557,41 @@ Expect clojure:
                 10 20)]
     (prn [a bbb ccccc]))
 
+Given clojure:
+  {:user {:plugins [[cider/cider-nrepl "0.9.1"]
+                    [lein-kibit "0.0.8"]
+                    [lein-licenses "0.1.1"]
+                    [lein-marginalia "0.8.0"] ; lein marg
+                    [codox "0.8.13"] ; lein doc
+                    [com.jakemccrary/lein-test-refresh "0.10.0"] ; lein test-refresh
+                    [lein-pprint "1.1.2"]
+                    [lein-exec "0.3.5"]
+                    [jonase/eastwood "0.2.1"]]
+          :dependencies [[slamhound "1.5.5"]]
+          :aliases {"slamhound" ["run" "-m" "slam.hound"]}
+          :signing {:gpg-key "FEF9C627"}}}
+
+Do (Virtual column should be used in blockwise-visual mode):
+  f[
+  vi[
+  \<C-V>
+  $20l
+  \<Enter>\<Space>
+
+Expect clojure:
+  {:user {:plugins [[cider/cider-nrepl                 "0.9.1"]
+                    [lein-kibit                        "0.0.8"]
+                    [lein-licenses                     "0.1.1"]
+                    [lein-marginalia                   "0.8.0"] ; lein marg
+                    [codox                             "0.8.13"] ; lein doc
+                    [com.jakemccrary/lein-test-refresh "0.10.0"] ; lein test-refresh
+                    [lein-pprint                       "1.1.2"]
+                    [lein-exec                         "0.3.5"]
+                    [jonase/eastwood                   "0.2.1"]]
+          :dependencies [[slamhound "1.5.5"]]
+          :aliases {"slamhound" ["run" "-m" "slam.hound"]}
+          :signing {:gpg-key "FEF9C627"}}}
+
 ###########################################################
 
 Given (hard-tab indentation (#19)):

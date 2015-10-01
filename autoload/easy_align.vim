@@ -1050,12 +1050,15 @@ function! s:process(range, mode, n, ch, opts, regexp, rules, bvis)
     \ get(dict, 'align', recur == 2 ? s:alternating_modes(a:mode) : a:mode),
     \ recur)
 
+  let ve = &virtualedit
+  set ve=all
   let args = [
     \ {}, split(mode_sequence, '\zs'),
     \ {}, {}, a:range[0], a:range[1],
-    \ a:bvis             ? min([col("'<"), col("'>")]) : 1,
-    \ (!recur && a:bvis) ? max([col("'<"), col("'>")]) : 0,
+    \ a:bvis             ? min([virtcol("'<"), virtcol("'>")]) : 1,
+    \ (!recur && a:bvis) ? max([virtcol("'<"), virtcol("'>")]) : 0,
     \ nth, recur, dict ]
+  let &ve = ve
   while len(args) > 1
     let args = call('s:do_align', args)
   endwhile
