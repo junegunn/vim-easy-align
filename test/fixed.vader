@@ -212,4 +212,38 @@ Expect:
   aa  -= bb
   aaa ?= bbb
 
+* #67 \v
+Given c:
+  bzero(&servaddr, sizeof(servaddr));
+  servaddr.sin_family = AF_INET;
+  servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  servaddr.sin_port = htons(SERV_PORT);
+
+Execute (#67 \v breaks surrounding regex):
+  %EasyAlign/\v(\=\s)@<=</
+
+Expect:
+  bzero(&servaddr, sizeof(servaddr));
+  servaddr.sin_family =       AF_INET;
+  servaddr.sin_addr.s_addr =  htonl(INADDR_ANY);
+  servaddr.sin_port =         htons(SERV_PORT);
+
+Execute (#67 \V followed by \v shouldn't matter):
+  %EasyAlign/\v(\=\s)@<=<\V/
+
+Expect:
+  bzero(&servaddr, sizeof(servaddr));
+  servaddr.sin_family =       AF_INET;
+  servaddr.sin_addr.s_addr =  htonl(INADDR_ANY);
+  servaddr.sin_port =         htons(SERV_PORT);
+
+Execute (#67 \zs is now allowed):
+  %EasyAlign/=\zs/
+
+Expect:
+  bzero(&servaddr, sizeof(servaddr));
+  servaddr.sin_family =       AF_INET;
+  servaddr.sin_addr.s_addr =  htonl(INADDR_ANY);
+  servaddr.sin_port =         htons(SERV_PORT);
+
 Include: include/teardown.vader
