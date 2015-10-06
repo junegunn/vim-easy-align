@@ -6,9 +6,7 @@ A simple, easy-to-use Vim alignment plugin.
 Demo
 ----
 
-<img src="https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align.gif" height="494" alt="Screencast">
-
-(Too fast? Slower GIF is [here](https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align-slow.gif))
+  <img src="https://cloud.githubusercontent.com/assets/3021667/10305400/70fa15e6-6c7c-11e5-801a-931229dfceb1.gif" height="494" alt="Equal">
 
 Features
 --------
@@ -69,6 +67,24 @@ Notice that the commands are repeatable with `.` key if you have installed
 [visualrepeat](https://github.com/vim-scripts/visualrepeat) as well if you want
 to repeat in visual mode.
 
+More examples:
+---------
+* Table
+
+  <img src="https://cloud.githubusercontent.com/assets/3021667/10305397/6ee4811a-6c7c-11e5-9dda-1d0a1369b917.gif" height="300" alt="Table">
+
+* Spaces:
+
+  <img src="https://cloud.githubusercontent.com/assets/3021667/10305388/6696a6a0-6c7c-11e5-928a-450b82fb1b91.gif" height="300" alt="Spaces">
+  
+* Json:
+ 
+  <img src="https://cloud.githubusercontent.com/assets/3021667/10305406/723adb48-6c7c-11e5-84a0-e054feb9b37b.gif" height="300" alt="Json">
+
+* Commas:
+
+  <img src="https://cloud.githubusercontent.com/assets/3021667/10305410/7394862e-6c7c-11e5-95d2-d5a850efcb6d.gif" height="300" alt="Commas">
+  
 Usage
 -----
 
