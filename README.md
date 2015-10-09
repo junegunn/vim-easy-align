@@ -64,7 +64,7 @@ which is identified by a single character, such as `<Space>`, `=`, `:`, `.`,
 - `2=` Around the 2nd occurrences
 - `*=` Around all occurrences
 - `**=` Left/Right alternating alignment around all occurrences
-- `<Enter>` Toggling left/right/center alignment mode
+- `<Enter>` Switching between left/right/center alignment modes
 
 #### `<Space>`
 
@@ -87,9 +87,10 @@ which is identified by a single character, such as `<Space>`, `=`, `:`, `.`,
 
 ![](https://raw.githubusercontent.com/junegunn/i/master/easy-align/regex.gif)
 
-You can use an arbitrary regular expression instead
-- by pressing `<Ctrl-X>` in interactive mode
-- or using `:EasyAlign /REGEX/` command
+You can use an arbitrary regular expression by
+- pressing `<Ctrl-X>` in interactive mode
+- or using `:EasyAlign /REGEX/` command in visual mode or in normal mode with
+  a range (e.g. `:%`)
 
 ### Different ways to start
 
