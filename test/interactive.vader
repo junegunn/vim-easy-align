@@ -1572,6 +1572,7 @@ Given clojure:
           :signing {:gpg-key "FEF9C627"}}}
 
 Do (Virtual column should be used in blockwise-visual mode):
+  :set ve=block\<Enter>
   f[
   vi[
   \<C-V>
@@ -1591,6 +1592,9 @@ Expect clojure:
           :dependencies [[slamhound "1.5.5"]]
           :aliases {"slamhound" ["run" "-m" "slam.hound"]}
           :signing {:gpg-key "FEF9C627"}}}
+
+Then:
+  set ve=
 
 ###########################################################
 
