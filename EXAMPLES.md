@@ -1,17 +1,22 @@
-vim-easy-align examples
-=======================
+easy-align examples
+===================
 
 Open this document in your Vim and try it yourself.
 
-This document assumes that you have defined the following mappings.
+This document assumes that you have the following mappings in your .vimrc.
 
 ```vim
-" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
 
-" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-nmap <Leader>a <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 ```
+
+You can use either of the maps. Place the cursor on the paragraph and press
+
+- `gaip` "(ga) start easy-align on (i)nner (p)aragraph"
+- or `vipga` "(v)isual-select (i)nner (p)aragraph and (ga) start easy-align"
 
 To enable syntax highlighting in the code blocks, define and call the following
 function.
@@ -37,15 +42,17 @@ Alignment around whitespaces
 
 You can align text around whitespaces with `<space>` delimiter key.
 
-Try these commands:
+Start the interactive mode as described above (`gaip` or `vipga`) and try
+these commands:
+
+- `<space>`
+- `2<space>`
+- `*<space>`
+- `-<space>`
+- `-2<space>`
 - `<Enter><space>`
-- `<Enter>2<space>`
 - `<Enter>*<space>`
-- `<Enter>-<space>`
-- `<Enter>-2<space>`
-- `<Enter><Enter><space>`
 - `<Enter><Enter>*<space>`
-- `<Enter><Enter><Enter>*<space>`
 
 ### Example
 
@@ -61,12 +68,13 @@ Pete Best 1941
 Formatting table
 ----------------
 
-Try these commands:
+Again, start the interactive mode and try these commands:
+
+- `*|`
+- `**|`
 - `<Enter>*|`
 - `<Enter>**|`
 - `<Enter><Enter>*|`
-- `<Enter><Enter>**|`
-- `<Enter><Enter><Enter>*|`
 
 ### Example
 
@@ -88,15 +96,16 @@ Try these commands:
 Alignment around =
 ------------------
 
-The default rule for delimiter key `=` aligns around a whole family of operators
-containing `=` character.
+The default rule for delimiter key `=` aligns around a whole family of
+operators containing `=` character.
 
-Try these commands:
-- `<Enter>=`
-- `<Enter>*=`
+Try these commands in the interactive mode.
+
+- `=`
+- `*=`
+- `**=`
 - `<Enter>**=`
-- `<Enter><Enter>**=`
-- `<Enter><Enter><Enter>*=`
+- `<Enter><Enter>*=`
 
 ### Example
 
@@ -132,8 +141,8 @@ gg <=> ee
 Formatting YAML (or JSON)
 -------------------------
 
-Try `<Enter>:` here, to align text around only the first occurrences of colons.
-In this case, you don't want to align around all the colons: `<Enter>*:`.
+You can use `:`-rule here to align text around only the first occurrences of
+colons. In this case, you don't want to align around all the colons: `*:`.
 
 ```yaml
 mysql:
@@ -148,7 +157,7 @@ mysql:
 Formatting multi-line method chaining
 -------------------------------------
 
-Try `<Enter>.` or `<Enter>*.` on the following lines.
+Try `.` or `*.` on the following lines.
 
 ```ruby
 my_object
@@ -174,8 +183,8 @@ Using blockwise-visual mode or negative N-th parameter
 ------------------------------------------------------
 
 You can try either:
-- select text around `=>` in blockwise-visual mode (`CTRL-V`) and `<Enter>=`
-- or `<Enter>-=`
+- select text around `=>` in blockwise-visual mode (`CTRL-V`) and `ga=`
+- or `gaip-=`
 
 ```ruby
 options = { :caching => nil,
@@ -186,8 +195,7 @@ options = { :caching => nil,
 Commas
 ------
 
-There is also a predefined rule for commas, try `<Enter>*,` on the following
-lines.
+There is also a predefined rule for commas, try `*,`.
 
 ```
 aaa,   bb,c
@@ -201,7 +209,7 @@ Ignoring delimiters in comments or strings
 ------------------------------------------
 
 Delimiters highlighted as comments or strings are ignored by default, try
-`<Enter>*=` on the following lines.
+`gaip*=` on the following lines.
 
 ```c
 
@@ -226,9 +234,9 @@ apple = 1 # comment not aligned
 banana = 'Gros Michel' # comment 2
 ```
 
-So, how do we align the trailing comments in the above lines?
-Simply try `<Enter>-<space>`. The spaces in the comments are ignored, so the
-trailing comment in each line is considered to be a single chunk.
+So, how do we align the trailing comments in the above lines? Simply try
+`-<space>`. The spaces in the comments are ignored, so the trailing comment in
+each line is considered to be a single chunk.
 
 But that doesn't work in the following case.
 
@@ -253,7 +261,7 @@ let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String']
 Notice that the rule overrides `ignore_groups` attribute in order *not to ignore*
 delimiters highlighted as comments.
 
-Then on `<Enter>#`, we get
+Then on `#`, we get
 
 ```ruby
 apple = 1         # comment not aligned
@@ -266,13 +274,16 @@ command:
 
 ```vim
 " Using regular expression /#/
-" - "is" is fuzzy-matched to "*i*gnore*s*"
-:EasyAlign/#/{'is':['String']}
+" - "ig" is a shorthand notation of "ignore_groups"
+:EasyAlign/#/{'ig':['String']}
+
+" Or more concisely with the shorthand notation;
+:EasyAlign/#/ig['String']
 ```
 
-In this case, the second line is ignored as it doesn't contain a `#`. (The one
-highlighted as String is ignored.) If you don't want the second line to be
-ignored, there are three options:
+In this case, the second line is ignored as it doesn't contain a `#` (The one
+in `'F#AD'` is ignored as it's highlighted as String). If you don't want the
+second line to be ignored, there are three options:
 
 1. Set global `g:easy_align_ignore_unmatched` flag to 0
 2. Use `:EasyAlign` command with `ignore_unmatched` option
@@ -284,11 +295,13 @@ let g:easy_align_ignore_unmatched = 0
 
 " 2. Using :EasyAlign command with ignore_unmatched option
 " 2-1. Using predefined rule with delimiter key #
-"      - "iu" is fuzzy-matched to "*i*gnore_*u*nmatched"
+"      - "iu" is expanded to "*i*gnore_*u*nmatched"
 :EasyAlign#{'iu':0}
+" or
+:EasyAlign#iu0
 
 " 2-2. Using regular expression /#/
-:EasyAlign/#/{'is':['String'],'iu':0}
+:EasyAlign/#/ig['String']iu0
 
 " 3. Update the alignment rule with ignore_unmatched option
 let g:easy_align_delimiters['#'] = {
@@ -315,7 +328,7 @@ static double pi = 3.14;
 ```
 
 We can align these lines with the predefined `=` rule. Select the lines and
-press `<Enter>=`
+press `ga=`
 
 ```c
 const char* str  = "Hello";
@@ -325,7 +338,7 @@ static double pi = 3.14;
 
 Not bad. However, the names of the variables, `str`, `count`, and `pi` are not
 aligned with each other. Can we do better? We can clearly see that simple
-`<Enter><space>` won't properly align those names.
+`<space>`-rule won't properly align those names.
 So let's define an alignment rule than can handle this case.
 
 ```vim
@@ -336,7 +349,7 @@ let g:easy_align_delimiters['d'] = {
 ```
 
 This new rule aligns text around spaces that are *not* preceded by
-`const` or `static`. Let's try it with `<Enter>d`.
+`const` or `static`. Let's select the lines and try `gad`.
 
 ```c
 const char*   str = "Hello";
@@ -345,7 +358,7 @@ static double pi = 3.14;
 ```
 
 Okay, the names are now aligned. We select the lines again with `gv`, and then
-press `<Enter>=` to finish our alignment.
+press `ga=` to finish our alignment.
 
 ```c
 const char*   str   = "Hello";
@@ -376,14 +389,14 @@ So what do we do? Let's try to improve our alignment rule.
 
 ```vim
 let g:easy_align_delimiters['d'] = {
-\ 'pattern': ' \(\S\+\s*[;=]\)\@=',
+\ 'pattern': ' \ze\S\+\s*[;=]',
 \ 'left_margin': 0, 'right_margin': 0
 \ }
 ```
 
 Now the new rule has changed to align text around spaces that are followed
 by some non-whitespace characters and then an equals sign or a semi-colon.
-Try `<Enter>d`
+Try `vipgad`
 
 ```c
 const char*                          str = "Hello";
@@ -392,7 +405,7 @@ static double                        pi = 3.14;
 static std::map<std::string, float>* scores = pointer;
 ```
 
-We're right on track, now press `gv<Enter>=` and voila!
+We're right on track, now press `gvga=` and voila!
 
 ```c
 const char*                          str    = "Hello";
