@@ -50,6 +50,8 @@ try these commands:
 Demo
 ----
 
+*Click on each image to see from the beginning.*
+
 ### Using predefined alignment rules
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
