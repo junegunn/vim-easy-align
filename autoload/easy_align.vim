@@ -657,7 +657,11 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
     let check = 0
     let warn = ''
 
-    let c  = getchar()
+    try
+      let c = getchar()
+    catch /^Vim:Interrupt$/
+      let c = 27
+    endtry
     let ch = nr2char(c)
     if c == 3 || c == 27 " CTRL-C / ESC
       if undo
