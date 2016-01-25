@@ -1125,7 +1125,13 @@ endfunction
 function! easy_align#align(bang, live, visualmode, expr) range
   try
     call s:align(a:bang, a:live, a:visualmode, a:firstline, a:lastline, a:expr)
-  catch 'exit'
+  catch /^\%(Vim:Interrupt\|exit\)$/
+    if empty(a:visualmode)
+      echon "\r"
+      echon "\r"
+    else
+      normal! gv
+    endif
   endtry
 endfunction
 
