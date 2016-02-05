@@ -179,6 +179,7 @@ alignment rules that you can trigger with a single keystroke.
 | `,`       | Multi-line method arguments                                          |
 | `&`       | LaTeX tables (matches `&` and `\\`)                                  |
 | `#`       | Ruby/Python comments                                                 |
+| `"`       | Vim comments                                                         |
 | `<Bar>`   | Table markdown                                                       |
 
 You can also define your own rules with `g:easy_align_delimiters` which will

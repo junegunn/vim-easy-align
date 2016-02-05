@@ -234,6 +234,7 @@ Predefined alignment rules~
   `,`            | Multi-line method arguments
   `&`            | LaTeX tables (matches  `&`  and  `\\` )
   `#`            | Ruby/Python comments
+  `"`            | Vim comments
  <Bar>         | Table markdown
  --------------+--------------------------------------------------------------------
 
