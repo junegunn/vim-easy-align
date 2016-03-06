@@ -829,10 +829,11 @@ function! s:valid_regexp(regexp)
 endfunction
 
 function! s:test_regexp(regexp)
-  if !s:valid_regexp(a:regexp)
-    call s:exit('Invalid regular expression: '. a:regexp)
+  let regexp = empty(a:regexp) ? @/ : a:regexp
+  if !s:valid_regexp(regexp)
+    call s:exit('Invalid regular expression: '. regexp)
   endif
-  return a:regexp
+  return regexp
 endfunction
 
 let s:shorthand_regex =
