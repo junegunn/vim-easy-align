@@ -98,14 +98,14 @@ You can use an arbitrary regular expression by
 
 ![](https://raw.githubusercontent.com/junegunn/i/master/easy-align/modes.gif)
 
-This demo shows how you can start interative mode with visual selection or use
+This demo shows how you can start interactive mode with visual selection or use
 non-interactive `:EasyAlign` command.
 
 ### Aligning table cells
 
 ![](https://raw.githubusercontent.com/junegunn/i/master/easy-align/tables.gif)
 
-Check out various alignment options and "live interative mode".
+Check out various alignment options and "live interactive mode".
 
 ### Syntax-aware alignment
 
