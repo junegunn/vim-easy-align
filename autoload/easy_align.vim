@@ -1050,7 +1050,7 @@ function! s:build_mode_sequence(expr, recur)
 endfunction
 
 function! s:process(range, mode, n, ch, opts, regexp, rules, bvis)
-  let [nth, recur] = s:parse_nth(a:n)
+  let [nth, recur] = s:parse_nth((empty(a:n) && exists('g:easy_align_nth')) ? g:easy_align_nth : a:n)
   let dict = s:build_dict(a:rules, a:ch, a:regexp, a:opts)
   let [mode_sequence, recur] = s:build_mode_sequence(
     \ get(dict, 'align', recur == 2 ? s:alternating_modes(a:mode) : a:mode),
