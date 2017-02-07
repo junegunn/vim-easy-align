@@ -581,6 +581,120 @@ Do:
 Execute (g:easy_align_last_command should not be set if interrupted):
   Assert !exists('g:easy_align_last_command')
 
+Do (g:easy_align_nth is not set (work with default value 1)):
+  vip\<Enter>|
+
+Expect:
+  | Option| Type | Default | Description |
+  | --|--|--|--|
+  | threads | Fixnum | 1 | number of threads in the thread pool |
+  | queues |Fixnum | 1 | number of concurrent queues |
+  | queue_size | Fixnum | 1000 | size of each queue |
+  | interval | Numeric | 0 | dispatcher interval for batch processing |
+  | batch | Boolean | false | enables batch processing mode |
+  | batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+  | logger | Logger | nil | logger instance for debug logs |
+
+Execute (set g:easy_align_nth):
+  let g:easy_align_nth = '2'
+
+Do (g:easy_align_nth is set as 2):
+  vip\<Enter>|
+
+Expect:
+  | Option     | Type | Default | Description |
+  |--          | --|--|--|
+  | threads    | Fixnum | 1 | number of threads in the thread pool |
+  |queues      | Fixnum | 1 | number of concurrent queues |
+  |queue_size  | Fixnum | 1000 | size of each queue |
+  |   interval | Numeric | 0 | dispatcher interval for batch processing |
+  |batch       | Boolean | false | enables batch processing mode |
+   |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+   |logger     | Logger | nil | logger instance for debug logs |
+
+Execute (unset g:easy_align_nth):
+  unlet g:easy_align_nth
+
+Execute (set g:easy_align_nth):
+  let g:easy_align_nth = '*'
+
+Do (g:easy_align_nth is set as *):
+  vip\<Enter>|
+
+Expect:
+  | Option     | Type    | Default | Description                                    |
+  | --         | --      | --      | --                                             |
+  | threads    | Fixnum  | 1       | number of threads in the thread pool           |
+  | queues     | Fixnum  | 1       | number of concurrent queues                    |
+  | queue_size | Fixnum  | 1000    | size of each queue                             |
+  | interval   | Numeric | 0       | dispatcher interval for batch processing       |
+  | batch      | Boolean | false   | enables batch processing mode                  |
+  | batch_size | Fixnum  | nil     | number of maximum items to be assigned at once |
+  | logger     | Logger  | nil     | logger instance for debug logs                 |
+
+Execute (unset g:easy_align_nth):
+  unlet g:easy_align_nth
+
+Execute (set g:easy_align_nth):
+  let g:easy_align_nth = '**'
+
+Do (g:easy_align_nth is set as **):
+  vip\<Enter>|
+
+Expect:
+  |     Option | Type    | Default | Description                                    |
+  |         -- | --      |      -- | --                                             |
+  |    threads | Fixnum  |       1 | number of threads in the thread pool           |
+  |     queues | Fixnum  |       1 | number of concurrent queues                    |
+  | queue_size | Fixnum  |    1000 | size of each queue                             |
+  |   interval | Numeric |       0 | dispatcher interval for batch processing       |
+  |      batch | Boolean |   false | enables batch processing mode                  |
+  | batch_size | Fixnum  |     nil | number of maximum items to be assigned at once |
+  |     logger | Logger  |     nil | logger instance for debug logs                 |
+
+Execute (unset g:easy_align_nth):
+  unlet g:easy_align_nth
+
+Execute (set g:easy_align_nth):
+  let g:easy_align_nth = '-'
+
+Do (g:easy_align_nth is set as -):
+  vip\<Enter>|
+
+Expect:
+  | Option| Type | Default | Description                                       |
+  |--|--|--|--                                                                 |
+  | threads | Fixnum | 1 | number of threads in the thread pool                |
+  |queues |Fixnum | 1 | number of concurrent queues                            |
+  |queue_size | Fixnum | 1000 | size of each queue                             |
+  |   interval | Numeric | 0 | dispatcher interval for batch processing        |
+  |batch | Boolean | false | enables batch processing mode                     |
+   |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+   |logger | Logger | nil | logger instance for debug logs                     |
+
+Execute (unset g:easy_align_nth):
+  unlet g:easy_align_nth
+
+Execute (set g:easy_align_nth):
+  let g:easy_align_nth = '-2'
+
+Do (g:easy_align_nth is set as -2):
+  vip\<Enter>|
+
+Expect:
+  | Option| Type | Default    | Description |
+  |--|--|--                   | --|
+  | threads | Fixnum | 1      | number of threads in the thread pool |
+  |queues |Fixnum | 1         | number of concurrent queues |
+  |queue_size | Fixnum | 1000 | size of each queue |
+  |   interval | Numeric | 0  | dispatcher interval for batch processing |
+  |batch | Boolean | false    | enables batch processing mode |
+   |batch_size | Fixnum | nil | number of maximum items to be assigned at once |
+   |logger | Logger | nil     | logger instance for debug logs |
+
+Execute (unset g:easy_align_nth):
+  unlet g:easy_align_nth
+
 ###########################################################
 
 Given (comma-separated items):
