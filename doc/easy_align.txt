@@ -77,7 +77,7 @@ FEATURES                                                   *easy-align-features*
 INSTALLATION                                           *easy-align-installation*
 ==============================================================================
 
-User your favorite plugin manager.
+Use your favorite plugin manager.
 
 Using {vim-plug}{2}:
 >
