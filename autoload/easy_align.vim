@@ -1088,10 +1088,12 @@ endfunction
 
 function! s:align(bang, live, visualmode, first_line, last_line, expr)
   " Heuristically determine if the user was in visual mode
-  if empty(a:visualmode)
+  if a:visualmode == 'command'
     let vis  = a:first_line == line("'<") && a:last_line == line("'>")
     let bvis = vis && visualmode() == "\<C-V>"
-  " Visual-mode explicitly given
+  elseif empty(a:visualmode)
+    let vis  = 0
+    let bvis = 0
   else
     let vis  = 1
     let bvis = a:visualmode == "\<C-V>"

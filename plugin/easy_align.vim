@@ -26,8 +26,8 @@ if exists("g:loaded_easy_align_plugin")
 endif
 let g:loaded_easy_align_plugin = 1
 
-command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 0, '', <q-args>)
-command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#align('<bang>' == '!', 1, '', <q-args>)
+command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align(<bang>0, 0, 'command', <q-args>)
+command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#align(<bang>0, 1, 'command', <q-args>)
 
 let s:last_command = 'EasyAlign'
 
@@ -99,7 +99,7 @@ function! s:generic_easy_align_op(type, vmode, live)
     if get(g:, 'easy_align_need_repeat', 0)
       execute range . g:easy_align_last_command
     else
-      execute range . "call easy_align#align('<bang>' == '!', a:live, vmode, '')"
+      execute range . "call easy_align#align(0, a:live, vmode, '')"
     end
     call s:set_repeat()
   finally

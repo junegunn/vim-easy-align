@@ -247,3 +247,17 @@ Expect:
   servaddr.sin_port =         htons(SERV_PORT);
 
 Include: include/teardown.vader
+
+Given:
+  hello = world bye all
+  hello world = bye all
+  hello world = foo all
+
+Do (#105: Incorrectly detection of blockwise visual mode):
+  \<c-v>jj\<esc>
+  \<Space>Aip=
+
+Expect:
+  hello       = world bye all
+  hello world = bye all
+  hello world = foo all
