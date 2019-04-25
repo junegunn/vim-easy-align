@@ -1,4 +1,4 @@
-easy-align.txt	easy-align	Last change: December 14 2014
+*easy-align.txt*	easy-align	Last change: December 14 2014
 EASY-ALIGN - TABLE OF CONTENTS             *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
 
