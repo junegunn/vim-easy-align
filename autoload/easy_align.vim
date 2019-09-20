@@ -677,12 +677,36 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
         let n = strpart(n, 0, len(n) - 1)
       endif
     elseif c == 13 " Enter key
+      " simon was here
+      " Accept the changes and exit. Same as <CTRL-P>
+      if s:live
+        if !empty(d)
+          let ch = d
+          break
+        else
+          let s:live = 0
+        endif
+      else
+        let s:live = 1
+      endif
+    " simon was here
+    " Cycle through the different alignments using letter 'a'.
+    elseif ch == 'a' || ch == 'A'
       let mode = s:shift(a:modes, 1)
       if has_key(opts, 'a')
         let opts.a = mode . strpart(opts.a, 1)
       endif
     elseif ch == '-'
       if empty(n)      | let n = '-'
+      " simon was here
+      " Override the * option to align all columns.
+      elseif n == '*'  | let n = '-'
+      elseif n == '**' | let n = '-'
+      " simon was here
+      " Override the numbers the user typed for single column aligning.
+      " Allows us to press - after we have already typed a number.
+      elseif ( n > '0' && n <= '9') 
+        let n = '-'
       elseif n == '-'  | let n = ''
       else             | let check = 1
       endif
@@ -690,12 +714,20 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
       if empty(n)      | let n = '*'
       elseif n == '*'  | let n = '**'
       elseif n == '**' | let n = ''
+      " simon was here
+      " Override the numbers the user typed for single column aligning
+      " Allows us to press * after we have already typed a number.
+      elseif ( n > '0' && n <= '9') 
+        let n = ch
+      " simon was here
+      " Override if they aligned the last column
+      elseif n == '-' | let n = '*'
       else             | let check = 1
       endif
-    elseif empty(d) && ((c == 48 && len(n) > 0) || c > 48 && c <= 57) " Numbers
-      if n[0] == '*'   | let check = 1
-      else             | let n = n . ch
-      end
+    " simon was here
+    " User typed a number to choose which column to align.
+    elseif ((c == 48 && len(n) > 0) || c > 48 && c <= 57)
+      let n = ch
     elseif ch == "\<C-D>"
       call s:shift_opts(opts, 'da', vals['delimiter_align'])
     elseif ch == "\<C-I>"
@@ -754,7 +786,8 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
       else
         silent! call remove(opts, 'a')
       endif
-    elseif ch == "\<C-_>" || ch == "\<C-X>"
+    " simon was here - Enter regex using '/' key
+    elseif ch == "\<C-_>" || ch == "\<C-X>" || ch == '/'
       if s:live && regx && !empty(d)
         break
       endif
