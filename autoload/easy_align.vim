@@ -1149,6 +1149,9 @@ function! s:align(bang, live, visualmode, first_line, last_line, expr)
     if bypass_fold | let &l:foldmethod = 'manual' | endif
 
     if empty(n) && empty(ch) || s:live
+      " simon was here
+      " Start live mode with 'align all columns' enabled by default
+      let n = '*'
       let [mode, n, ch, opts, regexp] = s:interactive(range, copy(modes), n, ch, opts, rules, vis, bvis)
     endif
 
