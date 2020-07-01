@@ -731,16 +731,16 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
       else
         let s:live = 1
       endif
-    elseif c == "\<Left>"
+    elseif c == "\<Left>"  || ch == "h"
       let opts['stl'] = 1
       let opts['lm']  = 0
-    elseif c == "\<Right>"
+    elseif c == "\<Right>" || ch == "l"
       let opts['stl'] = 0
       let opts['lm']  = 1
-    elseif c == "\<Down>"
+    elseif c == "\<Down>"  || ch == "j"
       let opts['lm']  = 0
       let opts['rm']  = 0
-    elseif c == "\<Up>"
+    elseif c == "\<Up>"    || ch == "k"
       silent! call remove(opts, 'stl')
       silent! call remove(opts, 'lm')
       silent! call remove(opts, 'rm')
