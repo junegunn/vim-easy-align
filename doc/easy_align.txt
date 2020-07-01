@@ -308,8 +308,8 @@ shortcut keys listed below. The meaning of each option will be described in
  l       | `stick_to_left`        | `{ 'left_margin': 1, 'stick_to_left': 0 }`
  <Down>  | `*_margin`             | `{ 'left_margin': 0, 'right_margin':  0 }`
  j       | `*_margin`             | `{ 'left_margin': 0, 'right_margin':  0 }`
- <Up>    | `reset_stl_and_margin` | `{ 'left_margin': 0, 'right_margin':  0 }`
- k       | `reset_stl_and_margin` | `{ 'left_margin': 0, 'right_margin':  0 }`
+ <Up>    | `reset_stl_and_margin` | `{ 'left_margin': 1, 'right_margin':  1 }`
+ k       | `reset_stl_and_margin` | `{ 'left_margin': 1, 'right_margin':  1 }`
  --------+----------------------+---------------------------------------------
 
               {6} https://github.com/junegunn/vim-easy-align#alignment-options
