@@ -737,7 +737,7 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
     elseif c == "\<Right>" || ch == "l"
       let opts['stl'] = 0
       let opts['lm']  = 1
-    elseif c == "\<down>"  || ch == "j"
+    elseif c == "\<Down>"  || ch == "j"
       let opts['lm']  = 0
       let opts['rm']  = 0
     elseif c == "\<Up>"    || ch == "k"
