@@ -567,6 +567,20 @@ opposite meaning. For instance, if `ignore_groups` is given as `['!Comment']`,
 delimiters that are not highlighted as Comment will be ignored during the
 alignment.
 
+To make `ignore_groups` work, and to debug the related issues, it is useful to
+know which highlight group a certain location in a file belongs to. A special
+function exists for this purpose, returning exactly the name of the highlight
+group that is used by the easy align plugin.
+>
+    "   The function accepts 2 arguments, line and column number.
+    "   However, if the arguments are skipped or have empty values,
+    "   line / column number under the cursor are used instead.
+    "   The function returns a table containing the position and
+    "   the highlight group name.
+    echo easy_align#get_highlight_group_name()
+    echo easy_align#get_highlight_group_name(10)
+    echo easy_align#get_highlight_group_name(10, 10)
+<
 
 < Ignoring unmatched lines >__________________________________________________~
                                            *easy-align-ignoring-unmatched-lines*
