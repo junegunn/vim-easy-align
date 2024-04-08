@@ -92,6 +92,13 @@ endfunction
 function! s:get_highlight_group_name(line, col)
   let hl = synIDattr(synID(a:line, a:col, 0), 'name')
 
+  if hl == '' && has('nvim-0.9.0')
+    let insp = luaeval('vim.inspect_pos and vim.inspect_pos( nil, ' .. (a:line-1) .. ', ' .. (a:col-1) .. ' ) or { treesitter = {} }')
+    if !empty(insp.treesitter)
+      let hl = insp.treesitter[0].hl_group_link
+    endif
+  endif
+
   " and, finally
   return hl
 endfunction
