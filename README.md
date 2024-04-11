@@ -406,7 +406,7 @@ highlighted as code comments or strings are ignored.
 ```vim
 " Default:
 "   If a delimiter is in a highlight group whose name matches
-"   any of the followings, it will be ignored.
+"   any of the following regular expressions, it will be ignored.
 let g:easy_align_ignore_groups = ['Comment', 'String']
 ```
 
