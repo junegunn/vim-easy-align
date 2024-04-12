@@ -1169,3 +1169,4 @@ endfunction
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
+" vim: set et sw=2 :
