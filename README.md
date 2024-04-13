@@ -469,14 +469,11 @@ function exists for this purpose, returning exactly the name of the highlight
 group that is used by the easy align plugin.
 
 ```vim
-"   The function accepts 2 arguments, line and column number.
-"   However, if the arguments are skipped or have empty values,
-"   line / column number under the cursor are used instead.
-"   The function returns a table containing the position and
-"   the highlight group name.
+" Highlight group name of the cursor position
 echo easy_align#get_highlight_group_name()
-echo easy_align#get_highlight_group_name(10)
-echo easy_align#get_highlight_group_name(10, 10)
+
+" Highlight group name of the line 10, column 20
+echo easy_align#get_highlight_group_name(10, 20)
 ```
 
 ### Ignoring unmatched lines

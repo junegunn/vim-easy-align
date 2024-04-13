@@ -104,12 +104,10 @@ function! s:get_highlight_group_name(line, col)
 endfunction
 
 function! easy_align#get_highlight_group_name(...)
-  let l  = a:0 >= 1 ? a:1       : ''
-  let l  = l == ''  ? line('.') : l
-  let c  = a:0 >= 2 ? a:2       : ''
-  let c  = c == ''  ? col('.')  : c
+  let l  = get(a:, 1, line('.'))
+  let c  = get(a:, 2, col('.'))
   let hl = s:get_highlight_group_name(l, c)
-  return { 'Line': l, 'Column': c, 'HL Group': hl }
+  return { 'line': l, 'column': c, 'group': hl }
 endfunction
 
 function! s:highlighted_as(line, col, groups)
