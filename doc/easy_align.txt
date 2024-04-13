@@ -575,8 +575,8 @@ group that is used by the easy align plugin.
     " Highlight group name of the cursor position
     echo easy_align#get_highlight_group_name()
 
-    " Highlight group name of the line 10, column 10
-    echo easy_align#get_highlight_group_name(10, 10)
+    " Highlight group name of the line 10, column 20
+    echo easy_align#get_highlight_group_name(10, 20)
 <
 
 < Ignoring unmatched lines >__________________________________________________~
