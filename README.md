@@ -406,7 +406,7 @@ highlighted as code comments or strings are ignored.
 ```vim
 " Default:
 "   If a delimiter is in a highlight group whose name matches
-"   any of the followings, it will be ignored.
+"   any of the following regular expressions, it will be ignored.
 let g:easy_align_ignore_groups = ['Comment', 'String']
 ```
 
@@ -462,6 +462,19 @@ For example if you set `ignore_groups` option to be an empty list, you get
 If a pattern in `ignore_groups` is prepended by a `!`, it will have the opposite
 meaning. For instance, if `ignore_groups` is given as `['!Comment']`, delimiters
 that are *not* highlighted as Comment will be ignored during the alignment.
+
+To make `ignore_groups` work, and to debug the related issues, it is useful to
+know which highlight group a certain location in a file belongs to. A special
+function exists for this purpose, returning exactly the name of the highlight
+group that is used by the easy align plugin.
+
+```vim
+" Highlight group name of the cursor position
+echo easy_align#get_highlight_group_name()
+
+" Highlight group name of the line 10, column 20
+echo easy_align#get_highlight_group_name(10, 20)
+```
 
 ### Ignoring unmatched lines
 

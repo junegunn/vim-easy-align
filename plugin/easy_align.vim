@@ -140,3 +140,4 @@ vnoremap <silent> <Plug>(EasyAlignRepeat) :<C-U>call <SID>repeat_in_visual()<Ent
 " Backward-compatibility (deprecated)
 nnoremap <silent> <Plug>(EasyAlignOperator) :set opfunc=<SID>easy_align_op<Enter>g@
 
+" vim: set et sw=2 :

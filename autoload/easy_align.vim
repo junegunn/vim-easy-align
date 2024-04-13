@@ -89,9 +89,30 @@ function! s:floor2(v)
   return a:v % 2 == 0 ? a:v : a:v - 1
 endfunction
 
+function! s:get_highlight_group_name(line, col)
+  let hl = synIDattr(synID(a:line, a:col, 0), 'name')
+
+  if hl == '' && has('nvim-0.9.0')
+    let insp = luaeval('vim.inspect_pos and vim.inspect_pos( nil, ' .. (a:line-1) .. ', ' .. (a:col-1) .. ' ) or { treesitter = {} }')
+    if !empty(insp.treesitter)
+      let hl = insp.treesitter[0].hl_group_link
+    endif
+  endif
+
+  " and, finally
+  return hl
+endfunction
+
+function! easy_align#get_highlight_group_name(...)
+  let l  = get(a:, 1, line('.'))
+  let c  = get(a:, 2, col('.'))
+  let hl = s:get_highlight_group_name(l, c)
+  return { 'line': l, 'column': c, 'group': hl }
+endfunction
+
 function! s:highlighted_as(line, col, groups)
   if empty(a:groups) | return 0 | endif
-  let hl = synIDattr(synID(a:line, a:col, 0), 'name')
+  let hl = s:get_highlight_group_name(a:line, a:col)
   for grp in a:groups
     if grp[0] == '!'
       if hl !~# grp[1:-1]
@@ -1146,3 +1167,4 @@ endfunction
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
+" vim: set et sw=2 :
