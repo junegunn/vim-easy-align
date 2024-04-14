@@ -26,6 +26,10 @@ if exists("g:loaded_easy_align_plugin")
 endif
 let g:loaded_easy_align_plugin = 1
 
+if !exists('g:easy_align_restore_last_selection')
+  let g:easy_align_restore_last_selection = 0
+endif
+
 command! -nargs=* -range -bang EasyAlign <line1>,<line2>call easy_align#align(<bang>0, 0, 'command', <q-args>)
 command! -nargs=* -range -bang LiveEasyAlign <line1>,<line2>call easy_align#align(<bang>0, 1, 'command', <q-args>)
 
@@ -113,6 +117,9 @@ endfunction
 
 function! s:live_easy_align_op(type, ...)
   call s:generic_easy_align_op(a:type, a:0, 1)
+  if g:easy_align_restore_last_selection == 1
+    execute "normal gv"
+  endif
 endfunction
 
 function! s:easy_align_repeat()
