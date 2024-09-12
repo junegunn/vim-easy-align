@@ -279,7 +279,7 @@ to align text around all occurrences of numbers:
  - <Enter>
  - `*`
  - CTRL-X
-   - `[0-9]\+`
+ - `[0-9]\+`
 
 
 Alignment options in interactive mode~
@@ -290,21 +290,27 @@ While in interactive mode, you can set alignment options using special
 shortcut keys listed below. The meaning of each option will be described in
 {the following sections}{6}.
 
- --------+--------------------+---------------------------------------------------
- Key     | Option             | Values                                            ~
- --------+--------------------+---------------------------------------------------
- CTRL-F  |  `filter`            | Input string ( `[gv]/.*/?` )
- CTRL-I  |  `indentation`       | shallow, deep, none, keep
- CTRL-L  |  `left_margin`       | Input number or string
- CTRL-R  |  `right_margin`      | Input number or string
- CTRL-D  |  `delimiter_align`   | left, center, right
- CTRL-U  |  `ignore_unmatched`  | 0, 1
- CTRL-G  |  `ignore_groups`     | [], ["String'], ["Comment'], ["String', "Comment']
- CTRL-A  |  `align`             | Input string ( `/[lrc]+\*{0,2}/` )
- <Left>  |  `stick_to_left`     |  `{ 'stick_to_left': 1, 'left_margin': 0 }`
- <Right> |  `stick_to_left`     |  `{ 'stick_to_left': 0, 'left_margin': 1 }`
- <Down>  |  `*_margin`          |  `{ 'left_margin': 0, 'right_margin': 0 }`
- --------+--------------------+---------------------------------------------------
+ --------+----------------------+---------------------------------------------
+ Key     |  Option              | Values                                            ~
+ --------+----------------------+---------------------------------------------
+ CTRL-F  | `filter`               | Input string ( `[gv]/.*/?` )
+ CTRL-I  | `indentation`          | shallow, deep, none, keep
+ CTRL-L  | `left_margin`          | Input number or string
+ CTRL-R  | `right_margin`         | Input number or string
+ CTRL-D  | `delimiter_align`      | left, center, right
+ CTRL-U  | `ignore_unmatched`     | 0, 1
+ CTRL-G  | `ignore_groups`        | [], ["String'], ["Comment'],
+         |                      | ["String', "Comment']
+ CTRL-A  | `align`                | Input string ( `/[lrc]+\*{0,2}/` )
+ <Left>  | `stick_to_left`        | `{ 'left_margin': 0, 'stick_to_left': 1 }`
+ h       | `stick_to_left`        | `{ 'left_margin': 0, 'stick_to_left': 1 }`
+ <Right> | `stick_to_left`        | `{ 'left_margin': 1, 'stick_to_left': 0 }`
+ l       | `stick_to_left`        | `{ 'left_margin': 1, 'stick_to_left': 0 }`
+ <Down>  | `*_margin`             | `{ 'left_margin': 0, 'right_margin':  0 }`
+ j       | `*_margin`             | `{ 'left_margin': 0, 'right_margin':  0 }`
+ <Up>    | `reset_stl_and_margin` | `{ 'left_margin': 1, 'right_margin':  1 }`
+ k       | `reset_stl_and_margin` | `{ 'left_margin': 1, 'right_margin':  1 }`
+ --------+----------------------+---------------------------------------------
 
               {6} https://github.com/junegunn/vim-easy-align#alignment-options
 
