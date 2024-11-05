@@ -56,7 +56,7 @@ Demo
 
 An *alignment rule* is a predefined set of options for common alignment tasks,
 which is identified by a single character, such as `<Space>`, `=`, `:`, `.`,
-`|`, `&`, `#`, and `,`.
+`|`, `&`, `#`, `,`, and `;`.
 
 #### `=`
 
@@ -151,7 +151,7 @@ xmap ga <Plug>(EasyAlign)
     - `-`         Around the last occurrences of delimiters (`-1`)
     - `-2`        Around the second to last occurrences of delimiters
     - ...
-1. Delimiter key (a single keystroke; `<Space>`, `=`, `:`, `.`, `|`, `&`, `#`, `,`) or an arbitrary regular expression followed by `<CTRL-X>`
+1. Delimiter key (a single keystroke; `<Space>`, `=`, `:`, `.`, `|`, `&`, `#`, `,`, `;`) or an arbitrary regular expression followed by `<CTRL-X>`
 
 #### 2. Using `:EasyAlign` command
 
@@ -180,6 +180,7 @@ alignment rules that you can trigger with a single keystroke.
 | `&`       | LaTeX tables (matches `&` and `\\`)                                  |
 | `#`       | Ruby/Python comments                                                 |
 | `"`       | Vim comments                                                         |
+| `;`       | Assembly comments                                                    |
 | `<Bar>`   | Table markdown                                                       |
 
 You can also define your own rules with `g:easy_align_delimiters` which will
